@@ -11,11 +11,11 @@ const monserrat = Montserrat({ weight: "600", subsets: ['latin'] });
 
 const routes = [
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, color: "text-sky-500" },
-  { label: 'Conversation', href: '/conversation', icon: MessageSquare, color: "text-violet-500" },
-  { label: 'Image Generation', href: '/image', icon: ImageIcon, color: "text-pink-700" },
-  { label: 'Video Generation', href: '/video', icon: VideoIcon, color: "text-orange-700" },
-  { label: 'Music Generation', href: '/music', icon: MusicIcon, color: "text-emerald-500" },
-  { label: 'Code Generation', href: '/code', icon: Code, color: "text-green-700" },
+  { label: 'Students', href: '/students', icon: MessageSquare, color: "text-violet-500" },
+  { label: 'Stats', href: '/stats', icon: ImageIcon, color: "text-pink-700" },
+  { label: 'Invoices', href: '/video', icon: VideoIcon, color: "text-orange-700" },
+  { label: 'Billing', href: '/music', icon: MusicIcon, color: "text-emerald-500" },
+  { label: 'Sessions', href: '/code', icon: Code, color: "text-green-700" },
   { label: 'Settings', href: '/settings', icon: Settings },
 ]
 
@@ -30,10 +30,10 @@ const Sidebar = () => {
     <div className='space-y-4 py-4 flex flex-col h-full bg-[#111827] text-white'>
       <div className='flex-1 px-3 py-2'>
         <Link href='/dashboard' className='flex items-center pl-3 mb-14'><div className='relative w-8 h-8 mr-4'>
-          <Image fill alt="logo" src="/logo.png" />
+          <Image fill alt="logo" src="/logo_only.png" />
 
         </div>
-          <h1 className={cn("text-2xl font-bold", monserrat.className)}>ReactAIvate</h1>
+          <h1 className={cn("text-2xl font-bold", monserrat.className)}>MentorHQ</h1>
         </Link>
         <div className='space-y-1'>
           {routes.map((route) => (

@@ -181,7 +181,6 @@ model User {
   email            String?          @unique
   emailVerified    DateTime?
   image            String?
-  credits          Int              @default(3)
   isOnboarded      Boolean          @default(false)
   isPremium        Boolean          @default(false)
   firstName        String?

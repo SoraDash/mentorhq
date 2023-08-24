@@ -1,29 +1,10 @@
-import { DefaultSession, NextAuthOptions, getServerSession } from "next-auth";
-import { prisma } from "./db";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import GoogleProvider from "next-auth/providers/google";
+
+import { NextAuthOptions, getServerSession } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
-import { Role } from '@prisma/client';
-
-declare module "next-auth" {
-  interface Session extends DefaultSession {
-    user: {
-      id: string;
-      isOnboarded: boolean;
-      isPremium: boolean;
-      role: Role
-    } & DefaultSession["user"];
-  }
-}
-
-declare module "next-auth/jwt" {
-  interface JWT {
-    id: string;
-    isOnboarded: boolean;
-    isPremium: boolean;
-    role: Role
-  }
-}
+import GoogleProvider from "next-auth/providers/google";
+import { prisma } from "./db";
+import { IUser } from '@/next-auth';
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET as string,
@@ -47,15 +28,19 @@ export const authOptions: NextAuthOptions = {
         },
       });
       if (db_user) {
-        token.id = db_user.id;
-        token.isOnboarded = db_user.isOnboarded;
-        token.isPremium = db_user.isPremium;
-        token.role = db_user.role;
+        token.id = db_user.id
+        token.name = db_user.name
+        token.email = db_user.email
+        token.image = db_user.image
+        token.isOnboarded = db_user.isOnboarded
+        token.isPremium = db_user.isPremium
+        token.role = db_user.role
       }
       return token;
     },
     session: ({ session, token }) => {
       if (token) {
+        if (!session.user) session.user = {} as IUser
         session.user.id = token.id;
         session.user.name = token.name;
         session.user.email = token.email;
@@ -83,3 +68,16 @@ export const getAuthSession = () => {
 
   return getServerSession(authOptions);
 };
+
+export const getUserRole = async () => {
+  const session = await getAuthSession()
+  if (!session?.user) return null
+  const role = await prisma.user.findUnique({
+    where: {
+      id: session.user.id
+    }, select: {
+      role: true
+    }
+  })
+  return role?.role
+}

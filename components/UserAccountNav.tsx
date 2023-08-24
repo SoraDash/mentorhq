@@ -8,47 +8,69 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
+import { roleConfig } from '@/lib/roleConfig';
+import { Role } from '@prisma/client';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { LogOut } from "lucide-react";
 import { User } from "next-auth";
-import { LogOut, ShieldCheck, Zap } from "lucide-react";
 import { signOut } from "next-auth/react";
+import { useRouter } from 'next/navigation';
 import { UserAvatar } from './UserAvatar';
+import { Badge } from './ui/badge';
+import { cn } from '@/lib/utils';
+import { BiCog } from 'react-icons/bi';
 
 type Props = {
   user: User;
+  role: Role
 };
 
-export const UserAccountNav = ({ user }: Props) => {
+export const UserAccountNav = ({ user, role }: Props) => {
+  const { color, icon: RoleIcon } = roleConfig[role];
+  const router = useRouter();
+
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <UserAvatar user={user} />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <div className="flex items-center justify-start gap-2 p-2">
-          <div className="flex flex-col space-y-1 leading-none">
-            <div className="flex items-center space-x-2">
-              <p className="font-medium">{user.name}</p>
+      <DropdownMenuContent align="end" className="p-4">
+        <div className="mb-4">
+          Signed in as
+          <div className="flex items-center space-x-2 mb-2">
 
-            </div>
-            {user?.email && (
-              <p className="w-[200px] truncate text-sm text-secondary-foreground">
-                {user.email}
-              </p>
-            )}
+            <p className="font-medium text-lg">{user.name}</p>
+            <Tooltip>
+              <TooltipTrigger>
+                <RoleIcon className={cn("w-5 h-5", color)} />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className='capitalize'>{role.toLocaleLowerCase()} Account</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
+          <p className="w-[200px] truncate text-sm text-secondary-foreground">
+            {user?.email}
+          </p>
         </div>
-
-
-
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onSelect={() => router.push('/settings')}
+          className="cursor-pointer flex items-center space-x-2 mb-2"
+        >
+          <span>Settings</span>
+          <BiCog className="w-4 h-4" />
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onSelect={() => {
             signOut();
           }}
-          className="text-red-600 cursor-pointer"
+          className="text-red-600 cursor-pointer flex items-center space-x-2"
         >
-          Sign out
-          <LogOut className="w-4 h-4 ml-2" />
+          <span>Sign out</span>
+          <LogOut className="w-4 h-4" />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

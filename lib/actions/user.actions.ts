@@ -1,101 +1,30 @@
-"use server";
-
-import { auth } from '@clerk/nextjs';
-import { currentUser } from '@clerk/nextjs/server';
-import { revalidatePath } from "next/cache";
+// user.action.ts
+"use server"
+import { getAuthSession } from '@/lib/auth';
+import { CustomFormData } from '@/types/FormDataTypes';
+import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
-import { prisma } from '../db';
 
-
-export async function fetchUser() {
-  const user = await currentUser()
-  if (!user) return null;
+const prisma = new PrismaClient();
+export async function onboardUser(rawFormData: Partial<FormData | CustomFormData>) {
   try {
-    const test = await prisma.userAccount.findUnique({
-      where: {
-        accountId: user.id
-
-      },
-    })
-    console.log("Running fetchUser")
-    if (test) throw new Error("Test")
-
-  } catch (error: any) {
-
-    return new NextResponse(`Failed to fetch user: ${error.message}`, { status: 500 });
-  }
-}
-
-interface Params {
-  username?: string | null | undefined
-  email: string;
-  ciEmail: string | null | undefined
-  name: string | null | undefined
-  image: string | null | undefined
-  paidPerHour?: number
-  github?: string | null | undefined
-  slack?: string | null | undefined
-  linkedIn?: string | null | undefined
-  website?: string | null | undefined
-  skype?: string | null | undefined
-  twitter?: string | null | undefined
-  ciApiKey?: string | null | undefined
-  isMentor: boolean
-  sendWelcomeEmail?: boolean
-  path: string
-}
-
-export async function updateUser({
-  username,
-  ciEmail,
-  email,
-  name,
-  image,
-  paidPerHour,
-  github,
-  slack,
-  linkedIn,
-  website,
-  skype,
-  twitter,
-  ciApiKey,
-  isMentor = false,
-  sendWelcomeEmail,
-  path
-}: Params): Promise<void> {
-  console.log({ username, ciEmail, email, name, image, paidPerHour, github, slack, linkedIn, website, skype, twitter, ciApiKey, isMentor, sendWelcomeEmail, path })
-  try {
-    const { userId } = await auth();
-    if (!userId) return;
-    await prisma.userAccount.update({
-      where: {
-        accountId: userId
-      },
-      data: {
-        name,
-        username,
-        email,
-        image: image,
-        isOnboarded: true,
-        role: isMentor ? "MENTOR" : "USER",
-        ciApiKey,
-        ciEmail,
-        paidPerHour,
-        github,
-        slack,
-        linkedIn,
-        website,
-        skype,
-        twitter,
-        sendWelcomeEmail
-
-      }
-    })
-    if (path === "/profile/edit") {
-      revalidatePath(path);
+    const session = await getAuthSession();
+    if (!session || !session.user?.id) {
+      throw new Error('No session found or no user ID in the session');
     }
 
+    const updatedUser = await prisma.user.update({
+      where: { id: session.user.id },
+      data: {
+        ...rawFormData as CustomFormData, // Cast rawFormData to CustomFormData
+        isOnboarded: true,
+        role: 'MENTOR'
+      }
+    });
+
+    return { success: true, data: updatedUser };
+
   } catch (error: any) {
-    throw new NextResponse(`Failed to update user: ${error.message}`, { status: 500 });
+    return { success: false, error: error.message };
   }
 }

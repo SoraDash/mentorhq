@@ -1,10 +1,11 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
+import { IUser } from '@/next-auth';
 import { NextAuthOptions, getServerSession } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import { prisma } from "./db";
-import { IUser } from '@/next-auth';
+import { splitName } from './split-name';
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET as string,
@@ -17,7 +18,17 @@ export const authOptions: NextAuthOptions = {
   },
   events: {
     async signIn(message) {
-      console.log("User signed in", message.user.email)
+      const name = splitName(message.user.name!)
+      await prisma.user.update({
+        where: {
+          email: message.user.email!
+        },
+        data: {
+          firstName: name.firstName,
+          lastName: name.lastName,
+          image: message.user.image
+        }
+      })
     }
   },
   callbacks: {
@@ -30,6 +41,8 @@ export const authOptions: NextAuthOptions = {
       if (db_user) {
         token.id = db_user.id
         token.name = db_user.name
+        token.firstName = db_user.firstName!
+        token.lastName = db_user.lastName!
         token.email = db_user.email
         token.image = db_user.image
         token.isOnboarded = db_user.isOnboarded
@@ -43,6 +56,8 @@ export const authOptions: NextAuthOptions = {
         if (!session.user) session.user = {} as IUser
         session.user.id = token.id;
         session.user.name = token.name;
+        session.user.firstName = token.firstName;
+        session.user.lastName = token.lastName;
         session.user.email = token.email;
         session.user.image = token.picture;
         session.user.isOnboarded = token.isOnboarded;

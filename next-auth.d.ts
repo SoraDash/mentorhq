@@ -3,6 +3,8 @@ import { DefaultUser } from "next-auth";
 
 interface IUser extends DefaultUser {
   id: string;
+  firstName: string;
+  lastName: string;
   isOnboarded: boolean;
   isPremium: boolean;
   role: Role

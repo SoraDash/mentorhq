@@ -1,11 +1,18 @@
 "use client";
 
 import { cn } from '@/lib/utils';
-import { Code, ImageIcon, LayoutDashboard, MessageSquare, MusicIcon, Settings, VideoIcon } from 'lucide-react';
+import { Code, ImageIcon, LayoutDashboard, MessageSquare, MusicIcon, Settings, VideoIcon, Zap } from 'lucide-react';
+import { User } from 'next-auth';
 import { Montserrat } from 'next/font/google';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+import { CgClose } from 'react-icons/cg';
+import { FaGraduationCap } from 'react-icons/fa';
+import { Alert, AlertDescription, AlertTitle } from './ui/alert';
+import { Button } from './ui/button';
+import useOnboardingModal from '@/hooks/useOnboardingModal';
 
 const monserrat = Montserrat({ weight: "600", subsets: ['latin'] });
 
@@ -20,11 +27,14 @@ const routes = [
 ]
 
 interface SidebarProps {
-
+  user?: User
 }
 
-const Sidebar = () => {
+const Sidebar: React.FC<SidebarProps> = ({ user }) => {
   const pathname = usePathname();
+  const [isHidden, setIsHidden] = useState(false);
+  const modal = useOnboardingModal();
+
 
   return (
     <div className='space-y-4 py-4 flex flex-col h-full bg-[#111827] text-white'>
@@ -45,8 +55,26 @@ const Sidebar = () => {
             </Link>))}
         </div>
       </div>
-    </div >
-  );
+      {/* Alert box for non-mentor users */}
+      {!user?.isOnboarded && !isHidden ? (
+        <Alert variant={"destructive"} onClick={modal.onOpen}>
+          {/* Icon and Text */}
+          <CgClose className="h-4 w-4" onClick={() => {
+            setIsHidden(true);
+          }} />
+          <AlertTitle>Unlock Your Mentor Mastery!</AlertTitle>
+          <AlertDescription>
+            Get access to students and a personalized experience
+            <Button size="lg" variant="ghost" className="w-full">
+              Complete profile!
+              <Zap className="w-4 h-4 ml-2 fill-white" />
+            </Button>
 
+          </AlertDescription>
+
+        </Alert>
+      ) : null}
+    </div>
+  )
 }
 export default Sidebar; 

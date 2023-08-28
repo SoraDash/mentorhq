@@ -126,17 +126,17 @@ model StudentSession {
 model Student {
   id            String    @id @default(uuid())
   name          String
-  email         String
+  email         String    @unique
   contactMethod String?
   lastContact   DateTime  @updatedAt
   github        String?
   slack         String?
   skype         String?
   linkedIn      String?
-  programmeId   String?
+  programmeID   String?
   courseCode    String?
   startDate     DateTime?
-  lms_access    Boolean?
+  lmsAccess     Boolean?
   status        String?
   mentor        User?     @relation(fields: [mentorId], references: [id])
   mentorId      String?

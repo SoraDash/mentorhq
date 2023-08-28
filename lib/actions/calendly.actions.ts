@@ -58,10 +58,8 @@ export const getCalendlyUser = async () => {
   const token = user.calendly_token;
   const { created_at, expires_in } = token;
 
-  // Calculate the current time
-  const currentTime = Math.floor(Date.now() / 1000);
-
   // Check if the token has expired or is about to expire
+  const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
   if (currentTime >= created_at + expires_in) {
     // Token has expired or is about to expire, introspect to validate
     const introspectionResult = await introspectToken(token);
@@ -69,6 +67,7 @@ export const getCalendlyUser = async () => {
       // The token is still valid, you can proceed with using it
       return user;
     } else {
+
       throw new Error('Token is no longer valid');
     }
   }

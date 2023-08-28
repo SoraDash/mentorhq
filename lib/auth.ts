@@ -96,3 +96,15 @@ export const getUserRole = async () => {
   })
   return role?.role
 }
+export const getUser = async () => {
+  const session = await getAuthSession()
+  if (!session?.user) return null
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.user.id
+    }
+  })
+  return user
+}
+
+

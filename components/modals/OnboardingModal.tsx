@@ -11,6 +11,7 @@ import NameForm from '../forms/onboarding/NameForm';
 import SocialForm from '../forms/onboarding/SocialForm';
 import { onboardUser } from '@/lib/actions/user.actions';
 import { useRouter } from 'next/navigation';
+import { useToast } from '../ui/use-toast';
 
 export const OnboardingModal = () => {
   const modal = useOnboardingModal();
@@ -66,7 +67,11 @@ export const OnboardingModal = () => {
         if (response.success) {
           modal.onClose();
           router.refresh();
-
+          toast({
+            title: "Success: You're in!",
+            description: "You've successfully completed onboarding.",
+            variant: "success",
+          })
         } else {
 
         }

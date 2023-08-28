@@ -1,5 +1,6 @@
 import { NavBar } from '@/components/navbar';
 import Sidebar from '@/components/sidebar';
+import { Toast } from '@/components/ui/toast';
 import { getAuthSession } from '@/lib/auth';
 import { redirect } from 'next/navigation'
 

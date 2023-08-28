@@ -6,6 +6,7 @@ import { type ThemeProviderProps } from "next-themes/dist/types";
 import { SessionProvider } from "next-auth/react";
 import { TooltipProvider } from '../components/ui/tooltip';
 import { ModalProvider } from './ModalProvider';
+import { Toaster } from '@/components/ui/toaster';
 
 export function Providers({ children, ...props }: ThemeProviderProps) {
   return (
@@ -18,6 +19,7 @@ export function Providers({ children, ...props }: ThemeProviderProps) {
     >
       <SessionProvider>
         <TooltipProvider>
+          <Toaster />
           <ModalProvider />
           {children}
         </TooltipProvider>

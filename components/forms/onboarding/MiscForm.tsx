@@ -56,7 +56,7 @@ const MiscForm: React.FC<MiscFormProps> = ({
           className="w-full px-4 py-2 border rounded shadow-sm focus:ring focus:ring-indigo-300 focus:outline-none"
         />
       </div>
-      <div>
+      {/* <div>
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="ciEmail">
           CI Email
         </label>
@@ -67,7 +67,7 @@ const MiscForm: React.FC<MiscFormProps> = ({
           onChange={(e) => updateFields({ ciEmail: e.target.value })}
           className="w-full px-4 py-2 border rounded shadow-sm focus:ring focus:ring-indigo-300 focus:outline-none"
         />
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -1,29 +1,32 @@
 "use client";
 
+import useOnboardingModal from '@/hooks/useOnboardingModal';
 import { cn } from '@/lib/utils';
-import { Code, ImageIcon, LayoutDashboard, MessageSquare, MusicIcon, Settings, VideoIcon, Zap } from 'lucide-react';
+import { LayoutDashboard, Zap } from 'lucide-react';
 import { User } from 'next-auth';
 import { Montserrat } from 'next/font/google';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { AiOutlineBarChart } from 'react-icons/ai';
 import { CgClose } from 'react-icons/cg';
-import { FaGraduationCap } from 'react-icons/fa';
+import { FaFileInvoice, FaGraduationCap, FaMoneyBillAlt } from 'react-icons/fa';
+import { FiSettings } from 'react-icons/fi';
+import { SiGotomeeting } from 'react-icons/si';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { Button } from './ui/button';
-import useOnboardingModal from '@/hooks/useOnboardingModal';
 
 const monserrat = Montserrat({ weight: "600", subsets: ['latin'] });
 
 const routes = [
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, color: "text-sky-500" },
-  { label: 'Students', href: '/students', icon: MessageSquare, color: "text-violet-500" },
-  { label: 'Stats', href: '/stats', icon: ImageIcon, color: "text-pink-700" },
-  { label: 'Invoices', href: '/video', icon: VideoIcon, color: "text-orange-700" },
-  { label: 'Billing', href: '/music', icon: MusicIcon, color: "text-emerald-500" },
-  { label: 'Sessions', href: '/code', icon: Code, color: "text-green-700" },
-  { label: 'Settings', href: '/settings', icon: Settings },
+  { label: 'Students', href: '/students', icon: FaGraduationCap, color: "text-violet-500" },
+  { label: 'Stats', href: '/stats', icon: AiOutlineBarChart, color: "text-pink-700" },
+  { label: 'Invoices', href: '/video', icon: FaFileInvoice, color: "text-orange-700" },
+  { label: 'Billing', href: '/music', icon: FaMoneyBillAlt, color: "text-emerald-500" },
+  { label: 'Sessions', href: '/code', icon: SiGotomeeting, color: "text-green-700" },
+  { label: 'Settings', href: '/settings', icon: FiSettings },
 ]
 
 interface SidebarProps {

@@ -1,3 +1,4 @@
+import CalendlyAuth from '@/components/calendly';
 import { DashboardCard } from '@/components/dashboard/InfoCard';
 import { getAuthSession } from '@/lib/auth';
 
@@ -15,6 +16,7 @@ const DashboardPage: React.FC<DashboardPageProps> = async () => {
         </div>
       </section>
       DashboardPage
+      <CalendlyAuth />
     </div>
   );
 }

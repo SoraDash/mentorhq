@@ -1,13 +1,10 @@
 "use server";
 
+import { getUser } from '@lib/auth/auth';
+import { prisma } from '@lib/db/db';
+import { lock } from '@lib/utils/asyncLock';
+import nodeCache from '@lib/utils/cache';
 import { Student, User } from '@prisma/client';
-import { getUser } from '../lib/auth/auth';
-import nodeCache from '../cache';
-import { prisma } from '../lib/db';
-import { signOut } from 'next-auth/react';
-const AsyncLock = require("async-lock");
-
-const lock = new AsyncLock();
 
 const isCachingEnabled = process.env.NODE_ENV !== 'production';
 

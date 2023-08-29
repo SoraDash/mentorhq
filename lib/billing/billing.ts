@@ -1,7 +1,7 @@
-import nodeCache from '../utils/cache';
-import { getAuthSession } from '../auth/auth';
-import { getUserByEmail } from '../db/user';
-import { lock } from '../utils/asyncLock';
+import nodeCache from '@/lib/utils/cache';
+import { getAuthSession } from '@/lib/auth/auth';
+import { getUserByEmail } from '@/lib/db/user';
+import { lock } from '@/lib/utils/asyncLock';
 
 
 export const getBilling = async (month: string, year: string) => {
@@ -30,14 +30,14 @@ export const getBilling = async (month: string, year: string) => {
 
       const cacheKey = `billing:${userEmail}:${month}:${year}`;
 
-      const cachedData = nodeCache.get(cacheKey);
-      if (cachedData) {
-        console.debug(`Cache HIT for key: ${cacheKey}`);
-        return cachedData;
-      } else {
-        console.debug(`Cache MISS for key: ${cacheKey}`);
+      // const cachedData = nodeCache.get(cacheKey);
+      // if (cachedData) {
+      //   console.debug(`Cache HIT for key: ${cacheKey}`);
+      //   return cachedData;
+      // } else {
+      //   console.debug(`Cache MISS for key: ${cacheKey}`);
 
-      }
+      // }
 
       const apiUrl = constructApiUrl(userEmail, ciApiKey, month, year);
 

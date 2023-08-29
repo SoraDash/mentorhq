@@ -5,20 +5,12 @@ import { fetchLatestStats } from '@/lib/queries/statQueries';
 import { fetchUser } from '@/lib/queries/userQueries';
 import { User } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
-import { signOut, useSession } from 'next-auth/react';
 import { CircleLoader } from 'react-spinners';
 
-interface DashboardPageProps { }
-
-const DashboardPage: React.FC<DashboardPageProps> = () => {
+const DashboardPage: React.FC = () => {
   const { data: user, isLoading: isUserLoading, isError: isUserError } = useQuery<User | null>(['user'], fetchUser);
   const { data: stats, isLoading: isStatsLoading, isError: isStatsError } = useQuery(['stats'], fetchLatestStats);
   const { refetch } = useQuery<User | null>(['user'], fetchUser);
-  const { data: session } = useSession();
-  if (!session) signOut({
-    callbackUrl: '/',
-    redirect: true
-  });
 
   if (isUserLoading || isStatsLoading) {
     return <CircleLoader color="#36d7b7" />;
@@ -27,7 +19,6 @@ const DashboardPage: React.FC<DashboardPageProps> = () => {
   if (isUserError || isStatsError) {
     return <div>Error...</div>;
   }
-
 
   return (
     <div>
@@ -42,6 +33,5 @@ const DashboardPage: React.FC<DashboardPageProps> = () => {
     </div>
   );
 };
-
 
 export default DashboardPage;

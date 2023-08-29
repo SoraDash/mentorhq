@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidateTag } from 'next/cache'
-import { getUser } from '../lib/auth/auth';
+import { getUser } from '@/components/lib/auth/auth';
 
 
 export async function revalidateUserFeatures() {

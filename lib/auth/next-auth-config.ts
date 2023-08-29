@@ -4,8 +4,8 @@ import { IUser } from '@/next-auth';
 import { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import { prisma } from "../db";
-import { splitName } from '../split-name';
+import { prisma } from "@/lib/db/db";
+import { splitName } from '@/lib/split-name';
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET as string,

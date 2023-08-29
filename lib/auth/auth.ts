@@ -1,22 +1,15 @@
+import { prisma } from '@lib/db/db';
+import { User } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './next-auth-config';
-import { User } from '@prisma/client';
 
 export const getAuthSession = () => {
   return getServerSession(authOptions);
 };
 
 export const getUserRole = async () => {
-  const session = await getAuthSession()
-  if (!session?.user) return
-  const role = await prisma.user.findUnique({
-    where: {
-      id: session.user.id
-    }, select: {
-      role: true
-    }
-  })
-  return role?.role
+  const user = await getUser()
+  return user?.role
 }
 export const getUser = async (): Promise<User | null> => {
   const session = await getAuthSession()
@@ -24,7 +17,8 @@ export const getUser = async (): Promise<User | null> => {
   const user = await prisma.user.findUnique({
     where: {
       id: session.user.id
-    }
+    },
+
   })
   return user
 }

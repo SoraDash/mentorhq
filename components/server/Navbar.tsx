@@ -1,8 +1,8 @@
 import { getAuthSession, getUserRole } from '@/lib/auth/auth';
-import { SignInButton } from '../client/SignInButton';
-import { ThemeToggle } from '../client/ThemeToggle';
-import { UserAccountNav } from '../client/UserAccountNav';
-import MobileSidebar from '../client/mobile-sidebar';
+import { SignInButton } from '@/components/client/SignInButton';
+import { ThemeToggle } from '@/components/client/ThemeToggle';
+import { UserAccountNav } from '@/components/client/UserAccountNav';
+import MobileSidebar from '@/components/client/mobile-sidebar';
 
 export const NavBar = async () => {
   const session = await getAuthSession();

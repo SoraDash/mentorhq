@@ -1,14 +1,13 @@
-import { getLatestStats } from '@/lib/actions/billing.actions';
+import { getLatestStats } from '@/lib/billing/stats';
 import { NextRequest, NextResponse } from 'next/server';
 
+interface LatestStatsRequest {
+  date: Date;
+}
 
-
-export async function GET(req: NextRequest): Promise<NextResponse> {
-  const url = new URL(req.url);
-  const dateParam = url.searchParams.get('date');
+export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
-    const date = dateParam ? new Date(dateParam) : undefined;
-    const data = await getLatestStats(date);
+    const data = await getLatestStats();
     if (!data) {
       return NextResponse.json({ message: 'No data available' }, { status: 204 });
     } else {

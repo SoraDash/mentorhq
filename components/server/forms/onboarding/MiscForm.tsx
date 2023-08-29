@@ -1,4 +1,3 @@
-import { Label } from '@/components/ui/label';
 import { MiscFormData } from '@/types/FormDataTypes';
 
 type MiscFormProps = MiscFormData & {

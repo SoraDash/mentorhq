@@ -1,18 +1,19 @@
 "use client"
+
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 import { useMultistepForm } from '@/hooks/useMultiStepForm';
 import useOnboardingModal from "@/hooks/useOnboardingModal";
+import { onboardUser } from '@/lib/actions/user.actions';
 import { INITIAL_DATA } from '@/lib/validations/UserValidation';
 import { CustomFormData } from '@/types/FormDataTypes';
 import { useSession } from 'next-auth/react';
-import { FormEvent, useEffect, useState } from 'react';
-import MiscForm from '../forms/onboarding/MiscForm';
-import NameForm from '../forms/onboarding/NameForm';
-import SocialForm from '../forms/onboarding/SocialForm';
-import { onboardUser } from '@/lib/actions/user.actions';
-import { useRouter } from 'next/navigation';
-import { useToast } from '../ui/use-toast';
 import { revalidatePath } from 'next/cache';
+import { useRouter } from 'next/navigation';
+import { FormEvent, useEffect, useState } from 'react';
+import MiscForm from '@/components/server/forms/onboarding/MiscForm';
+import NameForm from '@/components/server/forms/onboarding/NameForm';
+import SocialForm from '@/components/server/forms/onboarding/SocialForm';
+import { useToast } from '@/components/ui/use-toast';
 
 export const OnboardingModal = () => {
   const modal = useOnboardingModal();

@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button'
 import { Student } from '@prisma/client'
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, } from 'lucide-react'
-import { BiUserCircle } from 'react-icons/bi'
 import Link from 'next/link'
+import { BiUserCircle } from 'react-icons/bi'
 
 export const studentColumns: ColumnDef<Student>[] = [
   {

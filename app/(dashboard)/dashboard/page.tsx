@@ -1,10 +1,8 @@
 "use client"
-import { DashboardCard } from '@/components/dashboard/InfoCard';
-import { OnboardingSteps } from '@/components/OnboardingSteps';
-import { getUser } from '@/lib/auth';
+import { OnboardingSteps } from '@/components/client/OnboardingSteps';
+import { StatsCard } from '@/components/server/dashboard/StatsCard';
 import { User } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
-import { error } from 'console';
 
 interface DashboardPageProps { }
 
@@ -33,7 +31,7 @@ const DashboardPage: React.FC<DashboardPageProps> = () => {
       <section className="bg-coolGray-50 py-4">
         <div className="container px-4 mx-auto">
           <div className="flex flex-wrap -m-3">
-            <DashboardCard />
+            <StatsCard />
           </div>
         </div>
       </section>

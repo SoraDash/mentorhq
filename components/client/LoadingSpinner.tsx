@@ -1,8 +1,7 @@
 "use client"
-import { Comment } from 'react-loader-spinner';
-import React, { useState, useEffect } from 'react';
 import { EMOJI, LOADING_TEXT } from '@/constants/loading-text';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 export default function LoadingSpinner() {
   const generateLoadingText = () => {
@@ -14,7 +13,6 @@ export default function LoadingSpinner() {
   // Get a random loading text initially
   const initialLoadingText = generateLoadingText();
 
-  const [loadingState, setLoadingState] = useState(false);
   const [loadingText, setLoadingText] = useState(initialLoadingText);
 
   useEffect(() => {

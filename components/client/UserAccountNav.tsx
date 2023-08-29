@@ -6,19 +6,18 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 
-import { roleConfig } from '@/lib/roleConfig';
-import { Role } from '@prisma/client';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { roleConfig } from '@/lib/roleConfig';
+import { cn } from '@/lib/utils';
+import { Role } from '@prisma/client';
 import { LogOut } from "lucide-react";
 import { User } from "next-auth";
 import { signOut } from "next-auth/react";
 import { useRouter } from 'next/navigation';
-import { UserAvatar } from './UserAvatar';
-import { Badge } from './ui/badge';
-import { cn } from '@/lib/utils';
 import { BiCog } from 'react-icons/bi';
+import { UserAvatar } from './UserAvatar';
 
 type Props = {
   user: User;

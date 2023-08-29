@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { OnboardingModal } from '../components/modals/OnboardingModal';
+import { OnboardingModal } from '../components/client/modals/OnboardingModal';
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);

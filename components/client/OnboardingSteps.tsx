@@ -1,4 +1,5 @@
 "use client"
+
 import React, { useState, useEffect } from 'react';
 import useOnboardingModal from '@/hooks/useOnboardingModal';
 import { User } from '@prisma/client';
@@ -6,7 +7,7 @@ import Image from 'next/image';
 import { GoZap } from 'react-icons/go';
 import { LiaCheckSolid, LiaTimesSolid } from 'react-icons/lia';
 import { RiRocketFill } from 'react-icons/ri';
-import CalendlyAuth from './calendly';
+import CalendlyAuth from './Calendly';
 
 async function fetchUserData() {
   const response = await fetch('/api/user');

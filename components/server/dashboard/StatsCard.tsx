@@ -1,6 +1,6 @@
 import { getLatestStats } from '@/lib/actions/billing.actions';
 
-export const DashboardCard: React.FC = async () => {
+export const StatsCard: React.FC = async () => {
 
   const processedData = await getLatestStats(new Date("2022-10-01"))
 

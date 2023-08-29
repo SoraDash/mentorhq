@@ -3,7 +3,7 @@
 import { AvatarFallback } from '@radix-ui/react-avatar';
 import { User } from 'next-auth';
 import Image from 'next/image';
-import { Avatar } from './ui/avatar';
+import { Avatar } from '../ui/avatar';
 
 interface UserAvatarProps {
   user: User

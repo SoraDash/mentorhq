@@ -1,5 +1,5 @@
-import { NavBar } from '@/components/navbar';
-import Sidebar from '@/components/sidebar';
+import { NavBar } from '@/components/server/Navbar';
+import Sidebar from '@/components/client/Sidebar';
 import { getAuthSession } from '@/lib/auth';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { redirect } from 'next/navigation';

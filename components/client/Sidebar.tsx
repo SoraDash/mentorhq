@@ -14,8 +14,8 @@ import { CgClose } from 'react-icons/cg';
 import { FaFileInvoice, FaGraduationCap, FaMoneyBillAlt } from 'react-icons/fa';
 import { FiSettings } from 'react-icons/fi';
 import { SiGotomeeting } from 'react-icons/si';
-import { Alert, AlertDescription, AlertTitle } from './ui/alert';
-import { Button } from './ui/button';
+import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
+import { Button } from '../ui/button';
 
 const monserrat = Montserrat({ weight: "600", subsets: ['latin'] });
 

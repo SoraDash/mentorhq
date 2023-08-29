@@ -5,10 +5,7 @@ import { prisma } from '@/lib/db';
 import { differenceInDays, differenceInMinutes, endOfMonth, getMonth, getYear, parse, startOfMonth } from 'date-fns';
 import { FaCalendar, FaClock, FaEuroSign, FaUsers } from 'react-icons/fa';
 
-import nodeCache from '../cache';
-const AsyncLock = require("async-lock");
 
-const lock = new AsyncLock();
 
 const getBilling = async (month: string, year: string) => {
   return await lock.acquire("billing", async () => {

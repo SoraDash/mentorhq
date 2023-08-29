@@ -1,6 +1,6 @@
 "use server"
 
-import { getAuthSession } from '@/lib/auth';
+import { getAuthSession, getUser } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { differenceInDays, differenceInMinutes, endOfMonth, getMonth, getYear, parse, startOfMonth } from 'date-fns';
 import { FaCalendar, FaClock, FaEuroSign, FaUsers } from 'react-icons/fa';
@@ -48,14 +48,37 @@ const getBilling = async (month: string, year: string) => {
 
       const apiUrl = constructApiUrl(userEmail, ciApiKey, month, year);
 
-      const response = await fetch(apiUrl);
+      const MAX_RETRIES = 3;
+      let retryCount = 0;
+      let success = false;
+      let response;
 
-      if (!response.ok) { // Check if HTTP status code is not in the 200-299 range
-        console.error(`HTTP error occurred with status code: ${response.status}`);
+      while (retryCount < MAX_RETRIES && !success) {
+        try {
+          response = await fetch(apiUrl);
+          success = true; // If fetch succeeds, set success to true
+        } catch (error: any) {
+          retryCount++;
+          console.error(`Fetch failed. Retry count: ${retryCount}. Error:`, error.message);
+          await new Promise(res => setTimeout(res, 3000)); // Wait for 3 seconds before retrying
+        }
+      }
+
+      if (!success) {
         return {
           error: true,
-          message: `HTTP error with status code: ${response.status}`,
-          status: response.status
+          message: 'Network error. Could not fetch data after multiple attempts.',
+          status: 503 // Service unavailable
+        };
+      }
+
+      if (!response || !response.ok) { // Check if response is falsy or HTTP status code is not in the 200-299 range
+        const status = response ? response.status : 'unknown';
+        console.error(`HTTP error occurred with status code: ${status}`);
+        return {
+          error: true,
+          message: `HTTP error with status code: ${status}`,
+          status
         };
       }
 
@@ -106,11 +129,6 @@ function constructApiUrl(email: string, apiKey: string, month: string, year: str
   return `${process.env.CI_API_URL}?email=${email}&key=${apiKey}&month=${month}&year=${year}`;
 }
 
-// Helper function to convert minutes to HH:MM format
-const formatTimeHHMM = (time: string) => {
-  const [hours, minutes] = time.split(':');
-  return `${hours}h:${minutes}m`;
-};
 
 const convertToMinutes = (time: string) => {
   const referenceDate = new Date(0, 0, 0, 0, 0, 0);
@@ -119,16 +137,19 @@ const convertToMinutes = (time: string) => {
 };
 
 export const getLatestStats = async (date?: Date) => {
+  const user = await getUser();
+  if (!user?.ciApiKey) return null;
   const now = new Date();
   const month = date ? getMonth(date) + 1 : getMonth(now) + 1;
   const year = date ? getYear(date) : getYear(now);
 
   const data = await getBilling(month.toString(), year.toString());
+  if (!data) return null
 
-  const sessionCount = parseInt(data.aggregates.session_count);
-  const eurosBillable = data.aggregates.euros_billable;
+  const sessionCount = parseInt(data?.aggregates?.session_count);
+  const eurosBillable = data?.aggregates?.euros_billable;
 
-  const averageSessionTimeInMinutes = convertToMinutes(data.aggregates.total_session_time) / sessionCount;
+  const averageSessionTimeInMinutes = convertToMinutes(data?.aggregates?.total_session_time) / sessionCount;
 
   return [
     {

@@ -77,11 +77,9 @@ model Notification {
 }
 
 model ProjectType {
-  id         String   @id @default(uuid())
-  name       String
-  order      Int?
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id    String @id @default(uuid())
+  name  String
+  order Int?
 }
 
 model Project {
@@ -106,36 +104,34 @@ model Deadline {
 }
 
 model SessionType {
-  id         String   @id @default(uuid())
-  name       String
-  order      Int
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id    String @id @default(uuid())
+  name  String
+  order Int
 }
 
 model StudentSession {
-  id          String    @id @default(uuid())
-  date        DateTime  @default(now())
+  id          String          @id @default(uuid())
+  date        DateTime        @default(now())
   type        String?
-  progress    String?
-  summary     String?   @db.Text
-  notes       String?   @db.Text
+  progress    SessionProgress
+  summary     String?         @db.Text
+  notes       String?         @db.Text
   duration    Int?
   session_url String?
-  user        User      @relation(fields: [userId], references: [id])
+  user        User            @relation(fields: [userId], references: [id])
   userId      String
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
-  isDeleted   Boolean   @default(false)
-  deletedAt   DateTime? @default(now())
+  created_at  DateTime        @default(now())
+  updated_at  DateTime        @updatedAt
+  isDeleted   Boolean         @default(false)
+  deletedAt   DateTime?       @default(now())
 }
 
 model Student {
-  id            String     @id @default(uuid())
+  id            String        @id @default(uuid())
   name          String
-  email         String     @unique
-  contactMethod String?
-  lastContact   DateTime   @updatedAt
+  email         String        @unique
+  contactMethod ContactMethod @default(SLACK)
+  lastContact   DateTime      @updatedAt
   github        String?
   slack         String?
   skype         String?
@@ -146,12 +142,12 @@ model Student {
   lmsAccess     Boolean?
   status        String?
   deadlines     Deadline[]
-  mentor        User?      @relation(fields: [mentorId], references: [id])
+  mentor        User?         @relation(fields: [mentorId], references: [id])
   mentorId      String?
-  created_at    DateTime   @default(now())
-  updated_at    DateTime   @updatedAt
-  isDeleted     Boolean    @default(false)
-  deletedAt     DateTime?  @default(now())
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+  isDeleted     Boolean       @default(false)
+  deletedAt     DateTime?     @default(now())
 }
 
 model Account {
@@ -225,4 +221,25 @@ enum ProjectCompletion {
   FAILED
   ACTIVE
   NOTSTARTED
+}
+
+enum ContactMethod {
+  SLACK
+  SKYPE
+  ZOOM
+  GOOGLE
+}
+
+enum SessionProgress {
+  POOR
+  AVERAGE
+  EXCELLENT
+}
+
+enum ProgrammeIDList {
+  DISDCC
+  SPECOMM
+  DISDE
+  SPADVFE
+  DIWAD221005
 }

@@ -1,11 +1,10 @@
 "use client"
 import { getCalendlyAuthURL, getCalendlyUser } from '@/lib/actions/calendly.actions';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 export default function CalendlyAuth() {
   const [authURL, setAuthURL] = useState("");
-  const [calendlyToken, setCalendlyToken] = useState(null);
+  const [calendlyToken, setCalendlyToken] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchAuthURL() {
@@ -18,8 +17,8 @@ export default function CalendlyAuth() {
     async function fetchUserToken() {
       try {
         const userData = await getCalendlyUser();
-        if (userData.calendly_token) {
-          setCalendlyToken(userData.calendly_token);
+        if (userData?.calendly_token) {
+          setCalendlyToken(userData?.calendly_token as string);
         }
       } catch (error) {
         console.error('Error fetching user token:', error);
@@ -31,16 +30,17 @@ export default function CalendlyAuth() {
 
   if (authURL && !calendlyToken) {
     return (
-      <div>
-        <a href={authURL}>Authorize with Calendly</a>
-      </div>
+      <a href={authURL} className='mt-6 px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600'>Authorize with Calendly</a>
     );
   } else if (calendlyToken) {
     return (
       <div>
         <p>You are authenticated with Calendly.</p>
         {/* Display other user data or token details */}
-        <pre>{JSON.stringify(calendlyToken, null, 2)}</pre>
+        <div className='w-96'>
+
+          <pre>{JSON.stringify(calendlyToken, null, 2)}</pre>
+        </div>
       </div>
     );
   } else {

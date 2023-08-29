@@ -12,6 +12,7 @@ import SocialForm from '../forms/onboarding/SocialForm';
 import { onboardUser } from '@/lib/actions/user.actions';
 import { useRouter } from 'next/navigation';
 import { useToast } from '../ui/use-toast';
+import { revalidatePath } from 'next/cache';
 
 export const OnboardingModal = () => {
   const modal = useOnboardingModal();
@@ -61,10 +62,10 @@ export const OnboardingModal = () => {
   function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (!isLastStep) return next();
-    console.log(data);
     onboardUser(data)
       .then(response => {
         if (response.success) {
+          revalidatePath('/dashboard')
           modal.onClose();
           router.refresh();
           toast({

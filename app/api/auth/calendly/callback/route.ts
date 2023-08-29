@@ -14,7 +14,6 @@ export async function GET(req: NextRequest) {
 
   try {
     const tokenResponse = await exchangeCodeForToken(code as string);
-    console.log(tokenResponse)
     const user = await prisma.user.update({
       where: {
         id: session?.user?.id

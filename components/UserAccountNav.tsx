@@ -43,7 +43,7 @@ export const UserAccountNav = ({ user, role }: Props) => {
             <p className="font-medium text-lg">{user.name}</p>
             <Tooltip>
               <TooltipTrigger>
-                <RoleIcon className={cn("w-5 h-5", color)} />
+                <RoleIcon className={cn("w-5 h-5", color ? color : 'text-white')} />
               </TooltipTrigger>
               <TooltipContent>
                 <p className='capitalize'>{role.toLocaleLowerCase()} Account</p>

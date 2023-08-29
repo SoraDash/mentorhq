@@ -13,7 +13,7 @@ const MiscForm: React.FC<MiscFormProps> = ({
   sendWelcomeEmail,
 }) => {
   return (
-    <div className="grid grid-cols-1 gap-4 mt-3 mb-4">
+    <div className="grid grid-cols-1 gap-4 mt-3 mb-4 space-y-5">
       <div>
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="paidPerHour">
           Paid Per Hour
@@ -55,6 +55,18 @@ const MiscForm: React.FC<MiscFormProps> = ({
           onChange={(e) => updateFields({ ciApiKey: e.target.value })}
           className="w-full px-4 py-2 border rounded shadow-sm focus:ring focus:ring-indigo-300 focus:outline-none"
         />
+        <label className="block text-gray-700 text-sm font-bold my-5" htmlFor="ciApiKey">
+          CI Api Email
+          <span className='text-red-500 ml-3'>Case Sensetive</span>
+        </label>
+        <input
+          type="email"
+          id="ciEmail"
+          value={ciEmail}
+          onChange={(e) => updateFields({ ciEmail: e.target.value })}
+          className="w-full px-4 py-2 border rounded shadow-sm focus:ring focus:ring-indigo-300 focus:outline-none"
+        />
+
       </div>
       {/* <div>
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="ciEmail">

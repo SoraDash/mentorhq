@@ -1,7 +1,10 @@
 import { getLatestStats } from '@/lib/actions/billing.actions';
 
 export const DashboardCard: React.FC = async () => {
+
   const processedData = await getLatestStats(new Date("2022-10-01"))
+
+  if (!processedData) return null
 
   return (
     <div className="flex flex-row space-x-4 overflow-x-auto lg:grid lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 lg:space-x-0 lg:overflow-visible">

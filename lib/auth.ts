@@ -1,6 +1,7 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
 import { IUser } from '@/next-auth';
+import { User } from '@prisma/client';
 import { NextAuthOptions, getServerSession } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
@@ -35,7 +36,7 @@ export const authOptions: NextAuthOptions = {
     jwt: async ({ token }) => {
       const db_user = await prisma.user.findFirst({
         where: {
-          email: token.email,
+          email: token.email as string,
         },
       });
       if (db_user) {
@@ -86,7 +87,7 @@ export const getAuthSession = () => {
 
 export const getUserRole = async () => {
   const session = await getAuthSession()
-  if (!session?.user) return null
+  if (!session?.user) return
   const role = await prisma.user.findUnique({
     where: {
       id: session.user.id
@@ -96,7 +97,7 @@ export const getUserRole = async () => {
   })
   return role?.role
 }
-export const getUser = async () => {
+export const getUser = async (): Promise<User | null> => {
   const session = await getAuthSession()
   if (!session?.user) return null
   const user = await prisma.user.findUnique({

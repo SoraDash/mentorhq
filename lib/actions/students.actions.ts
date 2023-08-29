@@ -4,6 +4,7 @@ import { Student, User } from '@prisma/client';
 import { getUser } from '../auth';
 import nodeCache from '../cache';
 import { prisma } from '../db';
+import { signOut } from 'next-auth/react';
 const AsyncLock = require("async-lock");
 
 const lock = new AsyncLock();
@@ -96,7 +97,7 @@ const upsertStudent = async (student: Student, user: User) => {
       name: student.name,
       status: student.status,
       courseCode: student.courseCode,
-      programmeID: student.programmeID,
+      programmeID: student.programmeID?.toUpperCase(),
       mentorId: user.id,
       skype: student.skype,
       slack: student.slack,
@@ -107,7 +108,7 @@ const upsertStudent = async (student: Student, user: User) => {
       name: student.name,
       status: student.status,
       courseCode: student.courseCode,
-      programmeID: student.programmeID,
+      programmeID: student.programmeID?.toUpperCase(),
       mentorId: user.id,
       skype: student.skype,
       slack: student.slack,

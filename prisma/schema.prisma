@@ -98,6 +98,13 @@ model Project {
   deletedAt  DateTime?         @default(now())
 }
 
+model Deadline {
+  id        String   @id @default(uuid())
+  date      DateTime
+  student   Student  @relation(fields: [studentId], references: [id])
+  studentId String
+}
+
 model SessionType {
   id         String   @id @default(uuid())
   name       String
@@ -124,11 +131,11 @@ model StudentSession {
 }
 
 model Student {
-  id            String    @id @default(uuid())
+  id            String     @id @default(uuid())
   name          String
-  email         String    @unique
+  email         String     @unique
   contactMethod String?
-  lastContact   DateTime  @updatedAt
+  lastContact   DateTime   @updatedAt
   github        String?
   slack         String?
   skype         String?
@@ -138,12 +145,13 @@ model Student {
   startDate     DateTime?
   lmsAccess     Boolean?
   status        String?
-  mentor        User?     @relation(fields: [mentorId], references: [id])
+  deadlines     Deadline[]
+  mentor        User?      @relation(fields: [mentorId], references: [id])
   mentorId      String?
-  created_at    DateTime  @default(now())
-  updated_at    DateTime  @updatedAt
-  isDeleted     Boolean   @default(false)
-  deletedAt     DateTime? @default(now())
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+  isDeleted     Boolean    @default(false)
+  deletedAt     DateTime?  @default(now())
 }
 
 model Account {

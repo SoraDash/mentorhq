@@ -1,12 +1,11 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
 import { IUser } from '@/next-auth';
-import { User } from '@prisma/client';
-import { NextAuthOptions, getServerSession } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import { prisma } from "./db";
-import { splitName } from './split-name';
+import { prisma } from "../db";
+import { splitName } from '../split-name';
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET as string,
@@ -79,32 +78,3 @@ export const authOptions: NextAuthOptions = {
     })
   ],
 };
-
-export const getAuthSession = () => {
-  return getServerSession(authOptions);
-};
-
-export const getUserRole = async () => {
-  const session = await getAuthSession()
-  if (!session?.user) return
-  const role = await prisma.user.findUnique({
-    where: {
-      id: session.user.id
-    }, select: {
-      role: true
-    }
-  })
-  return role?.role
-}
-export const getUser = async (): Promise<User | null> => {
-  const session = await getAuthSession()
-  if (!session?.user) return null
-  const user = await prisma.user.findUnique({
-    where: {
-      id: session.user.id
-    }
-  })
-  return user
-}
-
-

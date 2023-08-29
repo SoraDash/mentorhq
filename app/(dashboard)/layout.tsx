@@ -1,6 +1,6 @@
 import Sidebar from '@/components/client/Sidebar';
 import { NavBar } from '@/components/server/Navbar';
-import { getAuthSession } from '@/lib/auth';
+import { getAuthSession } from '@/lib/auth/auth';
 import { redirect } from 'next/navigation';
 
 

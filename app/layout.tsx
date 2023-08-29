@@ -1,5 +1,5 @@
 import { Providers } from '@/providers/Providers'
-import { getAuthSession } from '@/lib/auth'
+import { getAuthSession } from '@/lib/auth/auth'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'

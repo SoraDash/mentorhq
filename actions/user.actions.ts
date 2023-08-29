@@ -1,6 +1,6 @@
 // user.action.ts
 "use server"
-import { getAuthSession } from '@/lib/auth';
+import { getAuthSession } from '@/lib/auth/auth';
 import { CustomFormData } from '@/types/FormDataTypes';
 import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';

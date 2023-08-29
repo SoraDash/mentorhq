@@ -19,15 +19,25 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@lib/*": ["./lib/*"],
+      "@components/*": ["./components/*"],
+      "@providers/*": ["./providers/*"],
+      "@prisma": ["./prisma/*"],
+      "@actions": ["./actions/*"],
+      "@hooks": ["./hooks/*"],
+      "@constants": ["./constants/*"],
+      "@auth": ["./lib/auth/*"]
     }
   },
   "include": [
     "next-env.d.ts",
+    "env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "lib/menuts"
+    "lib/menuts",
+    "generateEnv.js"
   ],
   "exclude": ["node_modules"]
 }

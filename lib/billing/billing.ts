@@ -1,16 +1,10 @@
-"use server"
+import nodeCache from '../utils/cache';
+import { getAuthSession } from '../auth/auth';
+import { getUserByEmail } from '../db/user';
+import { lock } from '../utils/asyncLock';
 
-import { getAuthSession, getUser } from '@/lib/auth';
-import { prisma } from '@/lib/db';
-import { differenceInDays, differenceInMinutes, endOfMonth, getMonth, getYear, parse, startOfMonth } from 'date-fns';
-import { FaCalendar, FaClock, FaEuroSign, FaUsers } from 'react-icons/fa';
 
-import nodeCache from '../cache';
-const AsyncLock = require("async-lock");
-
-const lock = new AsyncLock();
-
-const getBilling = async (month: string, year: string) => {
+export const getBilling = async (month: string, year: string) => {
   return await lock.acquire("billing", async () => {
     try {
       const session = await getAuthSession();
@@ -19,9 +13,7 @@ const getBilling = async (month: string, year: string) => {
         return { error: true, message: 'Not authenticated', status: 401 }
       }
 
-      const user = await prisma.user.findUnique({
-        where: { email: session.user.email }
-      });
+      const user = await getUserByEmail(session.user.email);
 
       if (!user) {
         console.debug(`No user found for email: ${session.user.email}`);
@@ -44,6 +36,7 @@ const getBilling = async (month: string, year: string) => {
         return cachedData;
       } else {
         console.debug(`Cache MISS for key: ${cacheKey}`);
+
       }
 
       const apiUrl = constructApiUrl(userEmail, ciApiKey, month, year);
@@ -128,64 +121,3 @@ const getBilling = async (month: string, year: string) => {
 function constructApiUrl(email: string, apiKey: string, month: string, year: string): string {
   return `${process.env.CI_API_URL}?email=${email}&key=${apiKey}&month=${month}&year=${year}`;
 }
-
-
-const convertToMinutes = (time: string) => {
-  const referenceDate = new Date(0, 0, 0, 0, 0, 0);
-  const parsedDate = parse(time, 'HH:mm:ss', referenceDate);
-  return differenceInMinutes(parsedDate, referenceDate);
-};
-
-export const getLatestStats = async (date?: Date) => {
-  const user = await getUser();
-  if (!user?.ciApiKey) return null;
-  const now = new Date();
-  const month = date ? getMonth(date) + 1 : getMonth(now) + 1;
-  const year = date ? getYear(date) : getYear(now);
-
-  const data = await getBilling(month.toString(), year.toString());
-  if (!data) return null
-
-  const sessionCount = parseInt(data?.aggregates?.session_count);
-  const eurosBillable = data?.aggregates?.euros_billable;
-
-  const averageSessionTimeInMinutes = convertToMinutes(data?.aggregates?.total_session_time) / sessionCount;
-
-  return [
-    {
-      title: 'Total Students',
-      icon: FaUsers,
-      content: data?.details?.length.toString(),
-      color: 'bg-green-100',
-      textColor: 'text-green-500',
-    },
-    {
-      title: 'Sessions This Month',
-      icon: FaCalendar,
-      content: sessionCount?.toString(),
-      color: 'bg-blue-100',
-      textColor: 'text-blue-500',
-    },
-    {
-      title: 'Amount (billable)',
-      icon: FaEuroSign,
-      content: eurosBillable,
-      color: 'bg-yellow-100',
-      textColor: 'text-yellow-500',
-    },
-    {
-      title: 'Total Session Time',
-      icon: FaClock,
-      content: data.aggregates.total_session_time,
-      color: 'bg-red-100',
-      textColor: 'text-red-500',
-    },
-    {
-      title: 'Average Session Time',
-      icon: FaClock,
-      content: averageSessionTimeInMinutes + ' mins',
-      color: 'bg-purple-100',
-      textColor: 'text-purple-500',
-    },
-  ];
-};

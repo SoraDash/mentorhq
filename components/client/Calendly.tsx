@@ -1,6 +1,6 @@
 "use client"
 
-import { getCalendlyAuthURL, getCalendlyUser } from '@/lib/actions/calendly.actions';
+import { getCalendlyAuthURL, getCalendlyUser } from '@/actions/calendly.actions';
 import { useEffect, useState } from 'react';
 
 export default function CalendlyAuth() {

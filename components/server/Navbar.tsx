@@ -1,4 +1,4 @@
-import { getAuthSession, getUserRole } from '@/lib/auth';
+import { getAuthSession, getUserRole } from '@/lib/auth/auth';
 import { SignInButton } from '../client/SignInButton';
 import { ThemeToggle } from '../client/ThemeToggle';
 import { UserAccountNav } from '../client/UserAccountNav';

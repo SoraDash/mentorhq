@@ -3,7 +3,7 @@
 import { BsShieldCheck } from "react-icons/bs";
 import { FaGraduationCap } from "react-icons/fa";
 import { RiAccountPinCircleLine } from "react-icons/ri";
-import { getUserRole } from './auth';
+import { getUserRole } from './auth/auth';
 
 enum Role {
   ADMIN = "ADMIN",

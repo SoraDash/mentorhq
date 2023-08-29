@@ -1,9 +1,9 @@
 "use server";
 
 import { Student, User } from '@prisma/client';
-import { getUser } from '../auth';
+import { getUser } from '../lib/auth/auth';
 import nodeCache from '../cache';
-import { prisma } from '../db';
+import { prisma } from '../lib/db';
 import { signOut } from 'next-auth/react';
 const AsyncLock = require("async-lock");
 

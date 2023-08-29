@@ -3,7 +3,7 @@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 import { useMultistepForm } from '@/hooks/useMultiStepForm';
 import useOnboardingModal from "@/hooks/useOnboardingModal";
-import { onboardUser } from '@/lib/actions/user.actions';
+import { onboardUser } from '@/actions/user.actions';
 import { INITIAL_DATA } from '@/lib/validations/UserValidation';
 import { CustomFormData } from '@/types/FormDataTypes';
 import { useSession } from 'next-auth/react';

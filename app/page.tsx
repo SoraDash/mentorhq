@@ -1,5 +1,5 @@
 import { NavBar } from '@/components/server/Navbar';
-import { getAuthSession } from '@/lib/auth';
+import { getAuthSession } from '@/lib/auth/auth';
 import { redirect } from 'next/navigation';
 
 export default async function Home() {

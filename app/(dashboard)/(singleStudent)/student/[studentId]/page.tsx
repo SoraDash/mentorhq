@@ -1,4 +1,4 @@
-import { getStudent } from '@/lib/actions/students.actions';
+import { getStudent } from '@/actions/students.actions';
 import Image from 'next/image';
 
 interface StudentProfilePageProps {

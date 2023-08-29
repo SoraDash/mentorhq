@@ -1,5 +1,5 @@
 
-import { getAuthSession, getUser } from '@/lib/auth';
+import { getAuthSession, getUser } from '@/lib/auth/auth';
 import { NextResponse } from 'next/server';
 
 export async function GET() {

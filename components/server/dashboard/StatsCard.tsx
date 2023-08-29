@@ -1,14 +1,16 @@
 import { getLatestStats } from '@/lib/actions/billing.actions';
 
-export const StatsCard: React.FC = async () => {
+interface StatsCardProps {
+  stats: any[]
+}
 
-  const processedData = await getLatestStats(new Date("2022-10-01"))
+export const StatsCard: React.FC<StatsCardProps> = ({ stats }) => {
+  if (!stats || stats.length === 0) return null;
 
-  if (!processedData) return null
 
   return (
     <div className="flex flex-row space-x-4 overflow-x-auto lg:grid lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 lg:space-x-0 lg:overflow-visible">
-      {processedData.map((card, idx) => (
+      {stats.map((card, idx) => (
         <div
           key={idx}
           className="flex p-3"

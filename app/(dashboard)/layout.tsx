@@ -1,9 +1,7 @@
-import { NavBar } from '@/components/server/Navbar';
 import Sidebar from '@/components/client/Sidebar';
+import { NavBar } from '@/components/server/Navbar';
 import { getAuthSession } from '@/lib/auth';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { redirect } from 'next/navigation';
-import { QueryClient, QueryClientProvider } from 'react-query';
 
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {

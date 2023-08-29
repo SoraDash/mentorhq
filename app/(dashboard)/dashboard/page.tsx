@@ -1,43 +1,47 @@
 "use client"
 import { OnboardingSteps } from '@/components/client/OnboardingSteps';
 import { StatsCard } from '@/components/server/dashboard/StatsCard';
+import { fetchLatestStats } from '@/lib/queries/statQueries';
+import { fetchUser } from '@/lib/queries/userQueries';
 import { User } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
+import { signOut, useSession } from 'next-auth/react';
+import { CircleLoader } from 'react-spinners';
 
 interface DashboardPageProps { }
 
 const DashboardPage: React.FC<DashboardPageProps> = () => {
-  const fetchUser = async (): Promise<User> => {
-    const response = await fetch('/api/user');
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.json();
-  };
-  const { data: user, isLoading, isError } = useQuery<User | null>(['user'], fetchUser);
+  const { data: user, isLoading: isUserLoading, isError: isUserError } = useQuery<User | null>(['user'], fetchUser);
+  const { data: stats, isLoading: isStatsLoading, isError: isStatsError } = useQuery(['stats'], fetchLatestStats);
+  const { refetch } = useQuery<User | null>(['user'], fetchUser);
+  const { data: session } = useSession();
+  if (!session) signOut({
+    callbackUrl: '/',
+    redirect: true
+  });
 
-  // Ensure user is not null or undefined
-  if (isLoading) {
-    // You can return a loading spinner or some placeholder here
-    return <div>Loading...</div>;
+  if (isUserLoading || isStatsLoading) {
+    return <CircleLoader color="#36d7b7" />;
   }
-  if (isError) {
-    // You can return a loading spinner or some placeholder here
+
+  if (isUserError || isStatsError) {
     return <div>Error...</div>;
   }
+
 
   return (
     <div>
       <section className="bg-coolGray-50 py-4">
         <div className="container px-4 mx-auto">
           <div className="flex flex-wrap -m-3">
-            <StatsCard />
+            <StatsCard stats={stats} />
           </div>
         </div>
       </section>
-      <OnboardingSteps user={user} />
+      <OnboardingSteps user={user} refetchUser={refetch} />
     </div>
   );
-}
+};
+
 
 export default DashboardPage;

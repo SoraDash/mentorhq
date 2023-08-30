@@ -3,7 +3,7 @@ import { Student } from '@prisma/client';
 import { User } from '@prisma/client';
 import { handleFieldPriority } from './utils';
 import { getUser } from '../auth/auth';
-import { prisma } from '@/lib/db/db';
+import { prisma } from '@/lib/db/prisma';
 export const upsertStudent = async (student: Student, user: User) => {
   const existingStudent = await prisma.student.findUnique({
     where: {

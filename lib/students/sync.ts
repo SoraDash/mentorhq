@@ -5,6 +5,7 @@ import { lock } from '../utils/asyncLock';
 import { fetchStudentsFromApi } from '@/lib/students';
 import { upsertStudent } from './db'
 import CacheConfig from '../utils/cacheConfig';
+import { prisma } from '@/lib/db/prisma';
 
 export const studentsFromGoogleSheets = async (): Promise<Student[]> => {
   const user = await getUser();

@@ -1,5 +1,5 @@
 "use server"
-import { prisma } from '@/lib/db/db';
+import { prisma } from '@/lib/db/prisma';
 import { getAuthSession } from '@/lib/auth/auth';
 
 export const getUserByEmail = async (email: string) => {

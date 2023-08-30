@@ -1,5 +1,5 @@
 "use server"
-import { prisma } from '@/lib/db/db';
+import { prisma } from '@/lib/db/prisma';
 import { User } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './next-auth-config';

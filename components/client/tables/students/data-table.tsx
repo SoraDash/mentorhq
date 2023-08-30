@@ -26,6 +26,7 @@ import { useToast } from '@/components/ui/use-toast'
 import { syncStudentsWithDatabase } from '@/lib/students'
 import Link from 'next/link'
 import { useState } from 'react'
+import { RiRocketFill } from 'react-icons/ri'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -38,6 +39,8 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [isSyncing, setIsSyncing] = useState(false);
+  const { toast } = useToast();
   const table = useReactTable({
     data,
     columns,
@@ -52,21 +55,6 @@ export function DataTable<TData, TValue>({
       columnFilters,
     },
   })
-  const [isSyncing, setIsSyncing] = useState(false);
-  const { toast } = useToast();
-
-  const SyncButton = () => {
-    if (isSyncing) {
-      return (
-        <>
-          <span className="spinner-icon"></span> {/* Assuming you have an icon called spinner-icon */}
-          Syncing...
-        </>
-      );
-    } else {
-      return 'SYNC STUDENTS';
-    }
-  }
 
   async function handleSync() {
     setIsSyncing(true);
@@ -101,13 +89,15 @@ export function DataTable<TData, TValue>({
             className="max-w-sm"
           />
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleSync}
-          disabled={isSyncing}
-        >
-          <SyncButton />
+        <Button variant="secondary" size="sm" onClick={handleSync} disabled={isSyncing}>
+          {isSyncing ? (
+            <>
+              <RiRocketFill className="ml-2 animate-bounce" />
+              Syncing...
+            </>
+          ) : (
+            <> Sync Students <RiRocketFill className="ml-2" /></>
+          )}
         </Button>
       </div>
 

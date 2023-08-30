@@ -1,6 +1,6 @@
 "use server"
 import { getAuthSession } from '@/lib/auth/auth';
-import { prisma } from '@/lib/db/db';
+import { prisma } from '@/lib/db/prisma';
 
 // Common constants
 const CLIENT_ID = process.env.CALENDLY_CLIENT_ID as string;

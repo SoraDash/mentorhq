@@ -4,7 +4,7 @@ import { IUser } from '@/next-auth';
 import { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import { prisma } from "@/lib/db/db";
+import { prisma } from "@/lib/db/prisma";
 import { splitName } from '@/lib/split-name';
 
 export const authOptions: NextAuthOptions = {

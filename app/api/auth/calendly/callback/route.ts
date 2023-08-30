@@ -1,6 +1,6 @@
 import { exchangeCodeForToken } from '@/actions/calendly.actions';
 import { getAuthSession } from '@/lib/auth/auth';
-import { prisma } from '@/lib/db/db';
+import { prisma } from '@/lib/db/prisma';
 import { redirect } from 'next/navigation';
 import { NextRequest, NextResponse } from 'next/server';
 

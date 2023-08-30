@@ -29,7 +29,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "lib/menuts",
-    "generateEnv.js"
+    "scripts/generateEnv.js"
   ],
   "exclude": ["node_modules"]
 }

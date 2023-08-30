@@ -1,4 +1,4 @@
-import { getStudent } from '@/actions/students.actions';
+import { getStudent } from '@/lib/students';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {

@@ -1,7 +1,8 @@
-import nodeCache from '@/lib/utils/cache';
+"use server"
 import { getAuthSession } from '@/lib/auth/auth';
 import { getUserByEmail } from '@/lib/db/user';
 import { lock } from '@/lib/utils/asyncLock';
+import Cache from '@/lib/utils/cacheConfig';
 
 
 export const getBilling = async (month: string, year: string) => {
@@ -27,17 +28,6 @@ export const getBilling = async (month: string, year: string) => {
         return { error: true, message: 'ciApiKey is required for the request', status: 400 };
       }
       const userEmail = ciEmail || email;
-
-      const cacheKey = `billing:${userEmail}:${month}:${year}`;
-
-      // const cachedData = nodeCache.get(cacheKey);
-      // if (cachedData) {
-      //   console.debug(`Cache HIT for key: ${cacheKey}`);
-      //   return cachedData;
-      // } else {
-      //   console.debug(`Cache MISS for key: ${cacheKey}`);
-
-      // }
 
       const apiUrl = constructApiUrl(userEmail, ciApiKey, month, year);
 
@@ -79,8 +69,8 @@ export const getBilling = async (month: string, year: string) => {
 
       // If the data is not an error and is not empty, cache it
       if (responseData.status !== "error" && responseData.status !== "empty") {
-        nodeCache.set(cacheKey, responseData);
-        console.debug(`Data stored in cache for key: ${cacheKey}`);
+        Cache.set("billing", user.email, responseData);
+
       }
 
       // Now, handle any error conditions

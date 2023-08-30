@@ -1,11 +1,10 @@
 // user.action.ts
 "use server"
 import { getAuthSession } from '@/lib/auth/auth';
+import { prisma } from '@/lib/db/db';
 import { CustomFormData } from '@/types/FormDataTypes';
-import { PrismaClient } from '@prisma/client';
-import { NextResponse } from 'next/server';
 
-const prisma = new PrismaClient();
+
 export async function onboardUser(rawFormData: Partial<FormData | CustomFormData>) {
   try {
     const session = await getAuthSession();
@@ -16,7 +15,7 @@ export async function onboardUser(rawFormData: Partial<FormData | CustomFormData
     const updatedUser = await prisma.user.update({
       where: { id: session.user.id },
       data: {
-        ...rawFormData as CustomFormData, // Cast rawFormData to CustomFormData
+        ...rawFormData as CustomFormData,
         isOnboarded: true,
         role: 'MENTOR'
       }

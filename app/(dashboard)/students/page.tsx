@@ -1,6 +1,6 @@
 import { studentColumns } from '@/components/client/tables/students/columns';
 import { DataTable } from '@/components/client/tables/students/data-table';
-import { getStudents } from '@/actions/students.actions';
+import { getStudents } from '@/lib/students';
 
 interface StudentsPageProps { }
 

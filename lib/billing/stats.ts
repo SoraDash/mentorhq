@@ -1,6 +1,5 @@
 import { getUserBySession } from '@/lib/db/user';
 import { getMonth, getYear } from 'date-fns';
-import { FaCalendar, FaClock, FaEuroSign, FaUsers } from 'react-icons/fa';
 import { getBilling } from './billing';
 
 export const getLatestStats = async () => {

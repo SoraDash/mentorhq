@@ -5,7 +5,7 @@ import {
   getStudents,
   getStudent,
   syncStudentsWithDatabase
-} from '@/lib/students/students';
+} from '@/lib/students';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
   try {

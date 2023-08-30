@@ -29,14 +29,6 @@ export const StatsCard: React.FC<StatsCardProps> = ({ stats }) => {
   return (
     <div className="flex flex-row space-x-4 overflow-x-auto lg:grid lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 lg:space-x-0 lg:overflow-visible">
       {stats.map((card, idx) => {
-        if (card.title === 'Average Session Time') {
-          return (
-            <div key={idx} className="lg:col-span-2 xl:col-span-2"> {/* Adjusting the column span here */}
-              <TimeUsageCard averageTimeInMinutes={averageSessionTimeInMinutes} />
-            </div>
-          );
-        }
-
         const Icon = ICONS[card.icon];  // Use the ICONS mapping to get the actual component
 
         if (!Icon) return null;  // If the icon is not found in the mapping, don't render it

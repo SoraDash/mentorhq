@@ -22,6 +22,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { useToast } from '@/components/ui/use-toast'
+import { syncStudentsWithDatabase } from '@/lib/students'
 import Link from 'next/link'
 import { useState } from 'react'
 
@@ -50,18 +52,63 @@ export function DataTable<TData, TValue>({
       columnFilters,
     },
   })
+  const [isSyncing, setIsSyncing] = useState(false);
+  const { toast } = useToast();
+
+  const SyncButton = () => {
+    if (isSyncing) {
+      return (
+        <>
+          <span className="spinner-icon"></span> {/* Assuming you have an icon called spinner-icon */}
+          Syncing...
+        </>
+      );
+    } else {
+      return 'SYNC STUDENTS';
+    }
+  }
+
+  async function handleSync() {
+    setIsSyncing(true);
+    try {
+      await syncStudentsWithDatabase();
+      toast({
+        title: "Success: You're sorted!",
+        description: "Students synced successfully!",
+        variant: "success",
+      })
+    } catch (error) {
+      toast({
+        title: "Error: Something went wrong!",
+        description: `Failed to sync students: error.message`,
+      })
+
+    } finally {
+      setIsSyncing(false);
+    }
+  }
 
   return (
-    <div>
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter by name..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+    <>
+      <div className="flex items-center justify-between py-4">
+        <div className="max-w-sm">
+          <Input
+            placeholder="Filter by name..."
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleSync}
+          disabled={isSyncing}
+        >
+          <SyncButton />
+        </Button>
       </div>
 
       <div className="rounded-md border">
@@ -128,6 +175,6 @@ export function DataTable<TData, TValue>({
           </Button>
         </div>
       </div>
-    </div>
+    </>
   )
 }

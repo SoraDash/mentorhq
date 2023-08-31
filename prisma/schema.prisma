@@ -127,11 +127,11 @@ model StudentSession {
 }
 
 model Student {
-  id            String        @id @default(uuid())
+  id            String         @id @default(uuid())
   name          String
-  email         String        @unique
-  contactMethod ContactMethod @default(SLACK)
-  lastContact   DateTime      @updatedAt
+  email         String         @unique
+  contactMethod ContactMethod? @default(SLACK)
+  lastContact   DateTime?      @updatedAt
   github        String?
   slack         String?
   skype         String?
@@ -142,12 +142,12 @@ model Student {
   lmsAccess     Boolean?
   status        String?
   deadlines     Deadline[]
-  mentor        User?         @relation(fields: [mentorId], references: [id])
+  mentor        User?          @relation(fields: [mentorId], references: [id])
   mentorId      String?
-  created_at    DateTime      @default(now())
-  updated_at    DateTime      @updatedAt
-  isDeleted     Boolean       @default(false)
-  deletedAt     DateTime?     @default(now())
+  created_at    DateTime       @default(now())
+  updated_at    DateTime       @updatedAt
+  isDeleted     Boolean        @default(false)
+  unassignedAt  DateTime?      @default(now())
 }
 
 model Account {

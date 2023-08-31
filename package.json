@@ -61,6 +61,7 @@
   },
   "devDependencies": {
     "@types/async-lock": "^1.4.0",
+    "@types/lodash-es": "^4.17.8",
     "prisma": "^5.2.0"
   }
 }

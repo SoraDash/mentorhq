@@ -1,7 +1,8 @@
 "use server"
 import { Student, User } from '@prisma/client';
+import { GoogleSheetStudent } from '.';
 
-export const fetchStudentsFromApi = async (user: User) => {
+export const fetchStudentsFromApi = async (user: User): Promise<GoogleSheetStudent[]> => {
   const res = await fetch(
     `${process.env.CI_API_URL}?email=${user?.ciEmail || user?.email}&key=${user?.ciApiKey}&students=true`
   );
@@ -17,6 +18,6 @@ export const fetchStudentsFromApi = async (user: User) => {
     throw new Error(data?.message || 'Failed fetching data');
   }
 
-  return data.students as Student[];
+  return data.students as GoogleSheetStudent[];
 };
 

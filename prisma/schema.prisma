@@ -85,23 +85,27 @@ model ProjectType {
 model Project {
   id         String            @id @default(uuid())
   name       String
-  deadline   DateTime?
   github     String?
   live_url   String?
   type       String
   completed  ProjectCompletion @default(NOTSTARTED)
+  deadlines  Deadline[]
   created_at DateTime          @default(now())
   updatedAt  DateTime          @updatedAt
   isDeleted  Boolean           @default(false)
   deletedAt  DateTime?         @default(now())
+  student    Student           @relation(fields: [studentId], references: [id])
+  studentId  String
 }
 
 model Deadline {
   id        String   @id @default(uuid())
   date      DateTime
-  student   Student  @relation(fields: [studentId], references: [id])
-  studentId String
+  project   Project  @relation(fields: [projectId], references: [id])
+  projectId String
   type      String
+  student   Student? @relation(fields: [studentId], references: [id])
+  studentId String?
 }
 
 model SessionType {
@@ -142,13 +146,14 @@ model Student {
   startDate     DateTime?
   lmsAccess     Boolean?
   status        String?
-  deadlines     Deadline[]
+  projects      Project[]
   mentor        User?          @relation(fields: [mentorId], references: [id])
   mentorId      String?
   created_at    DateTime       @default(now())
   updated_at    DateTime       @updatedAt
   isDeleted     Boolean        @default(false)
   unassignedAt  DateTime?      @default(now())
+  Deadline      Deadline[]
 }
 
 model Account {

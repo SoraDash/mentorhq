@@ -1,5 +1,5 @@
 "use server"
-import { Student, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { GoogleSheetStudent } from '.';
 
 export const fetchStudentsFromApi = async (user: User): Promise<GoogleSheetStudent[]> => {

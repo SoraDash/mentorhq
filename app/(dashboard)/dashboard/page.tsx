@@ -1,11 +1,10 @@
-import OnboardingStepsClient from '@/components/client/onboarding/OnboardingStepsClient';
 import OnboardingStepsServer from '@/components/client/onboarding/OnboardingStepsServer';
 import { StatsCard } from '@/components/server/dashboard/StatsCard';
 import { getUser } from '@/lib/auth/auth';
 import { getLatestStats } from '@/lib/billing/stats';
 import { Suspense } from 'react';
 
-const DashboardPage: React.FC = async () => {
+const DashboardPage = async () => {
   const stats = await getLatestStats();
   const user = await getUser();
 

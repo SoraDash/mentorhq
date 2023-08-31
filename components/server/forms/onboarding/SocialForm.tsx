@@ -1,6 +1,8 @@
 import { SocialFormData } from '@/types/FormDataTypes';
+import React from 'react';
 
 type SocialFormProps = SocialFormData & {
+  // eslint-disable-next-line no-unused-vars
   updateFields: (fields: Partial<SocialFormData>) => void;
 };
 

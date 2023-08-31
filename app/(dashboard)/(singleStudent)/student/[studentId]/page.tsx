@@ -1,5 +1,6 @@
 import { getStudent } from '@/lib/students';
 import Image from 'next/image';
+import React from 'react';
 
 interface StudentProfilePageProps {
   params: {

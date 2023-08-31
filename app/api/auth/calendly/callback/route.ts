@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const tokenResponse = await exchangeCodeForToken(code as string);
-    const user = await prisma.user.update({
+    await prisma.user.update({
       where: {
         id: session?.user?.id
       },
@@ -30,4 +30,5 @@ export async function GET(req: NextRequest) {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 export async function POST(req: NextRequest, res: NextResponse) { }

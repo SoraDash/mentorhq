@@ -16,7 +16,7 @@ redis.on('error', (error) => {
   console.error('❌ Redis connection error:', error);
 });
 
-redis.on('reconnecting', (times: number) => {
+redis.on('reconnecting', () => {
   connectionRetries += 1;
   if (connectionRetries > MAX_RETRIES) {
     console.error('❌ Max retries reached, closing Redis.');

@@ -1,6 +1,8 @@
 import { NameFormData } from '@/types/FormDataTypes';
+import React from 'react';
 
 type NameFormProps = NameFormData & {
+  // eslint-disable-next-line no-unused-vars
   updateFields: (fields: Partial<NameFormData>) => void;
 };
 

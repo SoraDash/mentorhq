@@ -1,9 +1,8 @@
-import { BiLogOut, BiSolidDashboard } from "react-icons/bi";
-import { PiStudentBold } from "react-icons/pi";
 import { AiOutlineBarChart } from "react-icons/ai";
+import { BiSolidDashboard } from "react-icons/bi";
 import { FaFileInvoiceDollar, } from "react-icons/fa";
 import { FiSettings } from "react-icons/fi";
-import { CgProfile } from "react-icons/cg";
+import { PiStudentBold } from "react-icons/pi";
 
 export const MAIN_MENU = [
   { title: "Dashboard", href: "/dashboard", icon: BiSolidDashboard, premium: false, spacing: true },

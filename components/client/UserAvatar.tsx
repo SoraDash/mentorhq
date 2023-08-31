@@ -1,5 +1,5 @@
 "use client"
-
+import React from 'react';
 import { AvatarFallback } from '@radix-ui/react-avatar';
 import { User } from 'next-auth';
 import Image from 'next/image';

@@ -1,16 +1,3 @@
-
-export enum UpsertType {
-  ADDED,
-  UPDATED,
-  UNCHANGED
-}
-
-export interface SyncResult {
-  added: number;
-  updated: number;
-  removed: number;
-}
-
 export type GoogleSheetStudent = {
   name: string;
   email: string;

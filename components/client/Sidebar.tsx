@@ -16,6 +16,7 @@ import { FiSettings } from 'react-icons/fi';
 import { SiGotomeeting } from 'react-icons/si';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import React from 'react';
 
 const monserrat = Montserrat({ weight: "600", subsets: ['latin'] });
 

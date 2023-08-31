@@ -1,8 +1,9 @@
 import Sidebar from '@/components/client/Sidebar';
 import { NavBar } from '@/components/server/Navbar';
 import { getAuthSession } from '@/lib/auth/auth';
-import { redirect } from 'next/navigation';
 
+import { redirect } from 'next/navigation';
+import React from 'react';
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await getAuthSession();

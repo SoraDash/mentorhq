@@ -1,6 +1,8 @@
 import { MiscFormData } from '@/types/FormDataTypes';
+import React from 'react';
 
 type MiscFormProps = MiscFormData & {
+  // eslint-disable-next-line no-unused-vars
   updateFields: (fields: Partial<MiscFormData>) => void;
 };
 

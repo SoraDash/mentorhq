@@ -2,7 +2,7 @@ import { prisma } from '@/lib/db/prisma';
 import { Student, User } from '@prisma/client';
 import { getUser } from '../auth/auth';
 import { GoogleSheetStudent, PartialGoogleSheetStudent } from './types';
-import { transformToPrismaStudent, handleFieldPriority } from './utils';
+import { handleFieldPriority, transformToPrismaStudent } from './utils';
 
 
 export const updateOrCreateStudent = async (
@@ -10,7 +10,6 @@ export const updateOrCreateStudent = async (
   user: User
 ): Promise<{ action: 'added' | 'updated' | 'unchanged', changes?: string[] }> => {
 
-  console.log("Incoming student data:", student);
 
   const existingStudent = await prisma.student.findUnique({
     where: {
@@ -21,12 +20,12 @@ export const updateOrCreateStudent = async (
   let prismaStudentData: Student = transformToPrismaStudent(student as GoogleSheetStudent, user) as Student;
 
   if (existingStudent) {
-    prismaStudentData = handleFieldPriority(existingStudent, prismaStudentData); // Use the function here
-
-    const changes = (Object.keys(existingStudent) as Array<keyof typeof existingStudent>)
+    const initialChanges = (Object.keys(existingStudent) as Array<keyof typeof existingStudent>)
       .filter(key => prismaStudentData[key] !== undefined && prismaStudentData[key] !== existingStudent[key]);
 
-    if (changes.length > 0) {
+    prismaStudentData = handleFieldPriority(existingStudent, prismaStudentData);
+
+    if (initialChanges.length > 0) {
       await prisma.student.update({
         where: {
           email: student.email!,
@@ -34,11 +33,12 @@ export const updateOrCreateStudent = async (
         data: prismaStudentData
       });
 
-      return { action: 'updated', changes };
+      return { action: 'updated', changes: initialChanges };
     }
 
     return { action: 'unchanged' };
   }
+
 
   await prisma.student.create({
     data: prismaStudentData

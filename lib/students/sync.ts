@@ -65,7 +65,9 @@ export const syncStudentsWithDatabase = async (): Promise<{ added: string[], rem
   }
 
   for (const sheetStudent of sheetStudents) {
-    if (currentStudentEmails.includes(sheetStudent.email)) {  // this means it's an existing student
+
+    if (currentStudentEmails.includes(sheetStudent.email)) {
+      sheetStudent.github = sheetStudent.github ? extractGithubUsername(sheetStudent.github) : sheetStudent.github;
       const result = await updateOrCreateStudent(sheetStudent, user);
 
       if (result.action === 'updated') updated.push(sheetStudent.name);

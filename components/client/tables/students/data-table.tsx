@@ -27,6 +27,7 @@ import { syncStudentsWithDatabase } from '@/lib/students'
 import Link from 'next/link'
 import { useState } from 'react'
 import { RiRocketFill } from 'react-icons/ri'
+import { useRouter } from 'next/navigation'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -41,6 +42,7 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [isSyncing, setIsSyncing] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
   const table = useReactTable({
     data,
     columns,
@@ -96,6 +98,8 @@ export function DataTable<TData, TValue>({
       })
     } finally {
       setIsSyncing(false);
+      router.refresh()
+
     }
   }
 
@@ -113,7 +117,11 @@ export function DataTable<TData, TValue>({
             className="max-w-sm"
           />
         </div>
-        <Button variant="secondary" size="sm" onClick={handleSync} disabled={isSyncing}>
+        <Button
+          variant={!isSyncing ? "secondary" : "sync"}
+          onClick={handleSync}
+          disabled={isSyncing}
+        >
           {isSyncing ? (
             <>
               Syncing...

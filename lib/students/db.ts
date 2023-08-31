@@ -72,17 +72,22 @@ export const getStudents = async (): Promise<Student[]> => {
   return students;
 };
 
+
 export const getStudent = async (id: string): Promise<Student | null> => {
   const user = await getUser();
-  if (!user?.email) throw new Error('Invalid user data');
+  if (!user) return null;
 
   const student = await prisma.student.findUnique({
     where: {
       id: id,
-      mentorId: user.id,
     },
   });
 
   if (!student) return null;
-  return student;
+
+  if (user.role === 'ADMIN' || student.mentorId === user.id) {
+    return student;
+  } else {
+    return null;
+  }
 };

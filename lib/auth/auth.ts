@@ -14,7 +14,7 @@ export const getUserRole = async () => {
 }
 export const getUser = async (): Promise<User | null> => {
   const session = await getAuthSession()
-  if (!session?.user) return null
+  if (!session?.user) return null;
   const user = await prisma.user.findUnique({
     where: {
       id: session.user.id

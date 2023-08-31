@@ -67,8 +67,8 @@ export const getCalendlyUser = async () => {
       // The token is still valid, you can proceed with using it
       return user;
     } else {
+      // We need to refresh this
       return user
-      throw new Error('Token is no longer valid');
     }
   }
 

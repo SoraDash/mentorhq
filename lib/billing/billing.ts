@@ -29,6 +29,12 @@ export const getBilling = async (month: string, year: string) => {
       }
       const userEmail = ciEmail || email;
 
+      // Check if data is cached
+      const cachedData = await Cache.get("billing", user.email);
+      if (cachedData) {
+        return cachedData;
+      }
+
       const apiUrl = constructApiUrl(userEmail, ciApiKey, month, year);
 
       const MAX_RETRIES = 3;

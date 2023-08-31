@@ -1,39 +1,50 @@
 "use client"
 
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle } from "@/components/ui/dialog";
-import { useMultistepForm } from '@/hooks/useMultiStepForm';
-import useOnboardingModal from "@/hooks/useOnboardingModal";
 import { onboardUser } from '@/actions/user.actions';
-import { INITIAL_DATA } from '@/lib/validations/UserValidation';
-import { CustomFormData } from '@/types/FormDataTypes';
-import { useSession } from 'next-auth/react';
-import { revalidatePath } from 'next/cache';
-import { useRouter } from 'next/navigation';
-import { FormEvent, useEffect, useState } from 'react';
 import MiscForm from '@/components/server/forms/onboarding/MiscForm';
 import NameForm from '@/components/server/forms/onboarding/NameForm';
 import SocialForm from '@/components/server/forms/onboarding/SocialForm';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from '@/components/ui/use-toast';
+import { useMultistepForm } from '@/hooks/useMultiStepForm';
+import useOnboardingModal from "@/hooks/useOnboardingModal";
+import { getUser } from '@/lib/auth/auth';
+import { INITIAL_DATA } from '@/lib/validations/UserValidation';
+import { CustomFormData } from '@/types/FormDataTypes';
+import { revalidatePath } from 'next/cache';
+import { useRouter } from 'next/navigation';
+import { FormEvent, useEffect, useState } from 'react';
 
 export const OnboardingModal = () => {
   const modal = useOnboardingModal();
   const [data, setData] = useState(INITIAL_DATA);
-  const { data: session } = useSession();
   const router = useRouter();
   const { toast } = useToast();
 
   useEffect(() => {
-    const { user } = session || {};
-    if (user) {
-      setData((prev) => ({
-        ...prev,
-        firstName: user.firstName || prev.firstName,
-        lastName: user.lastName || prev.lastName,
-        ciEmail: user.email || prev.ciEmail,
-        sendWelcomeEmail: false
-      }));
-    }
-  }, [session]);
+    const fetchUserData = async () => {
+      const user = await getUser();
+      if (user) {
+        setData((prev) => ({
+          ...prev,
+          firstName: user.firstName || prev.firstName,
+          lastName: user.lastName || prev.lastName,
+          ciEmail: user.email || prev.ciEmail,
+          ciApiKey: user.ciApiKey || prev.ciApiKey,
+          github: user.github || prev.github,
+          twitter: user.twitter || prev.twitter,
+          linkedIn: user.linkedIn || prev.linkedIn,
+          paidPerHour: user.paidPerHour || prev.paidPerHour,
+          sendWelcomeEmail: user.sendWelcomeEmail || prev.sendWelcomeEmail,
+          website: user.website || prev.website,
+          slack: user.slack || prev.slack,
+          skype: user.skype || prev.skype,
+        }));
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   function updateFields(fields: Partial<FormData | CustomFormData>) {
     setData((prev) => {
@@ -66,17 +77,14 @@ export const OnboardingModal = () => {
     onboardUser(data)
       .then(response => {
         if (response.success) {
-          revalidatePath('/dashboard')
           modal.onClose();
-          router.refresh();
           toast({
             title: "Success: You're in!",
             description: "You've successfully completed onboarding.",
             variant: "success",
           })
-        } else {
-
         }
+        setTimeout(() => router.refresh(), 300)
       })
       .catch(error => {
 

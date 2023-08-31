@@ -9,7 +9,7 @@ const CACHE_CONFIG = {
   billing: {
     key: 'billing',
     TTL: 60 * 60 * 24 * 7, // 1 week
-    enabled: false
+    enabled: true
   }
 }
 
@@ -26,7 +26,7 @@ const set = async (serviceType: keyof typeof CACHE_CONFIG, uniqueValue: string, 
   const key = getCacheKey(serviceType, uniqueValue);
   if (shouldUseCache(serviceType)) {
     await REDIS.set(key, value);
-    console.debug(`Data stored in cache for key: ${key}`);
+    console.debug(`🤖 Data stored in cache for key: ${key}`);
   }
 };
 

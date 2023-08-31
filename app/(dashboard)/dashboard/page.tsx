@@ -1,35 +1,27 @@
-"use client"
-import { OnboardingSteps } from '@/components/client/OnboardingSteps';
+import OnboardingStepsClient from '@/components/client/onboarding/OnboardingStepsClient';
+import OnboardingStepsServer from '@/components/client/onboarding/OnboardingStepsServer';
 import { StatsCard } from '@/components/server/dashboard/StatsCard';
-import { fetchLatestStats } from '@/lib/queries/statQueries';
-import { fetchUser } from '@/lib/queries/userQueries';
-import { User } from '@prisma/client';
-import { useQuery } from '@tanstack/react-query';
-import { CircleLoader } from 'react-spinners';
+import { getUser } from '@/lib/auth/auth';
+import { getLatestStats } from '@/lib/billing/stats';
+import { Suspense } from 'react';
 
-const DashboardPage: React.FC = () => {
-  const { data: user, isLoading: isUserLoading, isError: isUserError } = useQuery<User | null>(['user'], fetchUser);
-  const { data: stats, isLoading: isStatsLoading, isError: isStatsError } = useQuery(['stats'], fetchLatestStats);
-  const { refetch } = useQuery<User | null>(['user'], fetchUser);
+const DashboardPage: React.FC = async () => {
+  const stats = await getLatestStats();
+  const user = await getUser();
 
-  if (isUserLoading || isStatsLoading) {
-    return <CircleLoader color="#36d7b7" />;
-  }
-
-  if (isUserError || isStatsError) {
-    return <div>Error...</div>;
-  }
 
   return (
     <div>
-      <section className="bg-coolGray-50 py-4">
+      <section className="bg-coolGray-50 py-4" key={Math.random()}>
         <div className="container px-4 mx-auto">
           <div className="flex flex-wrap -m-3">
-            <StatsCard stats={stats} />
+            <Suspense fallback={"We are loading stuff"}>
+              {stats !== null && <StatsCard stats={stats} />}
+            </Suspense>
           </div>
         </div>
       </section>
-      <OnboardingSteps user={user} refetchUser={refetch} />
+      <OnboardingStepsServer user={user} />
     </div>
   );
 };

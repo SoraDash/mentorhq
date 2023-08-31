@@ -24,11 +24,11 @@ import {
 } from "@/components/ui/table"
 import { useToast } from '@/components/ui/use-toast'
 import { syncStudentsWithDatabase } from '@/lib/students'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { RiRocketFill } from 'react-icons/ri'
-import { getUser } from '@/lib/auth/auth'
-import { useSession } from 'next-auth/react'
+import { PiStudentBold } from 'react-icons/pi'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -108,34 +108,44 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <div className="flex items-center justify-between py-4">
-        <div className="max-w-sm">
-          <Input
-            placeholder="Filter by name..."
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-        </div>
-        {session?.user?.hasKey && (
-          <Button
-            variant={!isSyncing ? "default" : "sync"}
-            onClick={handleSync}
-            disabled={isSyncing}
-          >
-            {isSyncing ? (
-              <>
-                Sync in progress...
-                <RiRocketFill className="ml-2 animate-bounce" />
-              </>
-            ) : (
-              <> Sync Students <RiRocketFill className="ml-2" /></>
+      <div className="py-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+          {/* Input */}
+          <div className="mb-2 md:mb-0 md:max-w-sm md:mr-4">
+            <Input
+              placeholder="Filter by name..."
+              value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+              onChange={(event) =>
+                table.getColumn("name")?.setFilterValue(event.target.value)
+              }
+            />
+          </div>
+
+          {/* Buttons */}
+          <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
+            <Button variant={"secondary"}>
+              <> Add Student <PiStudentBold className="ml-2" /></>
+            </Button>
+            {session?.user?.hasKey && (
+              <Button
+                variant={!isSyncing ? "secondary" : "sync"}
+                onClick={handleSync}
+                disabled={isSyncing}
+              >
+                {isSyncing ? (
+                  <>
+                    Sync in progress...
+                    <RiRocketFill className="ml-2 animate-bounce" />
+                  </>
+                ) : (
+                  <> Sync Students <RiRocketFill className="ml-2" /></>
+                )}
+              </Button>
             )}
-          </Button>
-        )}
+          </div>
+        </div>
       </div>
+
 
       <div className="rounded-md border">
         <Table>

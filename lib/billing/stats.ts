@@ -1,6 +1,7 @@
 import { getUserBySession } from '@/lib/db/user';
 import { getMonth, getYear } from 'date-fns';
 import { getBilling } from './billing';
+import { FaUsers, FaCalendar, FaEuroSign, FaClock } from 'react-icons/fa';
 
 export const getLatestStats = async () => {
   const user = await getUserBySession();
@@ -24,35 +25,35 @@ export const getLatestStats = async () => {
   const stats = [
     {
       title: 'Total Students',
-      icon: 'FaUsers',
+      icon: FaUsers,
       content: data?.details?.length.toString(),
       color: 'bg-green-100',
       textColor: 'text-green-500',
     },
     {
       title: 'Sessions This Month',
-      icon: 'FaCalendar',
+      icon: FaCalendar,
       content: sessionCount?.toString(),
       color: 'bg-blue-100',
       textColor: 'text-blue-500',
     },
     {
       title: 'Amount (billable)',
-      icon: 'FaEuroSign',
+      icon: FaEuroSign,
       content: eurosBillable,
       color: 'bg-yellow-100',
       textColor: 'text-yellow-500',
     },
     {
       title: 'Total Session Time',
-      icon: 'FaClock',
+      icon: FaClock,
       content: data.aggregates.total_session_time,
       color: 'bg-red-100',
       textColor: 'text-red-500',
     },
     {
       title: 'Average Session Time',
-      icon: 'FaClock',
+      icon: FaClock,
       content: `${averageSessionTimeInMinutes.toFixed(2)} mins`,
       color: 'bg-purple-100',
       textColor: 'text-purple-500',

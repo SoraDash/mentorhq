@@ -25,24 +25,8 @@ const MiscForm: React.FC<MiscFormProps> = ({
           className="w-full px-4 py-2 border rounded shadow-sm focus:ring focus:ring-indigo-300 focus:outline-none"
         />
       </div>
-      <div>
-        <label htmlFor="sendWelcomeEmail" className="block text-gray-700 text-sm font-bold mb-1">
-          Send Welcome Email
-        </label>
-        <p className="text-xs text-gray-500 mb-2">
-          Enable this to have the system email students when they are assigned to you?
-        </p>
-        <label htmlFor="sendWelcomeEmail" className="inline-flex items-center space-x-2 cursor-pointer">
-          <input
-            type="checkbox"
-            id="sendWelcomeEmail"
-            checked={sendWelcomeEmail}
-            onChange={(e) => updateFields({ sendWelcomeEmail: e.target.checked })}
-            className="peer h-6 w-6 border-gray-300 transition-colors focus:ring focus:ring-indigo-300 focus:outline-none"
-          />
-          <span className="text-sm">Send Welcome Email</span>
-        </label>
-      </div>
+
+
       <div>
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="ciApiKey">
           CI API Key
@@ -65,20 +49,21 @@ const MiscForm: React.FC<MiscFormProps> = ({
           onChange={(e) => updateFields({ ciEmail: e.target.value })}
           className="w-full px-4 py-2 border rounded shadow-sm focus:ring focus:ring-indigo-300 focus:outline-none"
         />
-
+        <div className='mt-5'>
+          <input
+            type="checkbox"
+            id="sendWelcomeEmail"
+            checked={sendWelcomeEmail}
+            onChange={(e) => updateFields({ sendWelcomeEmail: e.target.checked })}
+            className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+          />
+          <span className='ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>Send Welcome Email to students</span>
+          <p className="text-xs text-gray-500 mt-3 mb-1">
+            Enable this to have the system email students when they are assigned to you?
+          </p>
+        </div>
       </div>
-      {/* <div>
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="ciEmail">
-          CI Email
-        </label>
-        <input
-          type="email"
-          id="ciEmail"
-          value={ciEmail}
-          onChange={(e) => updateFields({ ciEmail: e.target.value })}
-          className="w-full px-4 py-2 border rounded shadow-sm focus:ring focus:ring-indigo-300 focus:outline-none"
-        />
-      </div> */}
+
     </div>
   );
 };

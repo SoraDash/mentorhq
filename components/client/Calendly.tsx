@@ -37,11 +37,13 @@ export default function CalendlyAuth() {
     return (
       <div>
         <p>You are authenticated with Calendly.</p>
-        {/* Display other user data or token details */}
-        <div className='w-96'>
 
-          <pre>{JSON.stringify(calendlyToken, null, 2)}</pre>
-        </div>
+        {/* <div className='bg-gray-200 w-96 break'>
+          <code>
+            {JSON.stringify(calendlyToken, null, 3)}
+
+          </code>
+        </div> */}
       </div>
     );
   } else {

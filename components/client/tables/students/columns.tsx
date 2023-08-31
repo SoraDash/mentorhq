@@ -5,7 +5,7 @@ import { Student } from '@prisma/client'
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, } from 'lucide-react'
 import Link from 'next/link'
-import { BiUserCircle } from 'react-icons/bi'
+import { BiLinkExternal, BiUserCircle } from 'react-icons/bi'
 
 export const studentColumns: ColumnDef<Student>[] = [
   {
@@ -42,12 +42,13 @@ export const studentColumns: ColumnDef<Student>[] = [
   },
   {
     id: "actions",
+    header: "Profile",
     cell: ({ row }) => {
       const student = row.original
 
       return (
         <Link href={`/student/${student.id}`} className='cursor-pointer'>
-          <BiUserCircle className="h-4 w-4" />
+          <BiLinkExternal className="h-4 w-4" />
         </Link>
 
       )

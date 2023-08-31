@@ -59,22 +59,46 @@ export function DataTable<TData, TValue>({
   async function handleSync() {
     setIsSyncing(true);
     try {
-      await syncStudentsWithDatabase();
-      toast({
-        title: "Success: You're sorted!",
-        description: "Students synced successfully!",
-        variant: "success",
-      })
-    } catch (error) {
+      const { added, removed, updated } = await syncStudentsWithDatabase();
+
+      // Check for added, removed or updated students and update toast accordingly
+      if (added.length > 0) {
+        toast({
+          title: `Success: Added ${added.length} student(s)!`,
+          variant: "success",
+        });
+      }
+      if (removed.length > 0) {
+        toast({
+          title: `Notice: Unassigned ${removed.length} student(s)!`,
+          variant: "success",
+        });
+      }
+      if (updated.length > 0) {
+        toast({
+          title: `Success: Updated ${updated.length} student(s)!`,
+          variant: "success",
+        });
+      }
+      if (added.length === 0 && removed.length === 0 && updated.length === 0) {
+        toast({
+          title: "Everything's up-to-date!",
+          description: "No changes were made during the sync.",
+          variant: "default",
+        });
+      }
+
+    } catch (error: any) {
       toast({
         title: "Error: Something went wrong!",
-        description: `Failed to sync students: error.message`,
+        description: `Failed to sync students: ${error.message}`,
+        variant: "destructive",
       })
-
     } finally {
       setIsSyncing(false);
     }
   }
+
 
   return (
     <>
@@ -92,8 +116,8 @@ export function DataTable<TData, TValue>({
         <Button variant="secondary" size="sm" onClick={handleSync} disabled={isSyncing}>
           {isSyncing ? (
             <>
-              <RiRocketFill className="ml-2 animate-bounce" />
               Syncing...
+              <RiRocketFill className="ml-2 animate-bounce" />
             </>
           ) : (
             <> Sync Students <RiRocketFill className="ml-2" /></>
@@ -128,13 +152,11 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  <Link href={`/student/${row.original}`}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    ))}
-                  </Link>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
                 </TableRow>
               ))
             ) : (

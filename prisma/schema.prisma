@@ -101,6 +101,7 @@ model Deadline {
   date      DateTime
   student   Student  @relation(fields: [studentId], references: [id])
   studentId String
+  type      String
 }
 
 model SessionType {

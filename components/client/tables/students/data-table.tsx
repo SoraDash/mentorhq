@@ -24,10 +24,11 @@ import {
 } from "@/components/ui/table"
 import { useToast } from '@/components/ui/use-toast'
 import { syncStudentsWithDatabase } from '@/lib/students'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { RiRocketFill } from 'react-icons/ri'
-import { useRouter } from 'next/navigation'
+import { getUser } from '@/lib/auth/auth'
+import { useSession } from 'next-auth/react'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -43,6 +44,7 @@ export function DataTable<TData, TValue>({
   const [isSyncing, setIsSyncing] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
+  const { data: session } = useSession();
   const table = useReactTable({
     data,
     columns,
@@ -117,20 +119,22 @@ export function DataTable<TData, TValue>({
             className="max-w-sm"
           />
         </div>
-        <Button
-          variant={!isSyncing ? "secondary" : "sync"}
-          onClick={handleSync}
-          disabled={isSyncing}
-        >
-          {isSyncing ? (
-            <>
-              Syncing...
-              <RiRocketFill className="ml-2 animate-bounce" />
-            </>
-          ) : (
-            <> Sync Students <RiRocketFill className="ml-2" /></>
-          )}
-        </Button>
+        {session?.user?.hasKey && (
+          <Button
+            variant={!isSyncing ? "default" : "sync"}
+            onClick={handleSync}
+            disabled={isSyncing}
+          >
+            {isSyncing ? (
+              <>
+                Sync in progress...
+                <RiRocketFill className="ml-2 animate-bounce" />
+              </>
+            ) : (
+              <> Sync Students <RiRocketFill className="ml-2" /></>
+            )}
+          </Button>
+        )}
       </div>
 
       <div className="rounded-md border">

@@ -7,6 +7,7 @@ interface IUser extends DefaultUser {
   lastName: string;
   isOnboarded: boolean;
   isPremium: boolean;
+  hasKey?: boolean;
   role: Role
 }
 declare module "next-auth" {

@@ -47,7 +47,8 @@ export const authOptions: NextAuthOptions = {
         token.image = db_user.image
         token.isOnboarded = db_user.isOnboarded
         token.isPremium = db_user.isPremium
-        token.role = db_user.role
+        token.hasKey = !!db_user.ciApiKey,
+          token.role = db_user.role
       }
       return token;
     },
@@ -61,6 +62,7 @@ export const authOptions: NextAuthOptions = {
         session.user.email = token.email;
         session.user.image = token.picture;
         session.user.isOnboarded = token.isOnboarded;
+        session.user.hasKey = token.hasKey;
         session.user.isPremium = token.isPremium;
         session.user.role = token.role;
       }

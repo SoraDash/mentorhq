@@ -17,9 +17,7 @@ const DashboardPage = async () => {
       <section className="bg-coolGray-50 py-4" key={Math.random()}>
         <div className="container px-4 mx-auto">
           <div className="flex flex-wrap -m-3">
-            <Suspense fallback={"We are loading stuff"}>
-              {stats !== null && <StatsCard stats={stats} />}
-            </Suspense>
+            {stats !== null && <StatsCard stats={stats} />}
           </div>
         </div>
       </section>

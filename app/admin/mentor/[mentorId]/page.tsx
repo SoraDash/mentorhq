@@ -1,15 +1,17 @@
 import Avatar from '@/components/client/Avatar';
+import { knownRoles } from '@/components/client/RoleDropdown';
 import { SocialMediaIcons } from '@/components/client/SocialMediaIcons';
+import { FetchGithubBio } from '@/components/client/tables/admin/mentors/github-bio';
 import { redirectAdminPage } from '@/components/server/redirect-if-not-admin';
-import { getMentor } from '@/lib/admin/mentors';
-import { redirect } from 'next/navigation';
-import { roleConfig } from '@/lib/roleConfig';
-import React from 'react';
+import { getMentorWithCount } from '@/lib/admin/mentors';
 import { cn } from '@/lib/utils';
-import { capitalize } from 'lodash-es'
+import { capitalize } from 'lodash-es';
+import { redirect } from 'next/navigation';
+import React from 'react';
+import { FaFileAlt, FaGraduationCap, FaRegCircle } from 'react-icons/fa';
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm'
-import rehypeRaw from 'rehype-raw'
+import rehypeRaw from 'rehype-raw';
+import remarkGfm from 'remark-gfm';
 
 
 
@@ -21,8 +23,8 @@ interface StudentProfilePageProps {
 
 const MentorProfilePage: React.FC<StudentProfilePageProps> = async ({ params }) => {
   const mentorId = params.mentorId;
-  const mentor = await getMentor(mentorId);
-  const { color, icon: RoleIcon } = roleConfig[mentor?.role!];
+  const mentor = await getMentorWithCount(mentorId);
+  const { color, icon: RoleIcon } = knownRoles[mentor?.role!];
 
 
   if (await redirectAdminPage()) {
@@ -42,47 +44,59 @@ const MentorProfilePage: React.FC<StudentProfilePageProps> = async ({ params }) 
                 <Avatar entity={mentor} className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0" profile />
 
                 <h1 className="text-xl font-bold">{mentor.name}</h1>
-                <p className="text-gray-600 flex items-center font-bold">{capitalize(mentor.role)} <RoleIcon className={cn("w-5 h-5 ml-1", color ? color : 'text-gray-600')} /></p>
+                {mentor?.role && (
+                  <p className="text-gray-600 flex items-center font-bold">{capitalize(mentor.role)}
+                    <span className={cn("w-5 h-5 ml-1", color ? color : 'text-gray-600')}>
+
+                      <RoleIcon />
+                    </span>
+                  </p>
+                )}
 
 
                 <div className="mt-6 flex flex-wrap gap-4 justify-center">
-                  <a href="#" className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Contact</a>
-                  <a href="#" className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded">Resume</a>
+                  <a href="#" className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Edit</a>
+                  <a href="#" className="bg-red-500 hover:bg-red-400 text-white py-2 px-4 rounded">Ban</a>
+                  <span className="bg-secondary text-secondary-foreground hover:bg-secondary/80 py-2 px-4 rounded">
+                    <FetchGithubBio id={mentor.id} />
+                  </span>
                 </div>
               </div>
               <hr className="my-6 border-t border-gray-300" />
               <div className="flex flex-col">
-                <span className="text-gray-600 uppercase font-bold tracking-wider mb-2">Skills</span>
-                <ul>
-                  <li className="mb-2">JavaScript</li>
-                  <li className="mb-2">React</li>
-                  <li className="mb-2">Node.js</li>
-                  <li className="mb-2">HTML/CSS</li>
-                  <li className="mb-2">Tailwind Css</li>
+                <span className="text-gray-600 uppercase font-bold tracking-wider mb-2">Stats</span>
+                <ul className="space-y-2">
+                  <li className="flex items-center space-x-2">
+                    <FaFileAlt className="text-gray-500" />
+                    <span className="flex-grow">Sessions</span>
+                    <span>{mentor._count.studentSession}</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <FaGraduationCap className="text-gray-500" />
+                    <span className="flex-grow">Students</span>
+                    <span>{mentor._count.students}</span>
+                  </li>
                 </ul>
+                <span className="text-gray-600 uppercase font-bold tracking-wider my-3">Social</span>
+                <div className="flex justify-center items-center gap-6 my-6">
+                  <SocialMediaIcons user={mentor} />
+                </div>
               </div>
             </div>
           </div>
           <div className="col-span-4 sm:col-span-9">
             <div className="bg-white shadow rounded-lg p-6">
-              <h2 className="text-xl font-bold mb-4">About Me</h2>
               {mentor.bio && (
-                <div className="prose prose-blue max-w-none">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw as any]}>
-                    {mentor.bio}
-                  </ReactMarkdown>
+                <>
+                  <h2 className="text-xl font-bold mb-4">{mentor.firstName}&apos;s Github Profile</h2>
+                  <div className="prose prose-blue max-w-none">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw as any]}>
+                      {mentor.bio}
+                    </ReactMarkdown>
 
-                </div>
-
+                  </div>
+                </>
               )}
-
-              <h3 className="font-semibold text-center mt-3 -mb-2">
-                Reach me on
-              </h3>
-              <div className="flex justify-center items-center gap-6 my-6">
-                <SocialMediaIcons user={mentor} />
-              </div>
-
 
               <h2 className="text-xl font-bold mt-6 mb-4">Experience</h2>
               <div className="mb-6">

@@ -2,11 +2,12 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { updateRole } from '@/lib/auth/auth';
 import { Role } from '@prisma/client';
 import { useRouter } from 'next/navigation';
-import React from 'react';
 import { BsShieldCheck } from "react-icons/bs";
 import { FaGraduationCap } from "react-icons/fa";
 import { RiAccountPinCircleLine } from "react-icons/ri";
-import { useToast } from '../ui/use-toast';
+import { useToast } from '@/components/ui/use-toast';
+
+import React from 'react';
 
 type RoleConfig = {
   // eslint-disable-next-line no-unused-vars

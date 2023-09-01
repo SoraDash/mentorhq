@@ -2,6 +2,7 @@
 import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/components/ui/use-toast';
 import { getBio } from '@/lib/utils/github';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { PiUserSwitchFill } from 'react-icons/pi';
 
@@ -12,6 +13,7 @@ interface FetchGithubBioProps {
 export const FetchGithubBio: React.FC<FetchGithubBioProps> = ({ id }) => {
   const [bio, setBio] = useState(false)
   const { toast } = useToast();
+  const router = useRouter();
 
   const syncBio = async (refresh: boolean = false) => {
     setBio(true);
@@ -51,6 +53,7 @@ export const FetchGithubBio: React.FC<FetchGithubBioProps> = ({ id }) => {
       })
     } finally {
       setBio(false);
+      router.refresh()
     }
   }
 

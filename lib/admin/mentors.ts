@@ -50,7 +50,7 @@ export const getMentorsWithCount = async () => {
 };
 
 
-export const getMentorWtihCount = async (id: string) => {
+export const getMentorWithCount = async (id: string) => {
   const user = await getUser();
   if (user?.role !== "ADMIN") return null;
 

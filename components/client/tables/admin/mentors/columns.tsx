@@ -55,15 +55,6 @@ export const mentorColumns: ColumnDef<MentorWithCounts>[] = [
     }
   },
   {
-    accessorKey: "paidPerHour",
-    header: "Paid Per Hour",
-    cell: ({ row }) => {
-      return (<>
-        {row.original.paidPerHour ? (<SensitiveInfo value={row.original.paidPerHour.toString()} />) : (<span className='text-gray-400'>Not set</span>)}
-      </>)
-    }
-  },
-  {
     accessorKey: "calendly_token",
     header: "Calendly Enabled",
     cell: ({ row }) => {
@@ -105,6 +96,15 @@ export const mentorColumns: ColumnDef<MentorWithCounts>[] = [
     }
   },
   {
+    accessorKey: "paidPerHour",
+    header: "Paid Per Hour",
+    cell: ({ row }) => {
+      return (<>
+        {row.original.paidPerHour ? (<SensitiveInfo value={row.original.paidPerHour.toString()} />) : (<span className='text-gray-400'>Not set</span>)}
+      </>)
+    }
+  },
+  {
     accessorKey: "role",
     header: "Role",
     cell: ({ row }) => {
@@ -134,7 +134,7 @@ export const mentorColumns: ColumnDef<MentorWithCounts>[] = [
             <DropdownMenuItem asChild>
               <Link href={`/admin/mentor/${mentor.id}`} className='cursor-pointer'>
                 <PiUserCircleBold className="mr-2" />
-                Mentor Profile
+                View Profile
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>

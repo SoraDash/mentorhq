@@ -1,8 +1,9 @@
 "use server"
 import { prisma } from '@/lib/db/prisma';
-import { User } from '@prisma/client';
+import { Role, User } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './next-auth-config';
+import { revalidatePath } from 'next/cache';
 
 export const getAuthSession = () => {
   return getServerSession(authOptions);
@@ -23,5 +24,14 @@ export const getUser = async (): Promise<User | null> => {
   })
   return user
 }
-
-
+export const updateRole = async (id: string, role: Role) => {
+  const user = await prisma.user.update({
+    where: {
+      id
+    },
+    data: {
+      role
+    }
+  })
+  return user
+}

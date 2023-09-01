@@ -8,6 +8,7 @@ const nextConfig = {
     domains: [
       "lh3.googleusercontent.com",
       "avatars.githubusercontent.com",
+      "github.com",
       "randomuser.me",
     ],
   },

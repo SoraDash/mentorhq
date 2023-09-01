@@ -1,11 +1,11 @@
 "use client"
+import { checkStatus } from '@/actions/onboarding.actions';
+import { BooleanIcon } from '@/components/server/BooleanIcon';
+import useOnboardingModal from '@/hooks/useOnboardingModal';
+import { User } from '@prisma/client';
 import React, { useState } from 'react';
 import { GoZap } from 'react-icons/go';
 import { RiRocketFill } from 'react-icons/ri';
-import useOnboardingModal from '@/hooks/useOnboardingModal';
-import { User } from '@prisma/client';
-import { LiaCheckSolid, LiaTimesSolid } from 'react-icons/lia';
-import { checkStatus } from '@/actions/onboarding.actions';
 
 interface OnboardingStepsClientProps {
   user: Partial<User> | null;
@@ -65,7 +65,8 @@ const OnboardingStepsClient: React.FC<OnboardingStepsClientProps> = ({ user }) =
       <ul className="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400">
         {featureConfig.map((feature, index) => (
           <li key={index} className="flex items-center">
-            {feature.condition ? (
+            <BooleanIcon condition={feature.condition} missingText={feature.missingText} successText={feature.successText} />
+            {/* {feature.condition ? (
               <>
                 <LiaTimesSolid className="w-3.5 h-3.5 mr-2 text-red-500 dark:text-red-400 flex-shrink-0" />
                 {feature.missingText}
@@ -75,7 +76,7 @@ const OnboardingStepsClient: React.FC<OnboardingStepsClientProps> = ({ user }) =
                 <LiaCheckSolid className="w-3.5 h-3.5 mr-2 text-green-500 dark:text-green-400 flex-shrink-0" />
                 {feature.successText}
               </>
-            )}
+            )} */}
           </li>
         ))}
       </ul>

@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { roleConfig } from '@/lib/roleConfig';
 import { cn } from '@/lib/utils';
 import { Role } from '@prisma/client';
 import { LogOut } from "lucide-react";
@@ -18,15 +17,18 @@ import { signOut } from "next-auth/react";
 import { useRouter } from 'next/navigation';
 import { BiCog } from 'react-icons/bi';
 import { UserAvatar } from './UserAvatar';
+import { knownRoles } from './RoleDropdown';
 
 type Props = {
   user: User;
   role: Role
 };
 
+
 export const UserAccountNav = ({ user, role }: Props) => {
-  const { color, icon: RoleIcon } = roleConfig[role];
+  const { color, icon: Icon } = knownRoles[role];
   const router = useRouter();
+
 
 
   return (
@@ -42,7 +44,9 @@ export const UserAccountNav = ({ user, role }: Props) => {
             <p className="font-medium text-lg">{user.name}</p>
             <Tooltip>
               <TooltipTrigger>
-                <RoleIcon className={cn("w-5 h-5", color ? color : 'text-white')} />
+                <span className={cn("w-5 h-5", color ? color : 'text-white')}>
+                  <Icon />
+                </span>
               </TooltipTrigger>
               <TooltipContent>
                 <p className='capitalize'>{role.toLocaleLowerCase()} Account</p>

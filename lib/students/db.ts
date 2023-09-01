@@ -81,6 +81,10 @@ export const getStudent = async (id: string): Promise<Student | null> => {
     where: {
       id: id,
     },
+    include: {
+      deadline: true,
+      projects: true,
+    }
   });
 
   if (!student) return null;

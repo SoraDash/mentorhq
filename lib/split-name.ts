@@ -11,3 +11,9 @@ export function splitName(name: string): NameParts {
     return { firstName: words[0], lastName: words[words.length - 1] };
   }
 }
+export function getInitials(name: string): string {
+  const { firstName, lastName } = splitName(name);
+  const firstInitial = firstName ? firstName[0] : '';
+  const lastInitial = lastName ? lastName[0] : '';
+  return `${firstInitial}${lastInitial}`.toUpperCase();
+}

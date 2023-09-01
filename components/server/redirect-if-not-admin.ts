@@ -1,6 +1,15 @@
-import { Student, User } from '@prisma/client';
+import { getUser } from '@/lib/auth/auth';
+import { Student } from '@prisma/client';
 
-export const redirectIfNotAdmin = (user: User | null, student: Student | null) => {
-  return user?.id !== student?.mentorId && user?.role !== 'ADMIN' ? true : false;
+export const redirectIfNotAdmin = async (student: Student | null) => {
+  const user = await getUser();
+  if (!user) return false;
+  return user.id !== student?.mentorId && user?.role !== 'ADMIN' ? true : false;
 
+}
+
+export const redirectAdminPage = async () => {
+  const user = await getUser();
+  if (!user) return false;
+  return user?.role !== 'ADMIN' ? true : false;
 }

@@ -8,7 +8,7 @@ import React from 'react';
 const AdminDashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const user = await getUser();
   if (user?.role !== "ADMIN") {
-    return redirect("/dsahboard")
+    return redirect("/dashboard")
   }
   return (
 

@@ -4,7 +4,6 @@ import { StatsCard } from '@/components/server/dashboard/StatsCard';
 import { getUser } from '@/lib/auth/auth';
 import { getLatestStats } from '@/lib/billing/stats';
 import { generateCalendlyEvents } from '@/lib/calendly/fake-events';
-import { Suspense } from 'react';
 
 const DashboardPage = async () => {
   const stats = await getLatestStats();
@@ -14,7 +13,7 @@ const DashboardPage = async () => {
 
   return (
     <div>
-      <section className="bg-coolGray-50 py-4" key={Math.random()}>
+      <section className="bg-coolGray-50 py-4">
         <div className="container px-4 mx-auto">
           <div className="flex flex-wrap -m-3">
             {stats !== null && <StatsCard stats={stats} />}

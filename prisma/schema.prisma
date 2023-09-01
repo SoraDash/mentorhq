@@ -77,9 +77,10 @@ model Notification {
 }
 
 model ProjectType {
-  id    String @id @default(uuid())
-  name  String
-  order Int?
+  id       String    @id @default(uuid())
+  name     String
+  order    Int?
+  projects Project[]
 }
 
 model Project {
@@ -87,7 +88,6 @@ model Project {
   name       String
   github     String?
   live_url   String?
-  type       String
   completed  ProjectCompletion @default(NOTSTARTED)
   deadlines  Deadline[]
   created_at DateTime          @default(now())
@@ -96,6 +96,8 @@ model Project {
   deletedAt  DateTime?         @default(now())
   student    Student           @relation(fields: [studentId], references: [id])
   studentId  String
+  type       ProjectType       @relation(fields: [typeId], references: [id])
+  typeId     String
 }
 
 model Deadline {

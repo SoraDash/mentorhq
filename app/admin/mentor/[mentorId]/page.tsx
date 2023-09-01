@@ -1,6 +1,7 @@
 import Avatar from '@/components/client/Avatar';
 import { knownRoles } from '@/components/client/RoleDropdown';
 import { SocialMediaIcons } from '@/components/client/SocialMediaIcons';
+import OnboardingModal from '@/components/client/modals/UnifiedModal';
 import { FetchGithubBio } from '@/components/client/tables/admin/mentors/github-bio';
 import { redirectAdminPage } from '@/components/server/redirect-if-not-admin';
 import { getMentorWithCount } from '@/lib/admin/mentors';
@@ -8,7 +9,7 @@ import { cn } from '@/lib/utils';
 import { capitalize } from 'lodash-es';
 import { redirect } from 'next/navigation';
 import React from 'react';
-import { FaFileAlt, FaGraduationCap, FaRegCircle } from 'react-icons/fa';
+import { FaFileAlt, FaGraduationCap, FaHammer, FaUserEdit } from 'react-icons/fa';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
@@ -35,11 +36,11 @@ const MentorProfilePage: React.FC<StudentProfilePageProps> = async ({ params }) 
     return <div>Mentor not found</div>
   }
   return (
-    <div className="bg-gray-100">
+    <>
       <div className="container mx-auto py-8">
         <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
           <div className="col-span-4 sm:col-span-3">
-            <div className="bg-white shadow rounded-lg p-6">
+            <div className="dark:bg-navbar bg-white shadow rounded-lg p-6">
               <div className="flex flex-col items-center">
                 <Avatar entity={mentor} className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0" profile />
 
@@ -55,8 +56,16 @@ const MentorProfilePage: React.FC<StudentProfilePageProps> = async ({ params }) 
 
 
                 <div className="mt-6 flex flex-wrap gap-4 justify-center">
-                  <a href="#" className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Edit</a>
-                  <a href="#" className="bg-red-500 hover:bg-red-400 text-white py-2 px-4 rounded">Ban</a>
+
+                  <span className='bg-secondary text-secondary-foreground hover:bg-secondary/80 py-2 px-4 rounded inline-flex items-center'>
+                    <OnboardingModal title={`Edit ${mentor.name}'s profile`} buttonName='Edit'>
+                      <FaUserEdit className="mr-2" />
+                    </OnboardingModal>
+                  </span>
+                  <span className="bg-red-500 hover:bg-red-400 text-white py-2 px-4 rounded inline-flex items-center">
+                    <FaHammer className="mr-2" />
+                    Ban
+                  </span>
                   <span className="bg-secondary text-secondary-foreground hover:bg-secondary/80 py-2 px-4 rounded">
                     <FetchGithubBio id={mentor.id} />
                   </span>
@@ -85,7 +94,7 @@ const MentorProfilePage: React.FC<StudentProfilePageProps> = async ({ params }) 
             </div>
           </div>
           <div className="col-span-4 sm:col-span-9">
-            <div className="bg-white shadow rounded-lg p-6">
+            <div className="dark:bg-navbar bg-white shadow rounded-lg p-6">
               {mentor.bio && (
                 <>
                   <h2 className="text-xl font-bold mb-4">{mentor.firstName}&apos;s Github Profile</h2>
@@ -141,8 +150,8 @@ const MentorProfilePage: React.FC<StudentProfilePageProps> = async ({ params }) 
             </div>
           </div>
         </div>
-      </div>
-    </div >
+      </div >
+    </ >
   );
 }
 

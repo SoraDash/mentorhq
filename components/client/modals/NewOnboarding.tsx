@@ -1,22 +1,17 @@
-"use client"
-
+import React, { useEffect, useState, FormEvent } from 'react';
 import { onboardUser } from '@/actions/user.actions';
-import MiscForm from '@/components/server/forms/onboarding/MiscForm';
 import NameForm from '@/components/server/forms/onboarding/NameForm';
+import MiscForm from '@/components/server/forms/onboarding/MiscForm';
 import SocialForm from '@/components/server/forms/onboarding/SocialForm';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from '@/components/ui/use-toast';
 import { useMultistepForm } from '@/hooks/useMultiStepForm';
-import useOnboardingModal from "@/hooks/useOnboardingModal";
 import { getUser } from '@/lib/auth/auth';
 import { INITIAL_DATA } from '@/lib/validations/UserValidation';
-import { CustomFormData } from '@/types/FormDataTypes';
-import { revalidatePath } from 'next/cache';
 import { useRouter } from 'next/navigation';
-import { FormEvent, useEffect, useState } from 'react';
+import { CustomFormData } from '@/types/FormDataTypes';
 
-export const OnboardingModal = () => {
-  const modal = useOnboardingModal();
+const NewOnboarding = () => {
+  const [open, setOpen] = useState(false);
   const [data, setData] = useState(INITIAL_DATA);
   const router = useRouter();
   const { toast } = useToast();
@@ -46,13 +41,13 @@ export const OnboardingModal = () => {
     fetchUserData();
   }, []);
 
-  function updateFields(fields: Partial<FormData | CustomFormData>) {
+  const updateFields = (fields: Partial<FormData | CustomFormData>) => {
     setData((prev) => {
       return { ...prev, ...fields };
     });
   }
 
-  const { currentStepIndex, step, stepTitles, stepDescriptions, isFirstStep, isLastStep, back, next } =
+  const { currentStepIndex, step, stepTitles, isFirstStep, isLastStep, back, next } =
     useMultistepForm([
       {
         title: "Basic Information",
@@ -71,56 +66,33 @@ export const OnboardingModal = () => {
       },
     ]);
 
-  function onSubmit(e: FormEvent) {
+  const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!isLastStep) return next();
     onboardUser(data)
       .then(response => {
         if (response.success) {
-          modal.onClose();
           toast({
             title: "Success: You're in!",
             description: "You've successfully completed onboarding.",
             variant: "success",
-          })
+          });
         }
-        setTimeout(() => router.refresh(), 300)
+        setTimeout(() => router.refresh(), 300);
       })
-      .catch(error => {
-
-      });
-  }
+      .catch(error => { /* Handle errors here */ });
+  };
 
   return (
-    <Dialog open={modal.isOpen} onOpenChange={modal.onClose}>
-      <DialogContent className="sm:max-w-[425px] bg-white">
-        <form onSubmit={onSubmit}>
-          <DialogTitle>{stepTitles[currentStepIndex]}</DialogTitle>
-          <DialogDescription>{stepDescriptions[currentStepIndex]}</DialogDescription>
-          {step}
-          <DialogFooter className="flex justify-between items-center">
-            {!isFirstStep && (
-              <button
-                type="button"
-                onClick={back}
-                className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded"
-              >
-                Back
-              </button>
-            )}
-            <div className="flex space-x-4">
-              <button
-                type="submit"
-                className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded`}
-              >
-                {isLastStep ? 'Finish' : 'Next'}
-              </button>
-            </div>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+    <form onSubmit={onSubmit}>
+      <h1>{stepTitles[currentStepIndex]}</h1>
+      {step}
+      <div>
+        {!isFirstStep && <button type="button" onClick={back}>Back</button>}
+        <button type="submit">{isLastStep ? 'Finish' : 'Next'}</button>
+      </div>
+    </form>
   );
 };
 
-export default OnboardingModal;
+export default NewOnboarding;

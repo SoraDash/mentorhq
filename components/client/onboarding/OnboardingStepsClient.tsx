@@ -1,11 +1,12 @@
 "use client"
 import { checkStatus } from '@/actions/onboarding.actions';
 import { BooleanIcon } from '@/components/server/BooleanIcon';
-import useOnboardingModal from '@/hooks/useOnboardingModal';
 import { User } from '@prisma/client';
 import React, { useState } from 'react';
 import { GoZap } from 'react-icons/go';
 import { RiRocketFill } from 'react-icons/ri';
+import { useUnifiedModal } from '../modals/useModal';
+import { useModalStore } from '@/hooks/useUnifiedModal';
 
 interface OnboardingStepsClientProps {
   user: Partial<User> | null;
@@ -18,7 +19,8 @@ interface FeatureConfig {
 }
 
 const OnboardingStepsClient: React.FC<OnboardingStepsClientProps> = ({ user }) => {
-  const modal = useOnboardingModal();
+  const { openModal, isOpen } = useModalStore();
+  console.log("Modal isOpen:", isOpen);
 
   const featureConfig: FeatureConfig[] = [
     {
@@ -88,15 +90,15 @@ const OnboardingStepsClient: React.FC<OnboardingStepsClientProps> = ({ user }) =
             {isInitialVisit ? (
               <button
                 className="mt-6 px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 inline-flex items-center"
-                onClick={modal.onOpen}
+                onClick={() => openModal("sheet", "onboarding")}
               >
                 Get Started
-                <GoZap className="w-4 h-4 ml-2 fill-white" />
+                < GoZap className="w-4 h-4 ml-2 fill-white" />
               </button>
             ) : (
               <button
                 className="mt-6 px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 inline-flex items-center"
-                onClick={modal.onOpen}
+                onClick={() => openModal("sheet", "onboarding")}
               >
                 Finish Profile
                 <GoZap className="w-4 h-4 ml-2 fill-white" />
@@ -119,7 +121,7 @@ const OnboardingStepsClient: React.FC<OnboardingStepsClientProps> = ({ user }) =
         )}
 
       </div>
-    </div>
+    </div >
   );
 };
 

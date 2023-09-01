@@ -23,8 +23,9 @@ export function Providers({ children, ...props }: ThemeProviderProps) {
         <SessionProvider>
           <TooltipProvider>
             <Toaster />
-            <ModalProvider />
-            {children}
+            <ModalProvider>
+              {children}
+            </ModalProvider>
           </TooltipProvider>
         </SessionProvider>
       </NextThemesProvider>

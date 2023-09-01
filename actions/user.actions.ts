@@ -5,7 +5,7 @@ import { prisma } from '@/lib/db/prisma';
 import { CustomFormData } from '@/types/FormDataTypes';
 
 
-export async function onboardUser(rawFormData: Partial<FormData | CustomFormData>) {
+export async function onboardUser(rawFormData: Partial<FormData | CustomFormData>, onboarding: boolean = false) {
   try {
     const session = await getAuthSession();
     if (!session || !session.user?.id) {
@@ -16,7 +16,7 @@ export async function onboardUser(rawFormData: Partial<FormData | CustomFormData
       where: { id: session.user.id },
       data: {
         ...rawFormData as CustomFormData,
-        isOnboarded: true,
+        isOnboarded: onboarding,
         role: 'MENTOR'
       }
     });

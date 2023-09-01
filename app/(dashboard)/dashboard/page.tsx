@@ -12,8 +12,8 @@ const DashboardPage = async () => {
 
 
   return (
-    <div>
-      <section className="bg-coolGray-50 py-4">
+    <>
+      <section className="py-4">
         <div className="container px-4 mx-auto">
           <div className="flex flex-wrap -m-3">
             {stats !== null && <StatsCard stats={stats} />}
@@ -22,9 +22,12 @@ const DashboardPage = async () => {
       </section>
       <OnboardingStepsServer user={user} />
       {user?.calendly_token && (
-        <CalendlyTable events={events} />
+        <div className='px-5'>
+
+          <CalendlyTable events={events} />
+        </div>
       )}
-    </div>
+    </>
   );
 };
 

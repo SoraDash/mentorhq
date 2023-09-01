@@ -7,13 +7,13 @@ import React from 'react';
 
 interface StudentProfilePageProps {
   params: {
-    studentId: string;
+    mentorId: string;
   }
 }
 
 const MentorProfilePage: React.FC<StudentProfilePageProps> = async ({ params }) => {
-  const studentId = params.studentId;
-  const student = await getStudent(studentId);
+  const mentorId = params.mentorId;
+  const student = await getStudent(mentorId);
   const user = await getUser()
 
   if (redirectIfNotAdmin(user, student)) {

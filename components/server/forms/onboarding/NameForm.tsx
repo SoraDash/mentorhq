@@ -1,12 +1,15 @@
+"use client"
+import { useStepStore } from '@/store/useStepStore';
 import { NameFormData } from '@/types/FormDataTypes';
 import React from 'react';
 
-type NameFormProps = NameFormData & {
-  // eslint-disable-next-line no-unused-vars
-  updateFields: (fields: Partial<NameFormData>) => void;
-};
+const NameForm: React.FC = () => {
+  const formData = useStepStore(state => state.formData.name || {});
+  const updateFormData = useStepStore(state => state.updateFormData);
 
-const NameForm: React.FC<NameFormProps> = ({ firstName, lastName, updateFields }) => {
+  const updateFields = (fields: Partial<NameFormData>) => {
+    updateFormData('name', fields);
+  };
   return (
     <div className="grid grid-cols-1 gap-4 mt-3 mb-4">
       <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="firstName">
@@ -15,7 +18,7 @@ const NameForm: React.FC<NameFormProps> = ({ firstName, lastName, updateFields }
       <input
         id="firstName"
         type="text"
-        value={firstName}
+        value={formData.firstName}
         onChange={(e) => updateFields({ firstName: e.target.value })}
         className="w-full px-4 py-2 border rounded shadow-sm focus:ring focus:ring-indigo-300 focus:outline-none"
       />
@@ -26,7 +29,7 @@ const NameForm: React.FC<NameFormProps> = ({ firstName, lastName, updateFields }
       <input
         id="lastName"
         type="text"
-        value={lastName}
+        value={formData.lastName}
         onChange={(e) => updateFields({ lastName: e.target.value })}
         className="w-full px-4 py-2 border rounded shadow-sm focus:ring focus:ring-indigo-300 focus:outline-none"
       />

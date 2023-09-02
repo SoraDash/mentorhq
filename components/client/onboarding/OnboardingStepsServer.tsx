@@ -1,7 +1,6 @@
-import React from 'react';
-import Image from 'next/image';
-import OnboardingStepsClient from './OnboardingStepsClient';
 import { User } from '@prisma/client';
+import Image from 'next/image';
+import React from 'react';
 import CalendlyAuth from '../Calendly';
 
 interface OnboardingStepsServerProps {
@@ -22,7 +21,6 @@ const OnboardingStepsServer: React.FC<OnboardingStepsServerProps> = ({ user }) =
               Start your journey with us. However, some features require setup:
             </p>
 
-            <OnboardingStepsClient user={user} />
             <CalendlyAuth />
 
           </div>

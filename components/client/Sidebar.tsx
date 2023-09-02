@@ -1,6 +1,4 @@
 "use client";
-
-import useOnboardingModal from '@/hooks/useOnboardingModal';
 import { cn } from '@/lib/utils';
 import { LayoutDashboard, Zap } from 'lucide-react';
 import { User } from 'next-auth';
@@ -44,7 +42,6 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ user }) => {
   const pathname = usePathname();
   const [isHidden, setIsHidden] = useState(false);
-  const modal = useOnboardingModal();
 
 
   return (
@@ -81,7 +78,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
       </div>
       {/* Alert box for non-mentor users */}
       {!user?.isOnboarded && !isHidden ? (
-        <Alert variant={"destructive"} onClick={modal.onOpen}>
+        <Alert variant={"destructive"} onClick={() => console.log()}>
           {/* Icon and Text */}
           <CgClose className="h-4 w-4" onClick={() => {
             setIsHidden(true);

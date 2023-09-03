@@ -9,7 +9,6 @@ const SensitiveInfo: React.FC<{ value: string }> = ({ value }) => {
   return (
     <>
       <span className="inline-flex items-center cursor-pointer" onClick={() => setShow(!show)}>{show ? value : hiddenValue}</span>
-
     </>
   );
 };

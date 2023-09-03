@@ -4,16 +4,14 @@ import { useStepStore } from '@/store/useStepStore';
 import React from 'react';
 import { AiFillProfile } from 'react-icons/ai';
 import { BsGlobeAmericas, BsPersonBoundingBox } from 'react-icons/bs';
+import { FaQuestion } from 'react-icons/fa';
 import { GiConfirmed } from 'react-icons/gi';
-import { ImProfile } from 'react-icons/im';
-import { IoShareSocialSharp } from 'react-icons/io5';
-import { PiCardholder } from 'react-icons/pi';
 import { SiCodereview } from 'react-icons/si';
 
 interface OnboardingSidebarProps { }
 
 export const OnboardingSidebar: React.FC<OnboardingSidebarProps> = () => {
-  const { currentStep } = useStepStore();
+  const { currentStep, goTo, isLastStep } = useStepStore();
 
   const stepsInfo = [
     {
@@ -45,11 +43,36 @@ export const OnboardingSidebar: React.FC<OnboardingSidebarProps> = () => {
   return (
     <ol className="flex flex-col items-center space-y-4 text-gray-500 border-l border-gray-200 dark:border-gray-700 dark:text-gray-400">
       {stepsInfo.map((step, index) => {
-        const Icon = step.isCompleted ? GiConfirmed : step.defaultIcon;
+
+        let Icon;
+
+        if (currentStep === index) {
+          Icon = FaQuestion;
+        } else {
+          Icon = step.isCompleted ? GiConfirmed : step.defaultIcon;
+        }
+
+        const color = currentStep === index ? "text-orange-500" : (step.isCompleted ? "text-green-500" : "text-white");
+
+        const isFirstStep = index === 0;
+        const isClickable = isFirstStep || (!isLastStep && (index === currentStep - 1 || index === currentStep || index === currentStep + 1));
+
         return (
-          <li key={index} className="flex items-center space-x-4">
-            <span className={step.isCompleted ? "  text-green-500 " : "text-primary-purple"}>
-              <Icon className="w-6 h-6" />
+          <li
+            key={index}
+            className={`flex items-center space-x-4 ${isClickable ? 'cursor-pointer' : 'cursor-default'}`}
+            onClick={() => {
+              if (isClickable) {
+                goTo(index);
+              }
+            }}
+          >
+            <span className={color}>
+              {currentStep === index ? (
+                <Icon icon={Icon} className="w-6 h-6" />
+              ) : (
+                <Icon className="w-6 h-6" />
+              )}
             </span>
             <div>
               <h3 className="font-medium leading-tight">{step.title}</h3>
@@ -60,4 +83,4 @@ export const OnboardingSidebar: React.FC<OnboardingSidebarProps> = () => {
       })}
     </ol>
   );
-}
+};

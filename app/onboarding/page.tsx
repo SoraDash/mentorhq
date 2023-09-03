@@ -1,11 +1,11 @@
-import OnboardingFlow from '@/components/client/onboarding/Onboarding';
+import OnboardingForm from '@/components/client/onboarding/OnboardingForm';
 import React from 'react';
 
 const OnboardingPage: React.FC = async () => {
 
   return (
     <div className="flex-1 p-5">
-      <OnboardingFlow />
+      <OnboardingForm />
     </div>
   );
 }

@@ -1,8 +1,9 @@
 "use client"
-import React from 'react';
+import { PasswordInput } from '@/components/client/ShowHideInput';
+import { Input } from '@/components/ui/input';
 import { useStepStore } from '@/store/useStepStore';
 import { MiscFormData } from '@/types/FormDataTypes';
-import { PasswordInput } from '@/components/client/ShowHideInput';
+import React from 'react';
 
 const MiscForm: React.FC = () => {
   const formData = useStepStore(state => state.formData.misc || {});
@@ -19,7 +20,7 @@ const MiscForm: React.FC = () => {
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="paidPerHour">
           Paid Per Hour
         </label>
-        <input
+        <Input
           type="number"
           id="paidPerHour"
           value={formData.paidPerHour || ''}
@@ -33,7 +34,7 @@ const MiscForm: React.FC = () => {
         </label>
         <PasswordInput
           id="ciApiKey"
-          value={formData.ciApiKey}
+          value={formData.ciApiKey || ""}
           onChange={(e) => updateFields({ ciApiKey: e.target.value })}
           className="w-full px-4 py-2 border rounded shadow-sm focus:ring focus:ring-indigo-300 focus:outline-none"
         />
@@ -41,19 +42,18 @@ const MiscForm: React.FC = () => {
           CI Api Email
           <span className='text-red-500 ml-3'>Case Sensetive</span>
         </label>
-        <input
+        <Input
           type="email"
           id="ciEmail"
-          value={formData.ciEmail}
+          value={formData.ciEmail || ""}
           onChange={(e) => updateFields({ ciEmail: e.target.value })}
           className="w-full px-4 py-2 border rounded shadow-sm focus:ring focus:ring-indigo-300 focus:outline-none"
         />
       </div>
 
-      {/* ...other fields like ciApiKey, ciEmail, etc... */}
 
       <div className='mt-5'>
-        <input
+        <Input
           type="checkbox"
           id="sendWelcomeEmail"
           checked={formData.sendWelcomeEmail || false}

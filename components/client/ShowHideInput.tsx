@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { AiFillEyeInvisible } from 'react-icons/ai';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { Input } from '../ui/input';
 
 interface PasswordInputProps extends React.InputHTMLAttributes<HTMLInputElement> { }
 
@@ -9,7 +9,7 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({ value, onChange, c
 
   return (
     <div className="relative">
-      <input
+      <Input
         {...props}
         type={showPassword ? 'text' : 'password'}
         value={value as string}

@@ -1,4 +1,5 @@
 "use client"
+import { Input } from '@/components/ui/input';
 import { useStepStore } from '@/store/useStepStore';
 import { SocialFormData } from '@/types/FormDataTypes';
 import React from 'react';
@@ -16,10 +17,10 @@ const SocialForm: React.FC = () => {
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="github">
           GitHub Username
         </label>
-        <input
+        <Input
           type="text"
           id="github"
-          value={formData.github}
+          value={formData.github || ""}
           onChange={(e) => updateFields({ github: e.target.value })}
           className="w-full px-4 py-2 border rounded shadow-sm focus:ring focus:ring-indigo-300 focus:outline-none"
         />
@@ -28,10 +29,10 @@ const SocialForm: React.FC = () => {
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="slack">
           Slack Username
         </label>
-        <input
+        <Input
           type="text"
           id="slack"
-          value={formData.slack}
+          value={formData.slack || ""}
           onChange={(e) => updateFields({ slack: e.target.value })}
           className="w-full px-4 py-2 border rounded shadow-sm focus:ring focus:ring-indigo-300 focus:outline-none"
         />
@@ -40,10 +41,10 @@ const SocialForm: React.FC = () => {
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="linkedIn">
           LinkedIn Profile URL
         </label>
-        <input
+        <Input
           type="text"
           id="linkedIn"
-          value={formData.linkedIn}
+          value={formData.linkedIn || ""}
           onChange={(e) => updateFields({ linkedIn: e.target.value })}
           className="w-full px-4 py-2 border rounded shadow-sm focus:ring focus:ring-indigo-300 focus:outline-none"
         />
@@ -52,23 +53,11 @@ const SocialForm: React.FC = () => {
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="skype">
           Skype Username
         </label>
-        <input
+        <Input
           type="text"
           id="skype"
-          value={formData.skype}
+          value={formData.skype || ""}
           onChange={(e) => updateFields({ skype: e.target.value })}
-          className="w-full px-4 py-2 border rounded shadow-sm focus:ring focus:ring-indigo-300 focus:outline-none"
-        />
-      </div>
-      <div className="col-span-2 sm:col-span-1">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="website">
-          Website URL
-        </label>
-        <input
-          type="text"
-          id="website"
-          value={formData.website}
-          onChange={(e) => updateFields({ website: e.target.value })}
           className="w-full px-4 py-2 border rounded shadow-sm focus:ring focus:ring-indigo-300 focus:outline-none"
         />
       </div>
@@ -76,11 +65,23 @@ const SocialForm: React.FC = () => {
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="twitter">
           Twitter Handle
         </label>
-        <input
+        <Input
           type="text"
           id="twitter"
-          value={formData.twitter}
+          value={formData.twitter || ""}
           onChange={(e) => updateFields({ twitter: e.target.value })}
+          className="w-full px-4 py-2 border rounded shadow-sm focus:ring focus:ring-indigo-300 focus:outline-none"
+        />
+      </div>
+      <div className="col-span-2 sm:col-span-1">
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="website">
+          Website URL
+        </label>
+        <Input
+          type="url"
+          id="website"
+          value={formData.website || ""}
+          onChange={(e) => updateFields({ website: e.target.value })}
           className="w-full px-4 py-2 border rounded shadow-sm focus:ring focus:ring-indigo-300 focus:outline-none"
         />
       </div>

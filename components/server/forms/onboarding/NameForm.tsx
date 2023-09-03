@@ -1,4 +1,5 @@
 "use client"
+import { Input } from '@/components/ui/input';
 import { useStepStore } from '@/store/useStepStore';
 import { NameFormData } from '@/types/FormDataTypes';
 import React from 'react';
@@ -15,10 +16,10 @@ const NameForm: React.FC = () => {
       <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="firstName">
         First Name
       </label>
-      <input
+      <Input
         id="firstName"
         type="text"
-        value={formData.firstName}
+        value={formData.firstName || ""}
         onChange={(e) => updateFields({ firstName: e.target.value })}
         className="w-full px-4 py-2 border rounded shadow-sm focus:ring focus:ring-indigo-300 focus:outline-none"
       />
@@ -26,10 +27,10 @@ const NameForm: React.FC = () => {
       <label className="block text-gray-700 text-sm font-bold mb-2 mt-4" htmlFor="lastName">
         Last Name
       </label>
-      <input
+      <Input
         id="lastName"
         type="text"
-        value={formData.lastName}
+        value={formData.lastName || ""}
         onChange={(e) => updateFields({ lastName: e.target.value })}
         className="w-full px-4 py-2 border rounded shadow-sm focus:ring focus:ring-indigo-300 focus:outline-none"
       />

@@ -1,14 +1,14 @@
-import React, { useEffect, useState, FormEvent } from 'react';
 import { onboardUser } from '@/actions/user.actions';
-import NameForm from '@/components/server/forms/onboarding/NameForm';
 import MiscForm from '@/components/server/forms/onboarding/MiscForm';
+import NameForm from '@/components/server/forms/onboarding/NameForm';
 import SocialForm from '@/components/server/forms/onboarding/SocialForm';
 import { useToast } from '@/components/ui/use-toast';
 import { useMultistepForm } from '@/hooks/useMultiStepForm';
 import { getUser } from '@/lib/auth/auth';
 import { INITIAL_DATA } from '@/lib/validations/UserValidation';
-import { useRouter } from 'next/navigation';
 import { CustomFormData } from '@/types/FormDataTypes';
+import { useRouter } from 'next/navigation';
+import { FormEvent, useEffect, useState } from 'react';
 
 const NewOnboarding = () => {
   const [open, setOpen] = useState(false);

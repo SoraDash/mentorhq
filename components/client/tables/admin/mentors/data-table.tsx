@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/table"
 import { useState } from 'react'
 import { PiUserPlus } from 'react-icons/pi'
+import { useRouter } from 'next/navigation'
 
 
 interface DataTableProps<TData, TValue> {
@@ -37,6 +38,7 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const router = useRouter()
   const table = useReactTable({
     data,
     columns,
@@ -106,6 +108,8 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  onClick={() => router.push(`/admin/mentor/${(row.original as { id: string }).id}`)}
+
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

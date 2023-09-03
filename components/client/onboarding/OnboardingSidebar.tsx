@@ -6,6 +6,7 @@ import { BsGlobeAmericas, BsPersonBoundingBox } from 'react-icons/bs';
 import { FaQuestion } from 'react-icons/fa';
 import { GiConfirmed } from 'react-icons/gi';
 import { SiCodereview } from 'react-icons/si';
+import { ThemeToggle } from '../ThemeToggle';
 
 const OnboardingSidebar: React.FC = () => {
   const { currentStep, goTo, maxStep } = useStepStore();
@@ -77,6 +78,7 @@ const OnboardingSidebar: React.FC = () => {
           </li>
         )
       })}
+      {/* Toggle Logout and theme selection buttons */}
     </ol>
   );
 };

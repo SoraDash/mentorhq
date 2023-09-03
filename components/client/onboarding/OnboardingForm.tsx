@@ -16,35 +16,42 @@ const OnboardingForm: React.FC = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const user = await getUser();
+      try {
+        const user = await getUser();
 
-      if (user) {
-        const nameData = {
-          firstName: user.firstName || "",
-          lastName: user.lastName || "",
-        };
-        const miscData = {
-          ciEmail: user.email || "",
-          ciApiKey: user.ciApiKey || "",
-          paidPerHour: user.paidPerHour || 0,
-          sendWelcomeEmail: user.sendWelcomeEmail || false,
-          website: user.website || ""
-        };
-        const socialData = {
-          github: user.github || "",
-          twitter: user.twitter || "",
-          linkedIn: user.linkedIn || "",
-          slack: user.slack || "",
-          skype: user.skype || ""
-        };
-        updateFormData('name', nameData);
-        updateFormData('misc', miscData);
-        updateFormData('social', socialData);
+        if (user) {
+          const nameData = {
+            firstName: user.firstName || "",
+            lastName: user.lastName || "",
+          };
+          const miscData = {
+            ciEmail: user.email || "",
+            ciApiKey: user.ciApiKey || "",
+            paidPerHour: user.paidPerHour || 0,
+            sendWelcomeEmail: user.sendWelcomeEmail || false,
+            website: user.website || ""
+          };
+          const socialData = {
+            github: user.github || "",
+            twitter: user.twitter || "",
+            linkedIn: user.linkedIn || "",
+            slack: user.slack || "",
+            skype: user.skype || ""
+          };
+          updateFormData('name', nameData);
+          updateFormData('misc', miscData);
+          updateFormData('social', socialData);
+        }
+
+      } catch (error) {
+        console.log(error);
+      } finally {
+        console.log("finally");
       }
-    };
-
+    }
     fetchUserData();
-  }, [updateFormData]);
+  }, [updateFormData]
+  );
 
 
 
@@ -87,39 +94,41 @@ const OnboardingForm: React.FC = () => {
   const CurrentFormComponent = steps[currentStep] || (() => <div>Error: Unknown step!</div>);
 
   return (
-    <div>
-      <CurrentFormComponent />
+    <div className="flex flex-col justify-center items-center min-h-screen scroll-pt-4">
+      <div className="w-full max-w-lg bg-white shadow-lg p-8 rounded-lg">
+        <CurrentFormComponent />
 
-      <div className="mt-4 flex justify-end">
-        {/* Show Back button if it's not the first step */}
-        {!isFirstStep && (
-          <button
-            className="px-4 py-2 bg-blue-600 text-white rounded mr-2"
-            onClick={back}
-          >
-            Prev
-          </button>
-        )}
+        <div className="flex justify-center mt-8 space-x-4">
+          {/* Show Back button if it's not the first step */}
+          {!isFirstStep && (
+            <button
+              className="px-4 py-2 bg-blue-600 text-white rounded mr-2"
+              onClick={back}
+            >
+              Prev
+            </button>
+          )}
 
-        {/* Show Next button if it's not the last step */}
-        {!isLastStep && (
-          <button
-            className="px-4 py-2 bg-blue-600 text-white rounded"
-            onClick={next}
-          >
-            Next
-          </button>
-        )}
+          {/* Show Next button if it's not the last step */}
+          {!isLastStep && (
+            <button
+              className="px-4 py-2 bg-blue-600 text-white rounded"
+              onClick={next}
+            >
+              Next
+            </button>
+          )}
 
-        {/* Show Submit button only on the last step */}
-        {isLastStep && (
-          <button
-            className="px-4 py-2 bg-green-600 text-white rounded"
-            onClick={handleSubmit}
-          >
-            Submit
-          </button>
-        )}
+          {/* Show Submit button only on the last step */}
+          {isLastStep && (
+            <button
+              className="px-4 py-2 bg-green-600 text-white rounded"
+              onClick={handleSubmit}
+            >
+              Submit
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

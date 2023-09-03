@@ -1,9 +1,8 @@
 import Avatar from '@/components/client/Avatar';
 import { knownRoles } from '@/components/client/RoleDropdown';
 import { SocialMediaIcons } from '@/components/client/SocialMediaIcons';
-import OnboardingModal from '@/components/client/modals/UnifiedModal';
 import { FetchGithubBio } from '@/components/client/tables/admin/mentors/github-bio';
-import { redirectAdminPage } from '@/components/server/redirect-if-not-admin';
+import { isAdmin } from '@/components/server/routeguards';
 import { getMentorWithCount } from '@/lib/admin/mentors';
 import { cn } from '@/lib/utils';
 import { capitalize } from 'lodash-es';
@@ -26,11 +25,10 @@ const MentorProfilePage: React.FC<StudentProfilePageProps> = async ({ params }) 
   const mentorId = params.mentorId;
   const mentor = await getMentorWithCount(mentorId);
   const { color, icon: RoleIcon } = knownRoles[mentor?.role!];
-
-
-  if (await redirectAdminPage()) {
-    redirect('/dashboard')
+  if (!await isAdmin()) {
+    redirect('/dashboard');
   }
+
 
   if (!mentor) {
     return <div>Mentor not found</div>
@@ -58,9 +56,10 @@ const MentorProfilePage: React.FC<StudentProfilePageProps> = async ({ params }) 
                 <div className="mt-6 flex flex-wrap gap-4 justify-center">
 
                   <span className='bg-secondary text-secondary-foreground hover:bg-secondary/80 py-2 px-4 rounded inline-flex items-center'>
-                    <OnboardingModal title={`Edit ${mentor.name}'s profile`} buttonName='Edit'>
+                    <span className="bg-secondary text-secondary-foreground hover:bg-secondary/80 py-2 px-4 rounded">
                       <FaUserEdit className="mr-2" />
-                    </OnboardingModal>
+                      Edit
+                    </span>
                   </span>
                   <span className="bg-red-500 hover:bg-red-400 text-white py-2 px-4 rounded inline-flex items-center">
                     <FaHammer className="mr-2" />

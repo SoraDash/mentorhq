@@ -1,4 +1,4 @@
-import { getAuthSession, getUserRole } from '@/lib/auth/auth';
+import { getAuthSession, getUser, getUserRole } from '@/lib/auth/auth';
 import { SignInButton } from '@/components/client/SignInButton';
 import { ThemeToggle } from '@/components/client/ThemeToggle';
 import { UserAccountNav } from '@/components/client/UserAccountNav';
@@ -9,7 +9,7 @@ export const NavBar = async () => {
   const role = await getUserRole();
   return (
     <div className='flex items-center p-4'>
-      <MobileSidebar />
+      {session?.user && <MobileSidebar user={session?.user} />}
       <div className='flex justify-end w-full'>
         <ThemeToggle className='mr-3' />
         <div className='flex items-center'>

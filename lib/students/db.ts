@@ -1,3 +1,4 @@
+"use server"
 import { prisma } from '@/lib/db/prisma';
 import { Student, User } from '@prisma/client';
 import { getUser } from '../auth/auth';
@@ -62,14 +63,14 @@ export const unassignStudent = async (studentId: string) => {
 export const getStudents = async (): Promise<Student[]> => {
   const user = await getUser();
   if (!user?.email) throw new Error('Invalid user data');
+  if (user.role === 'ADMIN') return await prisma.student.findMany({})
 
-  const students = await prisma.student.findMany({
+  return await prisma.student.findMany({
     where: {
       mentorId: user.id,
     },
   });
 
-  return students;
 };
 
 

@@ -1,6 +1,5 @@
 import { prisma } from '@/lib/db/prisma';
 import { Student } from '@prisma/client';
-import { getUser } from '../auth/auth';
 
 export type StudentWithCounts = Student & {
   _count: {
@@ -10,32 +9,17 @@ export type StudentWithCounts = Student & {
   }
 }
 
-export const getStudents = async () => {
-  const user = await getUser();
-  if (user?.role !== "ADMIN") return null
-
-  const students = await prisma.user.findMany();
-
-  return students;
+export const getAllStudents = async () => {
+  return await prisma.student.findMany();
 };
 
+export const getStudentById = async (id: string) => {
+  return await prisma.student.findUnique({
+    where: { id }
+  });
+};
 
-export const getStudent = async (id: string) => {
-  const user = await getUser();
-  if (user?.role !== "ADMIN") return null;
-
-  return await prisma.user.findUnique({
-    where: {
-      id: id,
-    },
-  })
-}
-
-
-export const getStudentsWithCount = async () => {
-  const user = await getUser();
-  if (user?.role !== "ADMIN") return null
-
+export const getAllStudentsWithCount = async () => {
   return await prisma.user.findMany({
     include: {
       _count: {
@@ -49,16 +33,9 @@ export const getStudentsWithCount = async () => {
   });
 };
 
-
-export const getStudentWithCount = async (id: string) => {
-  const user = await getUser();
-  if (user?.role !== "ADMIN") return null;
-
+export const getStudentByIdWithCount = async (id: string) => {
   return await prisma.user.findUnique({
-    where: {
-      id: id,
-    },
-
+    where: { id },
     include: {
       _count: {
         select: {
@@ -68,5 +45,5 @@ export const getStudentWithCount = async (id: string) => {
         }
       }
     }
-  })
-}
+  });
+};

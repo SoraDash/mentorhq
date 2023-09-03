@@ -1,3 +1,4 @@
+import { CommandMenu } from '@/components/client/CommandSearch';
 import Sidebar from '@/components/client/Sidebar';
 import { NavBar } from '@/components/server/Navbar';
 import { getAuthSession } from '@/lib/auth/auth';
@@ -17,6 +18,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
         <Sidebar user={session?.user} />
       </div>
       <main className='md:pl-72'>
+        <CommandMenu />
         <NavBar />
         {children}
       </main>

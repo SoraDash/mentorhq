@@ -4,11 +4,14 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
+import { User } from 'next-auth';
+import { User as PrismUser } from '@prisma/client'
+import React from 'react';
 
 interface MobileSidebarProps {
-
+  user: User | PrismUser
 }
-const MobileSidebar = () => {
+const MobileSidebar: React.FC<MobileSidebarProps> = ({ user }) => {
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
@@ -22,7 +25,7 @@ const MobileSidebar = () => {
         <Menu />
       </SheetTrigger>
       <SheetContent side="left" className='p-0'>
-        <Sidebar />
+        <Sidebar user={user} />
       </SheetContent>
     </Sheet>
 

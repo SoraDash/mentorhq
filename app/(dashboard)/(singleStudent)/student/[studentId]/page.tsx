@@ -1,6 +1,7 @@
-import { redirectIfNotAdmin } from '@/components/server/redirect-if-not-admin';
-import { getUser } from '@/lib/auth/auth';
+
+import { canAccessStudentPage } from '@/components/server/routeguards';
 import { getStudent } from '@/lib/students';
+import { Student } from '@prisma/client';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import React from 'react';
@@ -13,10 +14,9 @@ interface StudentProfilePageProps {
 
 const StudentProfilePage: React.FC<StudentProfilePageProps> = async ({ params }) => {
   const studentId = params.studentId;
-  const student = await getStudent(studentId);
-  const user = await getUser()
+  const student = await getStudent(studentId) as Student;
 
-  if (redirectIfNotAdmin(user, student)) {
+  if (!await canAccessStudentPage(student)) {
     redirect('/dashboard')
   }
 

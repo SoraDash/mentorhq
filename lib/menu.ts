@@ -1,16 +1,30 @@
+import { LayoutDashboard } from 'lucide-react';
 import { AiOutlineBarChart } from "react-icons/ai";
-import { BiSolidDashboard } from "react-icons/bi";
-import { FaFileInvoiceDollar, } from "react-icons/fa";
+import { FaGraduationCap, FaFileInvoice, FaMoneyBillAlt, FaChalkboardTeacher } from 'react-icons/fa';
 import { FiSettings } from "react-icons/fi";
-import { PiStudentBold } from "react-icons/pi";
+import { IconType } from 'react-icons/lib';
+import { SiGotomeeting } from 'react-icons/si';
+
+
+export type MenuItem = {
+  label: string;
+  href: string;
+  icon: IconType;
+  color?: string;
+}
 
 export const MAIN_MENU = [
-  { title: "Dashboard", href: "/dashboard", icon: BiSolidDashboard, premium: false, spacing: true },
-  { title: "Your Students", href: "/students", icon: PiStudentBold, premium: false, spacing: true },
-  { title: "Student Stats", href: "/stats", icon: AiOutlineBarChart, premium: false, spacing: true },
-  { title: "Invoices", href: "/invoices", icon: FaFileInvoiceDollar, premium: false, spacing: true },
-];
-
-export const BOTTOM_MENU = [
-  { title: "Settings", href: "/settings", icon: FiSettings },
-];
+  { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, color: "text-sky-500" },
+  { label: 'My Students', href: '/students', icon: FaGraduationCap, color: "text-violet-500" },
+  { label: 'Sessions', href: '/sessions', icon: SiGotomeeting, color: "text-green-700" },
+  { label: 'Stats', href: '/stats', icon: AiOutlineBarChart, color: "text-pink-700" },
+  { label: 'Invoices', href: '/invoices', icon: FaFileInvoice, color: "text-orange-700" },
+  { label: 'Billing', href: '/billing', icon: FaMoneyBillAlt, color: "text-emerald-500" },
+  { label: 'Settings', href: '/settings', icon: FiSettings },
+]
+export const ADMIN_MENU = [
+  { label: 'Admin Dashboard', href: '/admin', icon: LayoutDashboard, color: "text-sky-500" },
+  { label: 'Students', href: '/admin/students', icon: FaGraduationCap, color: "text-violet-500" },
+  { label: 'Mentors', href: '/admin/mentors', icon: FaChalkboardTeacher, color: "text-orange-700" },
+  { label: 'Site Settings', href: '/admin/settings', icon: FiSettings },
+]

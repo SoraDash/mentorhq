@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import { useStepStore } from '@/store/useStepStore';
 import React from 'react';
 import { AiFillProfile } from 'react-icons/ai';
@@ -8,73 +7,69 @@ import { FaQuestion } from 'react-icons/fa';
 import { GiConfirmed } from 'react-icons/gi';
 import { SiCodereview } from 'react-icons/si';
 
-interface OnboardingSidebarProps { }
-
-export const OnboardingSidebar: React.FC<OnboardingSidebarProps> = () => {
-  const { currentStep, goTo, isLastStep } = useStepStore();
+const OnboardingSidebar: React.FC = () => {
+  const { currentStep, goTo, maxStep } = useStepStore();
 
   const stepsInfo = [
     {
-      isCompleted: currentStep > 0,
       defaultIcon: BsPersonBoundingBox,
       title: "Personal Info",
-      details: "Step details here"
+      details: "Name & Contact"
     },
     {
-      isCompleted: currentStep > 1,
       defaultIcon: AiFillProfile,
       title: "Profile Info",
-      details: "Step details here"
+      details: "Bio & Skills"
     },
     {
-      isCompleted: currentStep > 2,
       defaultIcon: BsGlobeAmericas,
       title: "Social Info",
-      details: "Step details here"
+      details: "Links & Handles"
     },
     {
-      isCompleted: currentStep > 3,
       defaultIcon: SiCodereview,
-      details: "Step details here",
       title: "Confirmation",
+      details: "Final Review",
     }
-  ];
+  ].map((step, index) => ({
+    ...step,
+    isCompleted: currentStep > index,
+  }));
 
   return (
-    <ol className="flex flex-col items-center space-y-4 text-gray-500 border-l border-gray-200 dark:border-gray-700 dark:text-gray-400">
+    <ol className="flex flex-col items-center space-y-4 text-gray-500  list-none p-0 m-0 w-full">
       {stepsInfo.map((step, index) => {
-
         let Icon;
-
         if (currentStep === index) {
           Icon = FaQuestion;
         } else {
           Icon = step.isCompleted ? GiConfirmed : step.defaultIcon;
         }
 
-        const color = currentStep === index ? "text-orange-500" : (step.isCompleted ? "text-green-500" : "text-white");
-
+        const color = currentStep === index ? "text-white" : (step.isCompleted ? "text-green-500" : "text-white");
         const isFirstStep = index === 0;
-        const isClickable = isFirstStep || (!isLastStep && (index === currentStep - 1 || index === currentStep || index === currentStep + 1));
+        const isClickable = isFirstStep
+          || (index === currentStep - 1 && currentStep !== maxStep)
+          || index === currentStep;
 
         return (
           <li
             key={index}
-            className={`flex items-center space-x-4 ${isClickable ? 'cursor-pointer' : 'cursor-default'}`}
+            className={`flex justify-start items-center px-4 py-2 w-full ${isClickable ? 'cursor-pointer' : 'cursor-default'} ${currentStep === index ? 'bg-primary-purple text-white' : ''}`}
             onClick={() => {
               if (isClickable) {
                 goTo(index);
               }
             }}
           >
-            <span className={color}>
+            <span className={`${color} mr-4`}>
               {currentStep === index ? (
                 <Icon icon={Icon} className="w-6 h-6" />
               ) : (
                 <Icon className="w-6 h-6" />
               )}
             </span>
-            <div>
+            <div className="flex-grow">
               <h3 className="font-medium leading-tight">{step.title}</h3>
               {step.details && <p className="text-sm">{step.details}</p>}
             </div>
@@ -84,3 +79,5 @@ export const OnboardingSidebar: React.FC<OnboardingSidebarProps> = () => {
     </ol>
   );
 };
+
+export default OnboardingSidebar;

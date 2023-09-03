@@ -23,7 +23,6 @@ type StepState = {
   isLastStep: boolean;
   setCurrentStep: (step: number) => void;
   updateFormData: <T extends FormSections>(section: T, data: FormData[T]) => void;
-  getFormData: () => FormData;
   setFormData: (data: FormData) => void;
   next: () => void;
   back: () => void;
@@ -97,11 +96,12 @@ export const useStepStore = create<StepState>((set) => {
     next,
     back,
     goTo,
-    isFirstStep: true,
-    isLastStep: false,
+    isFirstStep: true,  // initially true because currentStep starts at 0
+    isLastStep: false,  // initially false because there are multiple steps
     steps: forms
   };
 });
+
 
 
 

@@ -72,6 +72,7 @@ const OnboardingForm: React.FC = () => {
           });
         }
         setTimeout(() => router.refresh(), 300);
+        router.replace('/dashboard')
       })
       .catch(error => {
         console.log(error);

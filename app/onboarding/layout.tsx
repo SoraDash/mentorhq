@@ -1,6 +1,6 @@
+import OnboardingSidebar from '@/components/client/onboarding/OnboardingSidebar';
 import { NavBar } from '@/components/server/Navbar';
 import { getAuthSession } from '@/lib/auth/auth';
-import { OnboardingSidebar } from '@/components/client/onboarding/OnboardingSidebar';
 import React from 'react';
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {

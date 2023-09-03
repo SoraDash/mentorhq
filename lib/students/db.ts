@@ -48,7 +48,6 @@ export const updateOrCreateStudent = async (
   return { action: 'added' };
 };
 
-
 export const unassignStudent = async (studentId: string) => {
   return await prisma.student.update({
     where: {
@@ -62,21 +61,21 @@ export const unassignStudent = async (studentId: string) => {
 
 export const getStudents = async (): Promise<Student[]> => {
   const user = await getUser();
-  if (!user?.email) throw new Error('Invalid user data');
-  if (user.role === 'ADMIN') return await prisma.student.findMany({})
-
-  return await prisma.student.findMany({
+  if (!user) return [] as Student[]
+  const students = await prisma.student.findMany({
     where: {
       mentorId: user.id,
     },
   });
+  if (!students) return [] as Student[];
+  return students
 
 };
 
 
-export const getStudent = async (id: string): Promise<Student | null> => {
+export const getStudent = async (id: string): Promise<Student> => {
   const user = await getUser();
-  if (!user) return null;
+  if (!user) return {} as Student;
 
   const student = await prisma.student.findUnique({
     where: {
@@ -88,11 +87,47 @@ export const getStudent = async (id: string): Promise<Student | null> => {
     }
   });
 
-  if (!student) return null;
+  if (!student) return {} as Student;
+  return student;
+};
 
-  if (user.role === 'ADMIN' || student.mentorId === user.id) {
-    return student;
-  } else {
-    return null;
-  }
+
+
+export const getAllStudentsAdmin = async () => {
+  return await prisma.student.findMany();
+};
+
+export const getStudentByIdAdmin = async (id: string) => {
+  return await prisma.student.findUnique({
+    where: { id }
+  });
+};
+
+export const getAllStudentsWithCountAdmin = async () => {
+  return await prisma.user.findMany({
+    include: {
+      _count: {
+        select: {
+          studentSession: true,
+          students: true,
+          sessions: true,
+        }
+      }
+    }
+  });
+};
+
+export const getStudentByIdWithCountAdmin = async (id: string) => {
+  return await prisma.user.findUnique({
+    where: { id },
+    include: {
+      _count: {
+        select: {
+          studentSession: true,
+          students: true,
+          sessions: true,
+        }
+      }
+    }
+  });
 };

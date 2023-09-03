@@ -2,7 +2,7 @@
 
 "use strict";
 
-import { getAllMentors } from '@/lib/admin/mentors';
+import { getAllMentorsAdmin } from '@/lib/admin/mentors';
 import { getUser } from '@/lib/auth/auth';
 import { ADMIN_MENU, MAIN_MENU } from '@/lib/menu';
 import { getStudents } from '@/lib/students';
@@ -62,7 +62,7 @@ export function CommandMenu() {
       const user = await getUser();
 
       const fetchedStudents = await getStudents();
-      const fetchedMentors = await getAllMentors();
+      const fetchedMentors = await getAllMentorsAdmin();
 
       const mainMenuData = MAIN_MENU.map((item): SearchableItem => ({
         type: 'menu',

@@ -1,3 +1,5 @@
+import { Student } from '@prisma/client';
+
 export type GoogleSheetStudent = {
   name: string;
   email: string;
@@ -20,3 +22,11 @@ export type Deadline =
 
 
 export type PartialGoogleSheetStudent = Partial<GoogleSheetStudent>;
+
+export type StudentWithCounts = Student & {
+  _count: {
+    studentSession: number;
+    students: number;
+    sessions: number;
+  }
+}

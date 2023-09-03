@@ -3,7 +3,7 @@ import { knownRoles } from '@/components/client/RoleDropdown';
 import { SocialMediaIcons } from '@/components/client/SocialMediaIcons';
 import { FetchGithubBio } from '@/components/client/tables/admin/mentors/github-bio';
 import { isAdmin } from '@/components/server/routeguards';
-import { getMentorByIdWithCount } from '@/lib/admin/mentors';
+import { getMentorByIdWithCountAdmin } from '@/lib/admin/mentors';
 import { cn } from '@/lib/utils';
 import { capitalize } from 'lodash-es';
 import { redirect } from 'next/navigation';
@@ -23,7 +23,7 @@ interface StudentProfilePageProps {
 
 const MentorProfilePage: React.FC<StudentProfilePageProps> = async ({ params }) => {
   const mentorId = params.mentorId;
-  const mentor = await getMentorByIdWithCount(mentorId);
+  const mentor = await getMentorByIdWithCountAdmin(mentorId);
   const { color, icon: RoleIcon } = knownRoles[mentor?.role!];
   if (!await isAdmin()) {
     redirect('/dashboard');

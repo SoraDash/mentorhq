@@ -1,6 +1,6 @@
 import { studentColumns } from '@/components/client/tables/admin/students/columns';
 import { DataTable } from '@/components/client/tables/students/data-table';
-import { getAllStudentsAdmin } from '@/lib/admin/students';
+import { getAllStudentsAdmin } from '@/lib/students';
 
 
 const StudentsPage = async () => {

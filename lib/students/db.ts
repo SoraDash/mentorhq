@@ -59,9 +59,15 @@ export const unassignStudent = async (studentId: string) => {
   });
 };
 
-export const getStudents = async (): Promise<Student[]> => {
+export const getAllStudents = async (): Promise<Student[]> => {
   const user = await getUser();
   if (!user) return [] as Student[]
+  if (user.role === 'ADMIN') {
+    const students = await prisma.student.findMany();
+    if (!students) return [] as Student[];
+    return students;
+  }
+
   const students = await prisma.student.findMany({
     where: {
       mentorId: user.id,
@@ -76,6 +82,15 @@ export const getStudents = async (): Promise<Student[]> => {
 export const getStudent = async (id: string): Promise<Student> => {
   const user = await getUser();
   if (!user) return {} as Student;
+  if (user.role === 'ADMIN') {
+    const student = await prisma.student.findUnique({
+      where: {
+        id: id,
+      }
+    })
+    if (!student) return {} as Student;
+    return student;
+  }
 
   const student = await prisma.student.findUnique({
     where: {

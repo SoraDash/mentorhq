@@ -5,7 +5,7 @@
 import { getAllMentorsAdmin } from '@/lib/admin/mentors';
 import { getUser } from '@/lib/auth/auth';
 import { ADMIN_MENU, MAIN_MENU } from '@/lib/menu';
-import { getStudents } from '@/lib/students';
+import { getAllStudents } from '@/lib/students';
 import { CommandLoading } from 'cmdk';
 import { GraduationCap } from 'lucide-react';
 import { useRouter } from 'next/navigation'; // updated from 'next/navigation'
@@ -61,7 +61,7 @@ export function CommandMenu() {
 
       const user = await getUser();
 
-      const fetchedStudents = await getStudents();
+      const fetchedStudents = await getAllStudents();
       const fetchedMentors = await getAllMentorsAdmin();
 
       const mainMenuData = MAIN_MENU.map((item): SearchableItem => ({

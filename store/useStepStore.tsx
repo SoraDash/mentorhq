@@ -40,7 +40,13 @@ export const useStepStore = create<StepState>((set) => {
 
   const maxStep = forms.length - 1;
 
-  const setCurrentStep = (step: number) => set({ currentStep: step });
+  const setCurrentStep = (step: number) => {
+    set({
+      currentStep: step,
+      isFirstStep: step === 0,
+      isLastStep: step === maxStep
+    });
+  };
 
   const next = () => {
     set((state) => {
@@ -101,7 +107,3 @@ export const useStepStore = create<StepState>((set) => {
     steps: forms
   };
 });
-
-
-
-

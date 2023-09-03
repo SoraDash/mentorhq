@@ -37,7 +37,7 @@ const OnboardingSidebar: React.FC = () => {
   }));
 
   return (
-    <ol className="flex flex-col items-center space-y-4 text-gray-500  list-none p-0 m-0 w-full">
+    <ol className="flex flex-col items-center space-y-4 text-gray-200  list-none p-0 m-0 w-full">
       {stepsInfo.map((step, index) => {
         let Icon;
         if (currentStep === index) {
@@ -46,7 +46,8 @@ const OnboardingSidebar: React.FC = () => {
           Icon = step.isCompleted ? GiConfirmed : step.defaultIcon;
         }
 
-        const color = currentStep === index ? "text-white" : (step.isCompleted ? "text-green-500" : "text-white");
+        const color = currentStep === index ? "text-white" : (step.isCompleted ? "text-white" : "text-white");
+        const bg = currentStep === index ? 'bg-primary-purple tex-white' : (step.isCompleted ? 'bg-green-500 text-shite' : '');
         const isFirstStep = index === 0;
         const isClickable = isFirstStep
           || (index === currentStep - 1 && currentStep !== maxStep)
@@ -55,7 +56,7 @@ const OnboardingSidebar: React.FC = () => {
         return (
           <li
             key={index}
-            className={`flex justify-start items-center px-4 py-2 w-full ${isClickable ? 'cursor-pointer' : 'cursor-default'} ${currentStep === index ? 'bg-primary-purple text-white' : ''}`}
+            className={`flex justify-start items-center px-4 py-2 w-full ${isClickable ? 'cursor-pointer' : 'cursor-default'} ${bg}`}
             onClick={() => {
               if (isClickable) {
                 goTo(index);

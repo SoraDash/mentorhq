@@ -31,7 +31,7 @@ type StepState = {
   steps: React.FC[];
 };
 
-export const useStepStore = create<StepState>((set, get) => {
+export const useStepStore = create<StepState>((set) => {
   const forms = [
     NameForm,
     MiscForm,
@@ -44,19 +44,25 @@ export const useStepStore = create<StepState>((set, get) => {
   const setCurrentStep = (step: number) => set({ currentStep: step });
 
   const next = () => {
-    const { currentStep } = get();
-    if (currentStep < maxStep) setCurrentStep(currentStep + 1);
-    if (currentStep + 1 === maxStep) {
-      set({ isLastStep: true });
-    }
+    set((state) => {
+      const newStep = state.currentStep < maxStep ? state.currentStep + 1 : state.currentStep;
+      return {
+        currentStep: newStep,
+        isFirstStep: newStep === 0,
+        isLastStep: newStep === maxStep
+      };
+    });
   };
 
   const back = () => {
-    const { currentStep } = get();
-    if (currentStep > 0) setCurrentStep(currentStep - 1);
-    if (currentStep - 1 < maxStep) {
-      set({ isLastStep: false });
-    }
+    set((state) => {
+      const newStep = state.currentStep > 0 ? state.currentStep - 1 : state.currentStep;
+      return {
+        currentStep: newStep,
+        isFirstStep: newStep === 0,
+        isLastStep: newStep === maxStep
+      };
+    });
   };
 
   const goTo = (step: number) => {
@@ -71,8 +77,6 @@ export const useStepStore = create<StepState>((set, get) => {
       }
     }));
   };
-
-  const getFormData = (): FormData => get().formData;
 
   const setFormData = (data: FormData) => {
     set(state => ({
@@ -89,7 +93,6 @@ export const useStepStore = create<StepState>((set, get) => {
     formData: {},
     setCurrentStep,
     updateFormData,
-    getFormData,
     setFormData,
     next,
     back,
@@ -99,4 +102,6 @@ export const useStepStore = create<StepState>((set, get) => {
     steps: forms
   };
 });
+
+
 

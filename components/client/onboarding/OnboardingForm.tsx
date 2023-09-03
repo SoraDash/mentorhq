@@ -1,16 +1,23 @@
 "use client";
+import { onboardUser } from '@/actions/user.actions';
+import { useToast } from '@/components/ui/use-toast';
 import { getUser } from '@/lib/auth/auth';
 import { useStepStore } from '@/store/useStepStore';
-import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { FormEvent, useEffect } from 'react';
 
 const OnboardingForm: React.FC = () => {
+  const { toast } = useToast();
+  const router = useRouter();
   const { currentStep, updateFormData, back, next, steps, isFirstStep } = useStepStore();
   const formData = useStepStore(state => state.formData);
   const isLastStep = useStepStore(state => state.isLastStep);
 
+
   useEffect(() => {
     const fetchUserData = async () => {
       const user = await getUser();
+
       if (user) {
         const nameData = {
           firstName: user.firstName || "",
@@ -30,7 +37,6 @@ const OnboardingForm: React.FC = () => {
           slack: user.slack || "",
           skype: user.skype || ""
         };
-
         updateFormData('name', nameData);
         updateFormData('misc', miscData);
         updateFormData('social', socialData);
@@ -47,31 +53,50 @@ const OnboardingForm: React.FC = () => {
       ...formData.name,
       ...formData.misc,
       ...formData.social,
-    };
+    }
     return mergedData;
   };
 
   const mergedData = getMergedFormData();
 
-  const handleSubmit = () => {
-    console.log("Submitting form data:", mergedData);
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (!isLastStep) return next();
+    onboardUser(mergedData)
+      .then(response => {
+        if (response.success) {
+          toast({
+            title: "Success: You're in!",
+            description: "You've successfully completed onboarding.",
+            variant: "success",
+          });
+        }
+        setTimeout(() => router.refresh(), 300);
+      })
+      .catch(error => {
+        console.log(error);
+        toast({
+          title: "Error: Something went wrong",
+          description: "Please try again.",
+          variant: "destructive",
+        });
+      })
   };
 
   const CurrentFormComponent = steps[currentStep] || (() => <div>Error: Unknown step!</div>);
-  console.log("Current Step:", currentStep, "Total Steps:", steps.length);
 
   return (
     <div>
       <CurrentFormComponent />
 
-      <div className="mt-4 flex justify-between">
+      <div className="mt-4 flex justify-end">
         {/* Show Back button if it's not the first step */}
         {!isFirstStep && (
           <button
-            className="px-4 py-2 bg-blue-600 text-white rounded"
+            className="px-4 py-2 bg-blue-600 text-white rounded mr-2"
             onClick={back}
           >
-            Back
+            Prev
           </button>
         )}
 

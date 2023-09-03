@@ -6,11 +6,10 @@ import { FaCheck, FaTimes } from 'react-icons/fa';
 import SensitiveInfo from '../SensetiveInfo';
 
 type CustomTitleMap = {
-  [K in keyof FormData]?: {
-    [J in keyof FormData[K]]?: string
+  [K in keyof FormData]: {
+    [J in keyof FormData[K]]: string
   }
 };
-
 
 
 const OnboardingReview: React.FC = () => {
@@ -22,8 +21,9 @@ const OnboardingReview: React.FC = () => {
       lastName: "Last Name",
     },
     misc: {
-      sendWelcomeEmail: "Are we sending a welcome email?",
+      sendWelcomeEmail: "Send welcome email",
       ciAPIKey: "Your API Key",
+      ciEmail: "Google Sheet Email",
     },
     // ... other sections as necessary
   };
@@ -49,12 +49,12 @@ const OnboardingReview: React.FC = () => {
 
         {Object.entries(formData).map(([sectionKey, sectionData], index) => (
           <div key={sectionKey} className="mb-5">
-            <h3 className="text-xl font-medium mb-3 capitalize">{sectionKey}</h3>
+            <h3 className="text-xl font-bold mb-3 capitalize">{sectionKey}</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
               {Object.entries(sectionData).map(([key, value]) => (
                 <div key={key}>
-                  <h4 className="font-medium capitalize">{getTitle(sectionKey as keyof FormData, key)}</h4>
-                  <p>{displayValue(key, value)}</p>
+                  <h4 className="capitalize font-semibold">{getTitle(sectionKey as keyof FormData, key)}</h4>
+                  <p className='mt-2'>{displayValue(key, value)}</p>
                 </div>
               ))}
             </div>

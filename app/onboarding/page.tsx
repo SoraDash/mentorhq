@@ -1,11 +1,14 @@
+import LoadingSpinner from '@/components/client/LoadingSpinner';
 import OnboardingForm from '@/components/client/onboarding/OnboardingForm';
-import React from 'react';
+import React, { Suspense } from 'react';
 
 const OnboardingPage: React.FC = async () => {
 
   return (
     <div className="flex-1 p-5">
-      <OnboardingForm />
+      <Suspense fallback={<LoadingSpinner />}>
+        <OnboardingForm />
+      </Suspense>
     </div>
   );
 }

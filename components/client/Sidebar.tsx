@@ -1,15 +1,12 @@
 "use client";
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
 import { ADMIN_MENU, MAIN_MENU } from '@/lib/menu';
 import { cn } from '@/lib/utils';
 import { User as PrismaUser } from '@prisma/client';
-import { Zap } from 'lucide-react';
 import { User } from 'next-auth';
 import { Montserrat } from 'next/font/google';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { CgClose } from 'react-icons/cg';
 
@@ -23,11 +20,12 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ user }) => {
   const pathname = usePathname();
+  const router = useRouter();
   const [isHidden, setIsHidden] = useState(false);
 
 
   return (
-    <div className='space-y-4 py-4 flex flex-col h-full bg-navbar text-white'>
+    <div className='space-y-4 py-4 px-5 flex flex-col h-full bg-navbar text-white'>
       <div className='flex-1 px-3 py-2'>
         <Link href='/dashboard' className='flex items-center pl-3 mb-14'><div className='relative w-8 h-8 mr-4'>
           <Image fill alt="logo" src="/logo_only.png" />
@@ -58,25 +56,24 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
         )}
 
       </div>
-      {/* Alert box for non-mentor users */}
       {!user?.isOnboarded && !isHidden ? (
-        <Alert variant={"destructive"} onClick={() => console.log()}>
-          {/* Icon and Text */}
-          <CgClose className="h-4 w-4" onClick={() => {
-            setIsHidden(true);
-          }} />
-          <AlertTitle>Unlock Your Mentor Mastery!</AlertTitle>
-          <AlertDescription>
+        <div className="bg-yellow-400 rounded-lg shadow-lg p-6 relative" onClick={() => router.replace('/onboarding')}>
+          <button className="absolute top-2 right-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-full">
+            <CgClose className="h-4 w-4" onClick={() => {
+              setIsHidden(true);
+            }} />
+          </button>
+          <h2 className="text-2xl font-bold mb-4 text-white">Unlock Sync!</h2>
+          <p className="text-gray-700 mb-4">
             Get access to students and a personalized experience
-            <Button size="lg" variant="ghost" className="w-full">
-              Complete profile!
-              <Zap className="w-4 h-4 ml-2 fill-white" />
-            </Button>
+          </p>
+          <button className="bg-primary-purple hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-full">
+            Complete profile!
+          </button>
+        </div>
 
-          </AlertDescription>
-
-        </Alert>
       ) : null}
+
     </div>
   )
 }

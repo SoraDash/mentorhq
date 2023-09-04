@@ -1,6 +1,7 @@
 "use client"
 import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/components/ui/use-toast';
+import { cn } from '@/lib/utils';
 import { getBio } from '@/lib/utils/github';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -8,9 +9,10 @@ import { PiUserSwitchFill } from 'react-icons/pi';
 
 interface SyncGithubBioProps {
   id: string;
+  minimal?: boolean;
 }
 
-export const SyncGithubBio: React.FC<SyncGithubBioProps> = ({ id }) => {
+export const SyncGithubBio: React.FC<SyncGithubBioProps> = ({ id, minimal }) => {
   const [bio, setBio] = useState(false)
   const { toast } = useToast();
   const router = useRouter();
@@ -58,9 +60,19 @@ export const SyncGithubBio: React.FC<SyncGithubBioProps> = ({ id }) => {
   }
 
 
+  const commonClasses = "flex items-center transition-colors focus:outline-none text-secondary-foreground hover:bg-secondary/80 data-[disabled]:pointer-events-none data-[disabled]:opacity-50";
+
+  const minimalClasses = "relative cursor-default select-none rounded-sm text-sm focus:bg-accent focus:text-accent-foreground px-2 py-1.5";
+
+  const defaultClasses = "w-full justify-center space-x-2 px-4 py-2 rounded cursor-pointer bg-secondary";
+
+
   return (
     <span
-      className={`w-full flex justify-center items-center space-x-2 px-4 py-2 rounded transition-colors focus:outline-none bg-secondary text-secondary-foreground hover:bg-secondary/80 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 cursor-pointer`}
+      className={cn(
+        commonClasses,
+        minimal ? minimalClasses : defaultClasses
+      )}
       onClick={() => syncBio()}
     >
       <PiUserSwitchFill className={`mr-2 ${bio ? 'animate-spin' : ''}`} />

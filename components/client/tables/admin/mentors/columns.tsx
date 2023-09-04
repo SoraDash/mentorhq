@@ -151,7 +151,7 @@ export const mentorColumns: ColumnDef<MentorWithCount>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <SyncGithubBio id={mentor.id} />
+              <SyncGithubBio id={mentor.id} minimal />
             </DropdownMenuItem>
 
           </DropdownMenuContent>

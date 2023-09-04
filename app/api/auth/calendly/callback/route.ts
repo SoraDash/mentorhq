@@ -1,5 +1,5 @@
 import { exchangeCodeForToken } from '@/actions/calendly.actions';
-import { getAuthSession } from '@/lib/auth/auth';
+import { getAuthSession, getUser } from '@/lib/auth/auth';
 import { prisma } from '@/lib/db/prisma';
 import { redirect } from 'next/navigation';
 import { NextRequest, NextResponse } from 'next/server';
@@ -8,7 +8,6 @@ export async function GET(req: NextRequest) {
   const session = await getAuthSession();
   const { searchParams } = new URL(req.url);
   const code = searchParams.get("code");
-  const redirectUrl = searchParams.get("redirect") || '/dashboard';
   if (!code) {
     return NextResponse.json({ error: 'No code provided' }, { status: 400 });
   }
@@ -23,11 +22,11 @@ export async function GET(req: NextRequest) {
         calendly_token: tokenResponse
       },
     });
-
-    return redirect(redirectUrl);
   } catch (error) {
     console.log(error)
-    return redirect(redirectUrl);
+  } finally {
+    const user = await getUser();
+    redirect(user?.calendly_last_path as string);
   }
 }
 

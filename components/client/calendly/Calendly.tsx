@@ -32,6 +32,7 @@ export default function CalendlyAuth() {
       }
     }
     const currentPath = window.location.pathname;
+    console.log('currentPath:', currentPath)
     fetchAuthURL(currentPath);
     fetchUserToken();
   }, [router]);

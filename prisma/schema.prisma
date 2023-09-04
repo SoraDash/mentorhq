@@ -191,35 +191,36 @@ model Session {
 }
 
 model User {
-  id               String           @id @default(cuid())
-  name             String?
-  email            String           @unique
-  emailVerified    DateTime?
-  image            String?
-  isOnboarded      Boolean          @default(false)
-  isPremium        Boolean          @default(false)
-  firstName        String?
-  lastName         String?
-  paidPerHour      Int?
-  calendly_token   Json?
-  sendWelcomeEmail Boolean?
-  github           String?
-  slack            String?
-  linkedIn         String?
-  website          String?
-  skype            String?
-  status           String?
-  twitter          String?
-  ciApiKey         String?
-  ciEmail          String?
-  bio              String?          @db.Text()
-  role             Role             @default(USER)
-  accounts         Account[]
-  sessions         Session[]
-  studentSession   StudentSession[]
-  students         Student[]
-  updated_at       DateTime         @updatedAt
-  created_at       DateTime         @default(now())
+  id                 String           @id @default(cuid())
+  name               String?
+  email              String           @unique
+  emailVerified      DateTime?
+  image              String?
+  isOnboarded        Boolean          @default(false)
+  isPremium          Boolean          @default(false)
+  firstName          String?
+  lastName           String?
+  paidPerHour        Int?
+  calendly_token     Json?
+  calendly_last_path String?
+  sendWelcomeEmail   Boolean?
+  github             String?
+  slack              String?
+  linkedIn           String?
+  website            String?
+  skype              String?
+  status             String?
+  twitter            String?
+  ciApiKey           String?
+  ciEmail            String?
+  bio                String?          @db.Text()
+  role               Role             @default(USER)
+  accounts           Account[]
+  sessions           Session[]
+  studentSession     StudentSession[]
+  students           Student[]
+  updated_at         DateTime         @updatedAt
+  created_at         DateTime         @default(now())
 }
 
 enum Role {

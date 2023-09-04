@@ -13,7 +13,7 @@ export async function exchangeCodeForToken(code: string) {
     client_id: CLIENT_ID,
     client_secret: CLIENT_SECRET,
     code: code,
-    redirect_uri: `${process.env.NEXT_PUBLIC_URL}/api/auth/calendly/callback`,
+    redirect_uri: process.env.CALENDLY_REDIRECT_URL,
     grant_type: 'authorization_code'
   };
 
@@ -24,7 +24,6 @@ export async function exchangeCodeForToken(code: string) {
     },
     body: JSON.stringify(data)
   });
-
   if (!response.ok) {
     throw new Error('Failed to fetch access token');
   }
@@ -34,10 +33,16 @@ export async function exchangeCodeForToken(code: string) {
 }
 
 export const getCalendlyAuthURL = async (redirectPath: string = '') => {
-  const redirectURI = encodeURIComponent(`${process.env.NEXT_PUBLIC_URL}/api/auth/calendly/callback?redirect=${redirectPath}`);
-
-
-  return `https://calendly.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${redirectURI}&response_type=code`;
+  console.log("REDIRECT PATH FROM Actions", redirectPath)
+  const user = await getUser();
+  await prisma.user.update({
+    where: {
+      id: user?.id
+    }, data: {
+      calendly_last_path: redirectPath as string
+    }
+  })
+  return `https://auth.calendly.com/oauth/authorize?client_id=${process.env.CALENDLY_CLIENT_ID}&response_type=code&redirect_uri=${process.env.CALENDLY_REDIRECT_URL}`
 }
 
 export const getCalendlyUser = async () => {
@@ -57,7 +62,7 @@ export const getCalendlyUser = async () => {
   }
 
   const token = user.calendly_token;
-  const { created_at, expires_in } = token;
+  const { created_at, expires_in } = token as any;
 
   // Check if the token has expired or is about to expire
   const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds

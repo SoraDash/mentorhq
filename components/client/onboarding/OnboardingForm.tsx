@@ -5,6 +5,7 @@ import { getUser } from '@/lib/auth/auth';
 import { useStepStore } from '@/store/useStepStore';
 import { useRouter } from 'next/navigation';
 import React, { FormEvent, useEffect } from 'react';
+import { FaSave } from 'react-icons/fa';
 
 const OnboardingForm: React.FC = () => {
   const { toast } = useToast();
@@ -69,16 +70,17 @@ const OnboardingForm: React.FC = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!isLastStep) return next();
-    onboardUser(mergedData)
+    onboardUser(mergedData, true)
       .then(response => {
         if (response.success) {
           toast({
-            title: "Success: You're in!",
-            description: "You've successfully completed onboarding.",
+            title: "You've successfully completed onboarding.",
+            description: "We will redirect you shorlty",
             variant: "success",
           });
         }
         setTimeout(() => router.refresh(), 300);
+        router.refresh()
         router.replace('/dashboard')
       })
       .catch(error => {
@@ -122,10 +124,11 @@ const OnboardingForm: React.FC = () => {
           {/* Show Submit button only on the last step */}
           {isLastStep && (
             <button
-              className="px-4 py-2 bg-green-600 text-white rounded"
+              className="px-4 py-2 bg-green-600 text-white rounded inline-flex justify-between items-center"
               onClick={handleSubmit}
             >
-              Submit
+              Save Profile
+              <FaSave className="m-2" />
             </button>
           )}
         </div>

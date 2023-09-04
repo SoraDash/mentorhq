@@ -12,8 +12,7 @@ export const getLatestStats = async () => {
   const year = getYear(now);
 
   const data = await getBilling(month.toString(), year.toString());
-  if (!data) return null;
-
+  if (!data || data?.aggregates) return null;
   const sessionCount = parseInt(data?.aggregates?.session_count);
   const eurosBillable = data?.aggregates?.euros_billable;
 
@@ -47,7 +46,7 @@ export const getLatestStats = async () => {
     {
       title: 'Total Session Time',
       icon: FaClock,
-      content: data.aggregates.total_session_time,
+      content: data.aggregates?.total_session_time,
       color: 'bg-red-100',
       textColor: 'text-red-500',
     },

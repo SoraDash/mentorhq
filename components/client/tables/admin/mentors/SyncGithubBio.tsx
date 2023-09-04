@@ -6,11 +6,11 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { PiUserSwitchFill } from 'react-icons/pi';
 
-interface FetchGithubBioProps {
+interface SyncGithubBioProps {
   id: string;
 }
 
-export const FetchGithubBio: React.FC<FetchGithubBioProps> = ({ id }) => {
+export const SyncGithubBio: React.FC<SyncGithubBioProps> = ({ id }) => {
   const [bio, setBio] = useState(false)
   const { toast } = useToast();
   const router = useRouter();
@@ -60,7 +60,7 @@ export const FetchGithubBio: React.FC<FetchGithubBioProps> = ({ id }) => {
 
   return (
     <span
-      className={`relative flex select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors bg-secondary focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 cursor-pointer`}
+      className={`w-full flex justify-center items-center space-x-2 px-4 py-2 rounded transition-colors focus:outline-none bg-secondary text-secondary-foreground hover:bg-secondary/80 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 cursor-pointer`}
       onClick={() => syncBio()}
     >
       <PiUserSwitchFill className={`mr-2 ${bio ? 'animate-spin' : ''}`} />

@@ -1,7 +1,6 @@
 import { cn } from '@/lib/utils';
-import { LiaTimesSolid, LiaCheckSolid } from 'react-icons/lia';
 import React from 'react';
-import { cond } from 'lodash-es';
+import { FaCheck, FaTimes } from 'react-icons/fa';
 
 interface BooleanIconProps {
   condition: boolean;
@@ -18,7 +17,7 @@ export const BooleanIcon: React.FC<BooleanIconProps> = ({
   className,
   centered = false
 }) => {
-  const IconComponent = condition ? LiaCheckSolid : LiaTimesSolid;
+  const IconComponent = condition ? FaCheck : FaTimes;
 
   const Icon = (
     <IconComponent className={cn("w-3.5 h-3.5 mr-2", className, {

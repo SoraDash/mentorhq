@@ -11,7 +11,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, MoreHorizontal, } from 'lucide-react'
 import Link from 'next/link'
 import { PiHammerBold, PiTrashBold, PiUserCircleBold, PiUserCircleGearFill } from 'react-icons/pi'
-import { FetchGithubBio } from './github-bio'
+import { SyncGithubBio } from './SyncGithubBio'
 
 export const mentorColumns: ColumnDef<MentorWithCount>[] = [
   {
@@ -151,7 +151,7 @@ export const mentorColumns: ColumnDef<MentorWithCount>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <FetchGithubBio id={mentor.id} />
+              <SyncGithubBio id={mentor.id} />
             </DropdownMenuItem>
 
           </DropdownMenuContent>

@@ -137,6 +137,8 @@ model Student {
   id            String         @id @default(uuid())
   name          String
   email         String         @unique
+  firstName     String?
+  lastName      String?
   contactMethod ContactMethod? @default(SLACK)
   lastContact   DateTime?      @updatedAt
   github        String?
@@ -148,6 +150,7 @@ model Student {
   startDate     DateTime?
   lmsAccess     Boolean?
   status        String?
+  bio           String?        @db.Text()
   projects      Project[]
   mentor        User?          @relation(fields: [mentorId], references: [id])
   mentorId      String?

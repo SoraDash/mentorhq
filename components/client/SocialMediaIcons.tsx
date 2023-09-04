@@ -51,11 +51,11 @@ interface SocialMediaIconsProps {
 
 export const SocialMediaIcons: React.FC<SocialMediaIconsProps> = ({ user }) => {
   return (
-    <div className="flex space-x-2">
+    <div className="flex justify-between w-full space-x-2">
       {socialMediaConfig.map((social) => {
         if (user[social.key]) {
           return (
-            <Link key={social.key} className={` text-gray-700 hover:text-primary-purple`} aria-label={social.label}
+            <Link key={social.key} className={`text-gray-700 hover:text-primary-purple`} aria-label={social.label}
               target="_blank" rel="noopener noreferrer" href={user[social.key]}>
               <social.IconComponent className="h-6 w-6" />
             </Link>
@@ -66,3 +66,4 @@ export const SocialMediaIcons: React.FC<SocialMediaIconsProps> = ({ user }) => {
     </div>
   );
 };
+

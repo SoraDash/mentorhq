@@ -1,14 +1,15 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
+import { prisma } from "@/lib/db/prisma";
+import { splitName } from '@/lib/split-name';
 import { IUser } from '@/next-auth';
 import { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import { prisma } from "@/lib/db/prisma";
-import { splitName } from '@/lib/split-name';
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET as string,
+
   adapter: PrismaAdapter(prisma),
   session: {
     strategy: "jwt",
@@ -73,10 +74,13 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      allowDangerousEmailAccountLinking: true,
     }),
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+      allowDangerousEmailAccountLinking: true,
+
     })
   ],
 };

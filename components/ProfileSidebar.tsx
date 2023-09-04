@@ -8,17 +8,19 @@ import { FaChalkboardTeacher, FaFileAlt, FaGraduationCap, FaHammer, FaUserEdit }
 import { IconButton } from './client/IconButton';
 import { knownRoles } from './client/RoleDropdown';
 import { SocialMediaIcons } from './client/SocialMediaIcons';
-import { FetchGithubBio } from './client/tables/admin/mentors/github-bio';
+import CalendlyAuth from './client/calendly/Calendly';
+import CalendlyStatus from './client/calendly/CalendlyStatus';
+import { SyncGithubBio } from './client/tables/admin/mentors/SyncGithubBio';
 import { BooleanIcon } from './server/BooleanIcon';
 import { Badge } from './ui/badge';
 
 type ProfileWithCounts = MentorWithCount | StudentWithCounts
 
-interface MentorSidebarProps {
+interface ProfileSidebarProps {
   profile: ProfileWithCounts;
 }
 
-export const MentorSidebar: React.FC<MentorSidebarProps> = ({ profile }) => {
+export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ profile }) => {
 
   const isMentor = (profile: ProfileWithCounts): profile is MentorWithCount => {
     return (profile as MentorWithCount)._count !== undefined;
@@ -37,7 +39,7 @@ export const MentorSidebar: React.FC<MentorSidebarProps> = ({ profile }) => {
 
   return (
     <div className="dark:bg-navbar bg-white shadow rounded-lg p-6">
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center space-y-5">
         <Avatar entity={profile} className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0" profile />
 
         <h1 className="text-xl font-bold">{profile.name}</h1>
@@ -59,15 +61,15 @@ export const MentorSidebar: React.FC<MentorSidebarProps> = ({ profile }) => {
 
         <div className="mt-6 flex flex-wrap gap-4 justify-center">
           <div className="mt-6 grid grid-cols-1 gap-3">
+
             <IconButton color="bg-secondary text-secondary-foreground" icon={FaUserEdit}>
               Edit
             </IconButton>
             {isMentor(profile) && (
               <>
-                <FetchGithubBio id={profile.id} />
+                <SyncGithubBio id={profile.id} />
+                <CalendlyAuth />
               </>
-              // <div className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/80 py-3 px-5 rounded flex justify-center items-center">
-              // </div>
             )}
             {isMentor(profile) && profile.role === 'ADMIN' && (
               <IconButton color="bg-red-500 text-white" icon={FaHammer}>
@@ -76,52 +78,51 @@ export const MentorSidebar: React.FC<MentorSidebarProps> = ({ profile }) => {
             )}
           </div>
         </div>
-      </div>
 
-      {isMentor(profile) && (
-        <>
-          <hr className="my-6 border-t border-gray-300" />
-          <div className="flex flex-col">
-            <span className="text-gray-600 uppercase font-bold tracking-wider mb-2">Stats</span>
-            <ul className="space-y-2">
-              <li className="flex items-center space-x-2">
-                <FaFileAlt className="text-gray-500" />
-                <span className="flex-grow">Sessions</span>
-                <span>{profile._count.studentSession}</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <FaGraduationCap className="text-gray-500" />
-                <span className="flex-grow">Students</span>
-                <span>{profile._count.students}</span>
-              </li>
-              {isMentor(profile) && (
-                <>
-                  <li className="flex items-center space-x-2">
-                    <span className="flex-grow">Onboarding Completed</span>
-                    <BooleanIcon condition={profile.isOnboarded} className='items-center text-center w-6 h-6' />
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <span className="flex-grow">Premium Member</span>
-                    <BooleanIcon condition={profile.isPremium} className='items-center text-center w-6 h-6' />
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <span className="flex-grow">Calendly Enabled</span>
-                    <BooleanIcon condition={!!profile.calendly_token} className='items-center text-center w-6 h-6' />
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <span className="flex-grow">CI API Key set</span>
-                    <BooleanIcon condition={!!profile.ciApiKey} className='items-center text-center w-6 h-6' />
-                  </li>
-                </>
-              )}
-            </ul>
-          </div>
-        </>
-      )}
 
-      <span className="text-gray-600 uppercase font-bold tracking-wider my-3">Social</span>
-      <div className="flex justify-center items-center gap-6 my-6">
-        <SocialMediaIcons user={profile} />
+        {isMentor(profile) && (
+          <>
+            <hr className="my-6 border-t border-gray-300" />
+            <h3 className="text-gray-600 uppercase font-bold tracking-wider mb-2 text-left w-full">Stats</h3>
+            <div className="flex flex-col w-full">
+              <ul className="space-y-2">
+                <li className="flex items-center space-x-2">
+                  <FaFileAlt className="text-gray-500" />
+                  <span className="flex-grow">Sessions</span>
+                  <span>{profile._count.studentSession}</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <FaGraduationCap className="text-gray-500" />
+                  <span className="flex-grow">Students</span>
+                  <span>{profile._count.students}</span>
+                </li>
+                {isMentor(profile) && (
+                  <>
+                    <li className="flex items-center space-x-2">
+                      <span className="flex-grow">Onboarding Completed</span>
+                      <BooleanIcon condition={profile.isOnboarded} className='items-center text-center w-6 h-6' />
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <span className="flex-grow">Premium Member</span>
+                      <BooleanIcon condition={profile.isPremium} className='items-center text-center w-6 h-6' />
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <CalendlyStatus />
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <span className="flex-grow">CI API Key set</span>
+                      <BooleanIcon condition={!!profile.ciApiKey} className='items-center text-center w-6 h-6' />
+                    </li>
+                  </>
+                )}
+              </ul>
+            </div>
+          </>
+        )}
+        <h3 className="text-gray-600 uppercase font-bold tracking-wider my-3 text-left w-full">Social</h3>
+        <div className="flex justify-center items-center gap-6 my-6 w-full">
+          <SocialMediaIcons user={profile} />
+        </div>
       </div>
     </div>
   );

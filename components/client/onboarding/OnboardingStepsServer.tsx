@@ -1,7 +1,7 @@
 import { User } from '@prisma/client';
 import Image from 'next/image';
 import React from 'react';
-import CalendlyAuth from '../Calendly';
+import CalendlyAuth from '../calendly/Calendly';
 
 interface OnboardingStepsServerProps {
   user: Partial<User> | null;

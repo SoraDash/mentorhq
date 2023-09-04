@@ -6,12 +6,13 @@ interface IconButtonProps {
   icon: IconType;
   children: React.ReactNode;
 }
+
 export const IconButton: React.FC<IconButtonProps> = ({ color, icon: Icon, children, ...props }) => (
   <button
-    className={`flex justify-center items-center w-full rounded ${color} hover:${color}/80 transition-colors focus:outline-none`}
+    className={`w-full flex justify-center items-center space-x-2 px-4 py-2 rounded ${color} hover:${color}/80 transition-colors focus:outline-none`}
     {...props}
   >
-    <Icon className="mr-2" />
-    {children}
+    <Icon className="w-6 h-6" /> {/* Adjust width and height based on your preference */}
+    <span>{children}</span>
   </button>
 );

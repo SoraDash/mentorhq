@@ -1,4 +1,3 @@
-import React from 'react';
 type KindType = 'google' | 'zoom' | 'slack';
 
 export interface CalendarEvent {

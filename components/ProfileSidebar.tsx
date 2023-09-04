@@ -13,8 +13,9 @@ import CalendlyStatus from './client/calendly/CalendlyStatus';
 import { SyncGithubBio } from './client/tables/admin/mentors/SyncGithubBio';
 import { BooleanIcon } from './server/BooleanIcon';
 import { Badge } from './ui/badge';
+import { Student } from '@prisma/client';
 
-type ProfileWithCounts = MentorWithCount | StudentWithCounts
+type ProfileWithCounts = MentorWithCount | StudentWithCounts | Student
 
 interface ProfileSidebarProps {
   profile: ProfileWithCounts;

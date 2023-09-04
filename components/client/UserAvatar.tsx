@@ -4,7 +4,6 @@ import { AvatarFallback } from '@radix-ui/react-avatar';
 import { User } from 'next-auth';
 import Image from 'next/image';
 import React from 'react';
-import { FaStar } from 'react-icons/fa';
 import { PiShootingStarFill } from 'react-icons/pi';
 
 interface UserAvatarProps {

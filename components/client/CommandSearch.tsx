@@ -112,7 +112,7 @@ export function CommandMenu() {
     }
 
     fetchData();
-  }, []);
+  }, [router]);
 
   const filteredData = unifiedData.filter(item => item.label.toLowerCase().includes(searchTerm.toLowerCase()));
 

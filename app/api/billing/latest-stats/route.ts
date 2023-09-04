@@ -1,8 +1,8 @@
 import { getLatestStats } from '@/lib/billing/stats';
 import CacheConfig from '@/lib/utils/cacheConfig';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
+export async function POST(): Promise<NextResponse> {
   try {
     await CacheConfig.flush()
     const data = await getLatestStats();

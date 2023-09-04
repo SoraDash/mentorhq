@@ -2,7 +2,6 @@
 import { isAdmin } from '@/components/server/routeguards';
 import { prisma } from '@/lib/db/prisma';
 import { User } from '@prisma/client';
-import { getUser } from '../auth/auth';
 
 export type MentorWithCount = User & {
   _count: {

@@ -3,7 +3,6 @@ import { prisma } from '@/lib/db/prisma';
 import { Role, User } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './next-auth-config';
-import { revalidatePath } from 'next/cache';
 
 export const getAuthSession = () => {
   return getServerSession(authOptions);

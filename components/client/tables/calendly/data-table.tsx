@@ -22,7 +22,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
 interface DataTableProps<TData, TValue> {
@@ -55,7 +54,7 @@ export function DataTable<TData, TValue>({
   if (!isMounted) return null
 
   async function handleAddStudent() {
-
+    // TODO: Add student
   }
 
 

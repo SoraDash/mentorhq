@@ -4,6 +4,7 @@ import { Student, User } from '@prisma/client';
 import { getUser } from '../auth/auth';
 import { GoogleSheetStudent, PartialGoogleSheetStudent } from './types';
 import { handleFieldPriority, transformToPrismaStudent } from './utils';
+import { isAdmin } from '@/components/server/routeguards';
 
 export type StudentWithCounts = Student & {
   _count: {
@@ -11,6 +12,11 @@ export type StudentWithCounts = Student & {
     students: number;
     sessions: number;
   }
+}
+
+type FetchConditions = {
+  id: string;
+  mentorId?: string;
 }
 
 export const updateOrCreateStudent = async (
@@ -66,51 +72,44 @@ export const unassignStudent = async (studentId: string) => {
   });
 };
 
-export const getAllStudents = async (): Promise<Student[]> => {
-  const user = await getUser();
-  if (!user) return [] as Student[]
-  if (user.role === 'ADMIN') {
-    const students = await prisma.student.findMany();
-    if (!students) return [] as Student[];
-    return students;
-  }
+const fetchStudentByCondition = async (conditions: FetchConditions) => {
+  const student = await prisma.student.findUnique({
+    where: conditions,
+    include: {
+      deadline: true,
+      projects: true,
 
-  const students = await prisma.student.findMany({
-    where: {
-      mentorId: user.id,
-    },
+    }
   });
-  if (!students) return [] as Student[];
-  return students
 
+  return student || {} as Student;
 };
 
+export const getAllStudents = async (): Promise<Student[]> => {
+  const user = await getUser();
+  if (!user) return [];
+
+  // If the user is an ADMIN, fetch all students.
+  if (await isAdmin()) {
+    return prisma.student.findMany() || [];
+  }
+
+  // If not, fetch students associated with the user.
+  return prisma.student.findMany({ where: { mentorId: user.id } }) || [];
+};
 
 export const getStudent = async (id: string): Promise<Student> => {
   const user = await getUser();
   if (!user) return {} as Student;
-  if (user.role === 'ADMIN') {
-    const student = await prisma.student.findUnique({
-      where: {
-        id: id,
-      }
-    })
-    if (!student) return {} as Student;
-    return student;
+
+  let fetchConditions: FetchConditions = { id: id };
+
+
+  if (await isAdmin()) {
+    fetchConditions.mentorId = user.id;
   }
 
-  const student = await prisma.student.findUnique({
-    where: {
-      id: id,
-    },
-    include: {
-      deadline: true,
-      projects: true,
-    }
-  });
-
-  if (!student) return {} as Student;
-  return student;
+  return fetchStudentByCondition(fetchConditions);
 };
 
 

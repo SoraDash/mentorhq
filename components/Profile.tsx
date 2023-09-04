@@ -1,12 +1,12 @@
 import { MentorWithCount } from '@/lib/admin/mentors';
 import { StudentWithCounts } from '@/lib/students';
-import { User } from '@prisma/client';
+import { Student } from '@prisma/client';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
-type ProfileWithCounts = MentorWithCount | StudentWithCounts | User
+type ProfileWithCounts = MentorWithCount | StudentWithCounts | Student
 
 interface ProfileProps {
   profile: ProfileWithCounts;
@@ -28,6 +28,7 @@ export const Profile: React.FC<ProfileProps> = async ({ profile }) => {
       ) : (
         <>
           No github profile found for {profile.firstName || profile.name}
+
         </>
       )}
 

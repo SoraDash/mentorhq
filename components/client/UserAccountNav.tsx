@@ -59,6 +59,13 @@ export const UserAccountNav = ({ user, role }: Props) => {
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem
+          onSelect={() => router.push('/profile')}
+          className="cursor-pointer flex items-center space-x-2 mb-2"
+        >
+          <span>Profile</span>
+          <BiCog className="w-4 h-4" />
+        </DropdownMenuItem>
+        <DropdownMenuItem
           onSelect={() => router.push('/settings')}
           className="cursor-pointer flex items-center space-x-2 mb-2"
         >

@@ -1,5 +1,5 @@
 "use server"
-import { getAuthSession } from '@/lib/auth/auth';
+import { getAuthSession, getUser } from '@/lib/auth/auth';
 import { prisma } from '@/lib/db/prisma';
 
 // Common constants
@@ -33,8 +33,9 @@ export async function exchangeCodeForToken(code: string) {
   return result;
 }
 
-export const getCalendlyAuthURL = async () => {
-  const redirectURI = encodeURIComponent(`${process.env.NEXT_PUBLIC_URL}/api/auth/calendly/callback`);
+export const getCalendlyAuthURL = async (redirectPath: string = '') => {
+  const redirectURI = encodeURIComponent(`${process.env.NEXT_PUBLIC_URL}/api/auth/calendly/callback?redirect=${redirectPath}`);
+
 
   return `https://calendly.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${redirectURI}&response_type=code`;
 }
@@ -62,7 +63,7 @@ export const getCalendlyUser = async () => {
   const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
   if (currentTime >= created_at + expires_in) {
     // Token has expired or is about to expire, introspect to validate
-    const introspectionResult = await introspectToken(token);
+    const introspectionResult = await introspectToken(token as string);
     if (introspectionResult.active) {
       // The token is still valid, you can proceed with using it
       return user;
@@ -96,4 +97,24 @@ export async function introspectToken(token: string) {
 
   const result = await response.json();
   return result;
+}
+
+
+export const deAuthCalendly = async () => {
+  const user = await getUser();
+  if (!user) return;
+  try {
+    await prisma.user.update({
+      where: {
+        id: user.id
+      },
+      data: {
+        calendly_token: {}
+      }
+    })
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 }

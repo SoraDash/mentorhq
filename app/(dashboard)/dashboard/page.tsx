@@ -1,29 +1,40 @@
-import OnboardingStepsServer from '@/components/client/onboarding/OnboardingStepsServer';
 import { CalendlyTable } from '@/components/server/dashboard/CalendlyTable';
 import { StatsCard } from '@/components/server/dashboard/StatsCard';
+import { TodayCard } from '@/components/server/dashboard/TodayCard';
 import { getUser } from '@/lib/auth/auth';
 import { getLatestStats } from '@/lib/billing/stats';
 import { generateCalendlyEvents } from '@/lib/calendly/fake-events';
+import { redirect } from 'next/navigation';
 
 const DashboardPage = async () => {
-  const stats = await getLatestStats();
+  const response = await getLatestStats();
   const user = await getUser();
-  const events = await generateCalendlyEvents(20)
+  const events = await generateCalendlyEvents(20);
 
+  if (!user) return redirect('/')
+
+  let stats;
+  if (response.status !== "success") {
+    // handle the error here if needed
+    console.error(response.message);
+  } else {
+    stats = response.stats;
+  }
 
   return (
     <>
       <section className="py-4">
         <div className="container px-4 mx-auto">
-          <div className="flex flex-wrap -m-3">
-            {stats !== null && <StatsCard stats={stats} />}
+          <div className="-m-3 grid grid-cols-1 gap-4 space-y-4">
+            <TodayCard user={user} />
+            {response.status === 'empty' || response.message
+              ? <div className="p-4 bg-red-100 text-red-700 border border-red-200 rounded-md">{response.message}</div>
+              : stats && <StatsCard stats={stats} />}
           </div>
         </div>
       </section>
-      <OnboardingStepsServer user={user} />
       {user?.calendly_token && (
         <div className='px-5'>
-
           <CalendlyTable events={events} />
         </div>
       )}

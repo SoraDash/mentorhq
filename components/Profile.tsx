@@ -1,11 +1,12 @@
 import { MentorWithCount } from '@/lib/admin/mentors';
+import { StudentWithCounts } from '@/lib/students';
+import { User } from '@prisma/client';
+import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
-import React from 'react';
-import { StudentWithCounts } from '@/lib/students';
 
-type ProfileWithCounts = MentorWithCount | StudentWithCounts
+type ProfileWithCounts = MentorWithCount | StudentWithCounts | User
 
 interface ProfileProps {
   profile: ProfileWithCounts;

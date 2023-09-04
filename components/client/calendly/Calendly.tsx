@@ -1,19 +1,20 @@
-"use client"
+"use client";
 
-import { getCalendlyAuthURL, getCalendlyUser } from '@/actions/calendly.actions';
+import { getCalendlyAuthURL, getCalendlyUser, deAuthCalendly } from '@/actions/calendly.actions';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { TbCalendarCog } from 'react-icons/tb';
+import { TbCalendarCog, TbCalendarX } from 'react-icons/tb';
 
 export default function CalendlyAuth() {
   const [authURL, setAuthURL] = useState("");
   const [calendlyToken, setCalendlyToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [deAuthRequested, setDeAuthRequested] = useState(false);  // new state
   const router = useRouter();
 
   useEffect(() => {
-    async function fetchAuthURL() {
-      const url = await getCalendlyAuthURL();
+    async function fetchAuthURL(redirectPath: string) {
+      const url = await getCalendlyAuthURL(redirectPath);
       setAuthURL(url);
     }
 
@@ -30,10 +31,28 @@ export default function CalendlyAuth() {
         setLoading(false);
       }
     }
-
-    fetchAuthURL();
+    const currentPath = window.location.pathname;
+    fetchAuthURL(currentPath);
     fetchUserToken();
   }, [router]);
+
+  // New useEffect for de-authorization
+  useEffect(() => {
+    if (!deAuthRequested) return;
+
+    async function handleDeAuth() {
+      try {
+        await deAuthCalendly();
+        setCalendlyToken(null);
+        router.refresh();
+      } catch (error) {
+        console.error('Error de-authorizing:', error);
+      }
+      setDeAuthRequested(false);  // reset the state after the process is completed
+    }
+
+    handleDeAuth();
+  }, [deAuthRequested, router]);
 
   if (!loading && authURL && !calendlyToken) {
     return (
@@ -41,6 +60,15 @@ export default function CalendlyAuth() {
         <TbCalendarCog className='inline-block mr-2' />
         Authorize with Calendly
       </a>
+    );
+  }
+
+  if (calendlyToken) {
+    return (
+      <button onClick={() => setDeAuthRequested(true)} className='px-6 py-2 bg-red-500 text-white'>
+        <TbCalendarX className='inline-block mr-2' />
+        De-Authorize Calendly
+      </button>
     );
   }
 

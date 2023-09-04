@@ -5,14 +5,14 @@ import { FaUsers, FaCalendar, FaEuroSign, FaClock } from 'react-icons/fa';
 
 export const getLatestStats = async () => {
   const user = await getUserBySession();
-  if (!user?.ciApiKey) return null;
+  if (!user?.ciApiKey) return { status: 'empty', message: 'No user session found.' };
 
   const now = new Date();
   const month = getMonth(now) + 1;
   const year = getYear(now);
 
   const data = await getBilling(month.toString(), year.toString());
-  if (!data || data?.aggregates) return null;
+  if (!data || data?.aggregates) return { status: 'empty', message: 'No billing data available.' };
   const sessionCount = parseInt(data?.aggregates?.session_count);
   const eurosBillable = data?.aggregates?.euros_billable;
 
@@ -32,7 +32,7 @@ export const getLatestStats = async () => {
     {
       title: 'Sessions This Month',
       icon: FaCalendar,
-      content: sessionCount?.toString(),
+      content: isNaN(sessionCount) ? null : sessionCount?.toString(),
       color: 'bg-blue-100',
       textColor: 'text-blue-500',
     },
@@ -53,13 +53,13 @@ export const getLatestStats = async () => {
     {
       title: 'Average Session Time',
       icon: FaClock,
-      content: `${averageSessionTimeInMinutes.toFixed(2)} mins`,
+      content: averageSessionTimeInMinutes === 0 ? null : `${averageSessionTimeInMinutes.toFixed(2)} mins`,
       color: 'bg-purple-100',
       textColor: 'text-purple-500',
     },
   ].filter(stat => stat.content !== null && stat.content !== undefined);  // Filter out stats with null or undefined content
 
-  return stats;
+  return { status: 'success', stats };
 }
 
 const convertToMinutes = (time: string): number => {

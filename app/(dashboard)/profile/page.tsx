@@ -1,32 +1,17 @@
 
 import { Profile } from '@/components/Profile';
 import { ProfileSidebar } from '@/components/ProfileSidebar';
-import { isAdmin } from '@/components/server/routeguards';
-import { getMentorByIdWithCountAdmin } from '@/lib/admin/mentors';
-import { redirect } from 'next/navigation';
+import { getMentorById } from '@/lib/admin/mentors';
+import { getUser } from '@/lib/auth/auth';
 import React from 'react';
 
 
-
-
-interface MentorProfileProps {
-  params: {
-    mentorId: string;
+const UserProfilePage: React.FC = async () => {
+  const user = await getUser();
+  if (!user) {
+    return <div>No User found</div>
   }
-}
-
-const MentorProfilePage: React.FC<MentorProfileProps> = async ({ params }) => {
-  const mentorId = params.mentorId;
-  const mentor = await getMentorByIdWithCountAdmin(mentorId);
-
-  if (!await isAdmin()) {
-    redirect('/dashboard');
-  }
-
-
-  if (!mentor) {
-    return <div>Mentor not found</div>
-  }
+  const mentor = await getMentorById(user.id);
   return (
     <>
       <div className="container mx-auto py-8">
@@ -43,4 +28,4 @@ const MentorProfilePage: React.FC<MentorProfileProps> = async ({ params }) => {
   );
 }
 
-export default MentorProfilePage;
+export default UserProfilePage;

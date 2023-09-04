@@ -8,6 +8,7 @@ export async function GET(req: NextRequest) {
   const session = await getAuthSession();
   const { searchParams } = new URL(req.url);
   const code = searchParams.get("code");
+  const redirectUrl = searchParams.get("redirect") || '/dashboard';
   if (!code) {
     return NextResponse.json({ error: 'No code provided' }, { status: 400 });
   }
@@ -23,10 +24,10 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    return redirect('/dashboard');
+    return redirect(redirectUrl);
   } catch (error) {
     console.log(error)
-    return redirect('/dashboard');
+    return redirect(redirectUrl);
   }
 }
 

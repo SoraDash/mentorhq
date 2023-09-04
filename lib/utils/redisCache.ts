@@ -1,9 +1,6 @@
 import Redis from 'ioredis';
 
-const redis = new Redis({
-  host: process.env.REDIS_HOST,
-  port: parseInt(process.env.REDIS_PORT || '6379'),
-});
+const redis = new Redis(process.env.REDIS_URL);
 
 let connectionRetries = 0;
 const MAX_RETRIES = 3;

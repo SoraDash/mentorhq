@@ -108,6 +108,7 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className='cursor-pointer'
                   onClick={() => router.push(`/admin/mentor/${(row.original as { id: string }).id}`)}
 
                 >

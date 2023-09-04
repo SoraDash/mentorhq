@@ -59,12 +59,13 @@ export const FetchGithubBio: React.FC<FetchGithubBioProps> = ({ id }) => {
 
 
   return (
-    <div
-      className='relative flex select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 cursor-pointer'
+    <span
+      className={`relative flex select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors bg-secondary focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 cursor-pointer`}
       onClick={() => syncBio()}
     >
       <PiUserSwitchFill className={`mr-2 ${bio ? 'animate-spin' : ''}`} />
       Sync Github Bio
-    </div>
+    </span>
+
   );
 }

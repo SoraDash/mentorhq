@@ -1,6 +1,6 @@
 
 import { MentorBio } from '@/components/MentorProfile';
-import { MentorSidebar } from '@/components/MentorSidebar';
+import { MentorSidebar } from '@/components/ProfileSidebar';
 import { isAdmin } from '@/components/server/routeguards';
 import { getMentorByIdWithCountAdmin } from '@/lib/admin/mentors';
 import { redirect } from 'next/navigation';

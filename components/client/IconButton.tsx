@@ -8,7 +8,7 @@ interface IconButtonProps {
 }
 export const IconButton: React.FC<IconButtonProps> = ({ color, icon: Icon, children, ...props }) => (
   <button
-    className={`flex justify-center items-center w-full py-3 px-5 rounded ${color} hover:${color}/80 transition-colors focus:outline-none`}
+    className={`flex justify-center items-center w-full rounded ${color} hover:${color}/80 transition-colors focus:outline-none`}
     {...props}
   >
     <Icon className="mr-2" />

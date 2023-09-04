@@ -9,6 +9,8 @@ import { IconButton } from './client/IconButton';
 import { knownRoles } from './client/RoleDropdown';
 import { SocialMediaIcons } from './client/SocialMediaIcons';
 import { FetchGithubBio } from './client/tables/admin/mentors/github-bio';
+import { BooleanIcon } from './server/BooleanIcon';
+import { Badge } from './ui/badge';
 
 type ProfileWithCounts = MentorWithCount | StudentWithCounts
 
@@ -40,22 +42,32 @@ export const MentorSidebar: React.FC<MentorSidebarProps> = ({ profile }) => {
 
         <h1 className="text-xl font-bold">{profile.name}</h1>
         {isMentor(profile) && profile.role && (
-          <p className="text-gray-600 flex items-center font-bold">{capitalize(profile.role)}
-            <span className={cn("w-5 h-5 ml-1", color ? color : 'text-gray-600')}>
-              <RoleIcon />
-            </span>
-          </p>
+          <div className="text-gray-600 flex flex-col items-center space-y-3">
+            <div className="flex items-center font-bold">
+              {capitalize(profile.role)}
+              <span className={cn("w-5 h-5 ml-1", color ? color : 'text-gray-600')}>
+                <RoleIcon />
+              </span>
+            </div>
+            {profile.isPremium && (
+              <Badge variant={"premium"}>
+                Premium Member
+              </Badge>
+            )}
+          </div>
         )}
 
         <div className="mt-6 flex flex-wrap gap-4 justify-center">
-          <div className="mt-6 grid grid-cols-1 gap-4">
+          <div className="mt-6 grid grid-cols-1 gap-3">
             <IconButton color="bg-secondary text-secondary-foreground" icon={FaUserEdit}>
               Edit
             </IconButton>
             {isMentor(profile) && (
-              <div className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/80 py-3 px-5 rounded flex justify-center items-center">
+              <>
                 <FetchGithubBio id={profile.id} />
-              </div>
+              </>
+              // <div className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/80 py-3 px-5 rounded flex justify-center items-center">
+              // </div>
             )}
             {isMentor(profile) && profile.role === 'ADMIN' && (
               <IconButton color="bg-red-500 text-white" icon={FaHammer}>
@@ -82,6 +94,26 @@ export const MentorSidebar: React.FC<MentorSidebarProps> = ({ profile }) => {
                 <span className="flex-grow">Students</span>
                 <span>{profile._count.students}</span>
               </li>
+              {isMentor(profile) && (
+                <>
+                  <li className="flex items-center space-x-2">
+                    <span className="flex-grow">Onboarding Completed</span>
+                    <BooleanIcon condition={profile.isOnboarded} className='items-center text-center w-6 h-6' />
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <span className="flex-grow">Premium Member</span>
+                    <BooleanIcon condition={profile.isPremium} className='items-center text-center w-6 h-6' />
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <span className="flex-grow">Calendly Enabled</span>
+                    <BooleanIcon condition={!!profile.calendly_token} className='items-center text-center w-6 h-6' />
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <span className="flex-grow">CI API Key set</span>
+                    <BooleanIcon condition={!!profile.ciApiKey} className='items-center text-center w-6 h-6' />
+                  </li>
+                </>
+              )}
             </ul>
           </div>
         </>

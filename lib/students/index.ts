@@ -1,5 +1,5 @@
 export * from './api';
-export * from './db';
+export * from './student';
 export * from './sync';
 export * from './utils';
 export * from './types';

@@ -3,7 +3,7 @@ import { isAdmin } from '@/components/server/routeguards';
 import { prisma } from '@/lib/db/prisma';
 import { User } from '@prisma/client';
 
-export type MentorWithCounts = User & {
+export type MentorWithCount = User & {
   _count: {
     studentSession: number;
     students: number;
@@ -29,7 +29,7 @@ export const getMentorByIdAdmin = async (id: string) => {
 };
 
 export const getAllMentorsWithCountAdmin = async () => {
-  if (!await isAdmin()) return [] as MentorWithCounts[];
+  if (!await isAdmin()) return [] as MentorWithCount[];
 
   const mentors = await prisma.user.findMany({
     include: {
@@ -42,12 +42,12 @@ export const getAllMentorsWithCountAdmin = async () => {
       }
     }
   });
-  if (!mentors) return [] as MentorWithCounts[];
+  if (!mentors) return [] as MentorWithCount[];
   return mentors
 };
 
 export const getMentorByIdWithCountAdmin = async (id: string) => {
-  if (!await isAdmin()) return {} as MentorWithCounts;
+  if (!await isAdmin()) return {} as MentorWithCount;
   const mentor = await prisma.user.findUnique({
     where: { id },
     include: {
@@ -60,5 +60,6 @@ export const getMentorByIdWithCountAdmin = async (id: string) => {
       }
     }
   });
-  if (!mentor) return {} as MentorWithCounts;
+  if (!mentor) return {} as MentorWithCount;
+  return mentor;
 };

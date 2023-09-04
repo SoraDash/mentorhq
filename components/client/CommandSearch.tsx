@@ -91,7 +91,7 @@ export function CommandMenu() {
           type: 'mentor',
           label: mentor.name || '',
           action: () => {
-            router.push(`/admin/mentors/${mentor.id}`);
+            router.push(`/admin/mentor/${mentor.id}`);
             setOpen(false);
           }
         }));

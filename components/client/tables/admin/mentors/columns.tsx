@@ -6,14 +6,14 @@ import SensitiveInfo from '@/components/client/SensetiveInfo'
 import { BooleanIcon } from '@/components/server/BooleanIcon'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { MentorWithCounts } from '@/lib/admin/mentors'
+import { MentorWithCount } from '@/lib/admin/mentors'
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, MoreHorizontal, } from 'lucide-react'
 import Link from 'next/link'
 import { PiHammerBold, PiTrashBold, PiUserCircleBold, PiUserCircleGearFill } from 'react-icons/pi'
 import { FetchGithubBio } from './github-bio'
 
-export const mentorColumns: ColumnDef<MentorWithCounts>[] = [
+export const mentorColumns: ColumnDef<MentorWithCount>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {

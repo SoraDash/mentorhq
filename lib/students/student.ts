@@ -5,6 +5,13 @@ import { getUser } from '../auth/auth';
 import { GoogleSheetStudent, PartialGoogleSheetStudent } from './types';
 import { handleFieldPriority, transformToPrismaStudent } from './utils';
 
+export type StudentWithCounts = Student & {
+  _count: {
+    studentSession: number;
+    students: number;
+    sessions: number;
+  }
+}
 
 export const updateOrCreateStudent = async (
   student: PartialGoogleSheetStudent,
@@ -119,7 +126,7 @@ export const getStudentByIdAdmin = async (id: string) => {
 };
 
 export const getAllStudentsWithCountAdmin = async () => {
-  return await prisma.user.findMany({
+  const students = await prisma.user.findMany({
     include: {
       _count: {
         select: {
@@ -130,10 +137,13 @@ export const getAllStudentsWithCountAdmin = async () => {
       }
     }
   });
+  if (!students) return [] as StudentWithCounts[];
+  return students;
 };
 
+
 export const getStudentByIdWithCountAdmin = async (id: string) => {
-  return await prisma.user.findUnique({
+  const student = await prisma.user.findUnique({
     where: { id },
     include: {
       _count: {
@@ -145,4 +155,6 @@ export const getStudentByIdWithCountAdmin = async (id: string) => {
       }
     }
   });
+  if (!student) return null;
+  return student;
 };

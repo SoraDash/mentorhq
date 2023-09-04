@@ -1,11 +1,11 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/components/ui/use-toast';
 import { updateRole } from '@/lib/auth/auth';
 import { Role } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { BsShieldCheck } from "react-icons/bs";
-import { FaGraduationCap } from "react-icons/fa";
+import { FaChalkboardTeacher } from "react-icons/fa";
 import { RiAccountPinCircleLine } from "react-icons/ri";
-import { useToast } from '@/components/ui/use-toast';
 
 import React from 'react';
 
@@ -21,7 +21,7 @@ type RoleConfig = {
 export const knownRoles: RoleConfig = {
   [Role.ADMIN]: { color: "text-red-500", icon: BsShieldCheck },
   [Role.USER]: { color: "text-dark-purple", icon: RiAccountPinCircleLine },
-  [Role.MENTOR]: { color: "text-dark-purple", icon: FaGraduationCap },
+  [Role.MENTOR]: { color: "text-dark-purple", icon: FaChalkboardTeacher },
 };
 
 interface RoleDropdownProps {

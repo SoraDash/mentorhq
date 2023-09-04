@@ -14,7 +14,7 @@ const NameForm: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-col space-y-2">
-        <label className="text-gray-700 text-sm font-bold" htmlFor="firstName">
+        <label className="text-gray-700 dark:text-white text-sm font-bold" htmlFor="firstName">
           First Name
         </label>
         <Input
@@ -27,7 +27,7 @@ const NameForm: React.FC = () => {
       </div>
 
       <div className="flex flex-col space-y-2">
-        <label className="text-gray-700 text-sm font-bold" htmlFor="lastName">
+        <label className="text-gray-700 dark:text-white text-sm font-bold" htmlFor="lastName">
           Last Name
         </label>
         <Input

@@ -5,7 +5,7 @@ import React, { Suspense } from 'react';
 const OnboardingPage: React.FC = async () => {
 
   return (
-    <div className="flex-1 p-5">
+    <div className="w-full">
       <Suspense fallback={<LoadingSpinner />}>
         <OnboardingForm />
       </Suspense>

@@ -44,7 +44,7 @@ const OnboardingReview: React.FC = () => {
 
   return (
     <div className="p-5 flex justify-center">
-      <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-5">
+      <div className="w-full max-w-2xl lg p-5 shadow-sm">
         <h2 className="text-lg font-bold mb-5">Review your details:</h2>
 
         {Object.entries(formData).map(([sectionKey, sectionData], index) => (
@@ -52,10 +52,17 @@ const OnboardingReview: React.FC = () => {
             <h3 className="text-xl font-bold mb-3 capitalize">{sectionKey}</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
               {Object.entries(sectionData).map(([key, value]) => (
-                <div key={key}>
-                  <h4 className="capitalize font-semibold">{getTitle(sectionKey as keyof FormData, key)}</h4>
-                  <p className='mt-2'>{displayValue(key, value)}</p>
-                </div>
+                key === 'sendWelcomeEmail' ? (
+                  <div key={key} className="col-span-3 flex items-center">
+                    <h4 className="capitalize font-semibold mr-2">{getTitle(sectionKey as keyof FormData, key)}</h4>
+                    {displayValue(key, value)}
+                  </div>
+                ) : (
+                  <div key={key}>
+                    <h4 className="capitalize font-semibold">{getTitle(sectionKey as keyof FormData, key)}</h4>
+                    <p className='mt-2'>{displayValue(key, value)}</p>
+                  </div>
+                )
               ))}
             </div>
             {index < Object.keys(formData).length - 1 && (

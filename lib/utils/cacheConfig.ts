@@ -4,7 +4,7 @@ const CACHE_CONFIG = {
   students: {
     key: 'students',
     TTL: 60 * 60 * 24 * 7, // 1 week
-    enabled: false
+    enabled: true
   },
   billing: {
     key: 'billing',

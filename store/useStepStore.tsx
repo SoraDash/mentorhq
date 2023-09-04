@@ -102,8 +102,8 @@ export const useStepStore = create<StepState>((set) => {
     next,
     back,
     goTo,
-    isFirstStep: true,  // initially true because currentStep starts at 0
-    isLastStep: false,  // initially false because there are multiple steps
+    isFirstStep: true,
+    isLastStep: false,
     steps: forms
   };
 });

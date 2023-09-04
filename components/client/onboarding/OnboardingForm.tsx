@@ -29,14 +29,14 @@ const OnboardingForm: React.FC = () => {
             ciApiKey: user.ciApiKey || "",
             paidPerHour: user.paidPerHour || 0,
             sendWelcomeEmail: user.sendWelcomeEmail || false,
-            website: user.website || ""
           };
           const socialData = {
             github: user.github || "",
             twitter: user.twitter || "",
             linkedIn: user.linkedIn || "",
             slack: user.slack || "",
-            skype: user.skype || ""
+            skype: user.skype || "",
+            website: user.website || ""
           };
           updateFormData('name', nameData);
           updateFormData('misc', miscData);
@@ -95,7 +95,7 @@ const OnboardingForm: React.FC = () => {
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen scroll-pt-4">
-      <div className="w-full max-w-lg bg-white shadow-lg p-8 rounded-lg">
+      <div className="w-3/4  bg-white dark:bg-gray-700 shadow-lg p-8 rounded-lg">
         <CurrentFormComponent />
 
         <div className="flex justify-center mt-8 space-x-4">

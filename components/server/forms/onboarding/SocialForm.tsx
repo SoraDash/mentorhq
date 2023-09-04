@@ -14,7 +14,7 @@ const SocialForm: React.FC = () => {
   return (
     <div className="grid grid-cols-1 gap-4 mt-3 mb-4">
       <div className="col-span-2 sm:col-span-1">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="github">
+        <label className="block text-gray-700 dark:text-white text-sm font-bold mb-2" htmlFor="github">
           GitHub Username
         </label>
         <Input
@@ -26,7 +26,7 @@ const SocialForm: React.FC = () => {
         />
       </div>
       <div className="col-span-2 sm:col-span-1">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="slack">
+        <label className="block text-gray-700 dark:text-white text-sm font-bold mb-2" htmlFor="slack">
           Slack Username
         </label>
         <Input
@@ -38,7 +38,7 @@ const SocialForm: React.FC = () => {
         />
       </div>
       <div className="col-span-2 sm:col-span-1">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="linkedIn">
+        <label className="block text-gray-700 dark:text-white text-sm font-bold mb-2" htmlFor="linkedIn">
           LinkedIn Profile URL
         </label>
         <Input
@@ -50,7 +50,7 @@ const SocialForm: React.FC = () => {
         />
       </div>
       <div className="col-span-2 sm:col-span-1">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="skype">
+        <label className="block text-gray-700 dark:text-white text-sm font-bold mb-2" htmlFor="skype">
           Skype Username
         </label>
         <Input
@@ -62,7 +62,7 @@ const SocialForm: React.FC = () => {
         />
       </div>
       <div className="col-span-2 sm:col-span-1">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="twitter">
+        <label className="block text-gray-700 dark:text-white text-sm font-bold mb-2" htmlFor="twitter">
           Twitter Handle
         </label>
         <Input
@@ -74,7 +74,7 @@ const SocialForm: React.FC = () => {
         />
       </div>
       <div className="col-span-2 sm:col-span-1">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="website">
+        <label className="block text-gray-700 dark:text-white text-sm font-bold mb-2" htmlFor="website">
           Website URL
         </label>
         <Input

@@ -29,7 +29,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "lib/menuts",
-    "scripts/generateEnv.js"
+    "scripts/generateEnv.js",
+    "prisma/seed.ts"
   ],
   "exclude": ["node_modules"]
 }

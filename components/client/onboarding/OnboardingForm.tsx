@@ -80,8 +80,8 @@ const OnboardingForm: React.FC = () => {
           });
         }
         setTimeout(() => router.refresh(), 300);
-        router.refresh()
         router.replace('/dashboard')
+        router.refresh()
       })
       .catch(error => {
         console.log(error);

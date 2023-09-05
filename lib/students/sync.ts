@@ -14,7 +14,6 @@ export const studentsFromGoogleSheets = async (): Promise<GoogleSheetStudent[]> 
     throw new Error('Invalid user data');
   }
 
-
   const cachedStudents = await CacheConfig.get<GoogleSheetStudent[]>('students', user.email);
   if (cachedStudents) {
     console.log("Returning cached students");

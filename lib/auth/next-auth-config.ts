@@ -19,14 +19,14 @@ export const authOptions: NextAuthOptions = {
   },
   events: {
     async signIn(message) {
-      const name = splitName(message.user.name!)
+      const { firstName, lastName } = splitName(message.user.name!)
       await prisma.user.update({
         where: {
           email: message.user.email!
         },
         data: {
-          firstName: name.firstName,
-          lastName: name.lastName,
+          firstName: firstName,
+          lastName: lastName,
           image: message.user.image
         }
       })

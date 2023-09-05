@@ -1,7 +1,7 @@
 import { Student, User } from '@prisma/client';
 import { GoogleSheetStudent } from './types';
 
-export const fieldsToCheck: Array<keyof Student> = ['skype', 'slack', 'github', 'name'];
+export const fieldsToCheck: Array<keyof Student> = ['skype', 'slack', 'github'];
 
 
 export const handleFieldPriority = (existingStudent: Student, incomingStudent: Student): Student => {

@@ -6,6 +6,7 @@ import { GoogleSheetStudent, PartialGoogleSheetStudent } from './types';
 import { handleFieldPriority, transformToPrismaStudent } from './utils';
 import { isAdmin } from '@/components/server/routeguards';
 import { getCourseByProgrammeID, generateProjectsForStudent } from '../course/courseUtils';
+import { splitName } from '../split-name';
 
 type UnifiedStudent = Student & {
   sessions?: Session[]; // Assuming Session is a type you have
@@ -30,17 +31,19 @@ type FetchConditions = {
 }
 
 const updateStudent = async (existingStudent: Student, prismaStudentData: Student): Promise<Student> => {
+  const { firstName, lastName } = splitName(prismaStudentData.name!);
   return await prisma.student.update({
     where: {
       email: existingStudent.email,
     },
-    data: prismaStudentData
+    data: { ...prismaStudentData, firstName, lastName }
   });
 };
 
 const createStudent = async (prismaStudentData: Student): Promise<Student> => {
+  const { firstName, lastName } = splitName(prismaStudentData.name!);
   return await prisma.student.create({
-    data: prismaStudentData
+    data: { ...prismaStudentData, firstName, lastName }
   });
 };
 
@@ -50,7 +53,6 @@ export const updateOrCreateStudent = async (
 ): Promise<{ action: 'added' | 'updated' | 'unchanged', changes?: string[], error?: string }> => {
   try {
     console.log("🔍 Searching for existing student using email...");
-
     const existingStudent = await prisma.student.findUnique({
       where: {
         email: student.email!,

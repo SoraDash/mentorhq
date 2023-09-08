@@ -5,18 +5,15 @@ import { useRouter } from 'next/navigation';
 import { BsShieldCheck } from "react-icons/bs";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import { RiAccountPinCircleLine } from "react-icons/ri";
-
-import { Select, SelectItem } from '@nextui-org/react';
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from '@nextui-org/react';
 import React from 'react';
 
 type RoleConfig = {
-  // eslint-disable-next-line no-unused-vars
   [key in Role]: {
     color: string;
     icon: React.ComponentType;
   };
 };
-
 
 export const knownRoles: RoleConfig = {
   [Role.ADMIN]: { color: "text-red-500", icon: BsShieldCheck },
@@ -28,19 +25,24 @@ interface RoleDropdownProps {
   userId: string;
   currentRole: Role;
 }
+
 export const RoleDropdown: React.FC<RoleDropdownProps> = ({ userId, currentRole }) => {
   const { toast } = useToast();
   const router = useRouter();
-  const roleSelection = Object.values(Role).map(role => ({
-    value: role,
-    label: role
+
+  const dropdownItems = Object.entries(knownRoles).map(([role, { color, icon }]) => ({
+    key: role,
+    label: role,
+    color,
+    IconComponent: icon,
   }));
+
+  const CurrentRoleIcon = knownRoles[currentRole].icon;
 
   const handleRoleChange = async (role: string) => {
     if (role === currentRole) return;
-    //TODO:  We need a modal to show the user the changes they are about to make
     try {
-      const user = await updateRole(userId, role as Role)
+      const user = await updateRole(userId, role as Role);
       router.refresh();
       toast({
         description: `Success: Updated ${user.firstName}'s role to ${role}!`,
@@ -53,21 +55,26 @@ export const RoleDropdown: React.FC<RoleDropdownProps> = ({ userId, currentRole 
         variant: "destructive",
       });
     }
-
   };
-  return (
-    <>
-      <Select
-        items={roleSelection}
-        placeholder="Select a role"
-        className="w-[180px]"
-        variant='underlined'
-        onChange={(e) => handleRoleChange(e.target.value)}
-      >
-        {(role) => <SelectItem key={role.value} value={role.value}>{role.label}</SelectItem>}
-      </Select>
 
-    </>
+  return (
+    <Dropdown backdrop='blur' showArrow>
+      <DropdownTrigger>
+        <Button variant="light" startContent={<CurrentRoleIcon />}>
+          {currentRole}
+        </Button>
+      </DropdownTrigger>
+      <DropdownMenu aria-label="Roles">
+        {dropdownItems.map(item => (
+          <DropdownItem
+            key={item.key}
+            onClick={() => handleRoleChange(item.key)}
+            startContent={<item.IconComponent />}
+          >
+            {item.label}
+          </DropdownItem>
+        ))}
+      </DropdownMenu>
+    </Dropdown>
   );
 }
-

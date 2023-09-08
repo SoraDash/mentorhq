@@ -68,7 +68,7 @@ export const ContactMethodDropdown: React.FC<ContactMethodDropdownProps> = ({ st
   const CurrentMethodIcon = knownContactMethods[currentMethod]
 
   return (
-    <Dropdown>
+    <Dropdown backdrop='blur' showArrow>
       <DropdownTrigger>
         <Button variant="light" startContent={<CurrentMethodIcon />}>
           {capitalize(currentMethod)}

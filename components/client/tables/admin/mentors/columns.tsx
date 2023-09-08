@@ -133,13 +133,9 @@ export const mentorColumns: ColumnDef<MentorWithCount>[] = [
         <Dropdown
           backdrop='blur'
           showArrow
-          classNames={{
-            base: "py-1 px-1 border border-default-200 bg-gradient-to-br from-white to-default-200 dark:from-default-50 dark:to-black",
-            arrow: "bg-default-200",
-          }}
         >
           <DropdownTrigger>
-            <Button variant="ghost" className="h-8 w-8 p-0">
+            <Button variant="light" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>

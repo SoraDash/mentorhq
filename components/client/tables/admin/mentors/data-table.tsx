@@ -25,6 +25,7 @@ import { Button } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { PiUserPlus } from 'react-icons/pi'
+import { FaChalkboardTeacher } from 'react-icons/fa'
 
 
 interface DataTableProps<TData, TValue> {
@@ -74,8 +75,8 @@ export function DataTable<TData, TValue>({
 
           {/* Buttons */}
           <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
-            <Button variant={"faded"} color='secondary'>
-              <> Add User <PiUserPlus className="ml-2" /></>
+            <Button variant='solid' endContent={<FaChalkboardTeacher />}>
+              Add User
             </Button>
           </div>
         </div>
@@ -109,7 +110,6 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className='cursor-pointer'
-                  onClick={() => router.push(`/admin/mentor/${(row.original as { id: string }).id}`)}
 
                 >
                   {row.getVisibleCells().map((cell) => (

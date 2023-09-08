@@ -1,5 +1,5 @@
 import { studentColumns } from '@/components/client/tables/admin/students/columns';
-import { DataTable } from '@/components/client/tables/students/data-table';
+import { DataTable } from '@/components/client/tables/admin/students/data-table';
 import { getAllStudentsAdmin } from '@/lib/students';
 
 

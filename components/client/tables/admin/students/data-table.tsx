@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   ColumnDef,
@@ -10,9 +10,8 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
-import { Input } from '@/components/ui/input'
 import {
   Table,
   TableBody,
@@ -20,27 +19,28 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { useToast } from '@/components/ui/use-toast'
-import { syncStudentsWithDatabase } from '@/lib/students'
-import { Button } from '@nextui-org/react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { PiStudentBold } from 'react-icons/pi'
-import { RiRocketFill } from 'react-icons/ri'
+} from "@/components/ui/table";
+import { useToast } from "@/components/ui/use-toast";
+import useStudentSyncText from '@/hooks/useStudentSyncText';
+import { syncStudentsWithDatabase } from "@/lib/students";
+import { Button, Input } from "@nextui-org/react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { PiStudentBold } from "react-icons/pi";
+import { FaChalkboardTeacher } from 'react-icons/fa';
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [isSyncing, setIsSyncing] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
@@ -58,7 +58,7 @@ export function DataTable<TData, TValue>({
       sorting,
       columnFilters,
     },
-  })
+  });
 
   async function handleSync() {
     setIsSyncing(true);
@@ -91,64 +91,57 @@ export function DataTable<TData, TValue>({
           variant: "default",
         });
       }
-
     } catch (error: any) {
       toast({
         title: "Error: Something went wrong!",
         description: `Failed to sync students: ${error.message}`,
         variant: "destructive",
-      })
+      });
     } finally {
       setIsSyncing(false);
-      router.refresh()
-
+      router.refresh();
     }
   }
-
+  const syncText = useStudentSyncText(isSyncing);
 
   return (
     <>
-      <div className="py-4">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+      <div className='py-4'>
+        <div className='flex flex-col md:flex-row md:items-center md:justify-between'>
           {/* Input */}
-          <div className="mb-2 md:mb-0 md:max-w-sm md:mr-4">
+          <div className='mb-2 md:mb-0 md:max-w-sm md:mr-4'>
             <Input
-              placeholder="Filter by name..."
-              value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+              isClearable
+              type='text'
+              variant='bordered'
+              label='Filter by students name'
+              value={
+                (table.getColumn("name")?.getFilterValue() as string) ?? ""
+              }
               onChange={(event) =>
                 table.getColumn("name")?.setFilterValue(event.target.value)
               }
+              onClear={() => table.getColumn("name")?.setFilterValue("")}
             />
           </div>
 
           {/* Buttons */}
-          <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
-            <Button variant={"flat"} color="secondary">
-              <> Add Student <PiStudentBold className="ml-2" /></>
+          <div className='flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2'>
+            <Button variant='flat' endContent={<PiStudentBold />}>
+              Add Student
             </Button>
-            {session?.user?.hasKey && (
-              <Button
-                color={!isSyncing ? "secondary" : "warning"}
-                variant={"light"}
-                onClick={handleSync}
-                disabled={isSyncing}
-              >
-                {isSyncing ? (
-                  <>
-                    Sync in progress...
-                    <RiRocketFill className="ml-2 animate-bounce" />
-                  </>
-                ) : (
-                  <> Sync Students <RiRocketFill className="ml-2" /></>
-                )}
-              </Button>
-            )}
+            <Button
+              variant='flat'
+              spinnerPlacement='end'
+              endContent={<FaChalkboardTeacher />}
+            >
+              Assign Mentor
+            </Button>
           </div>
         </div>
       </div>
 
-
-      <div className="rounded-md border">
+      <div className='rounded-md border'>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -163,7 +156,7 @@ export function DataTable<TData, TValue>({
                           header.getContext()
                         )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -174,36 +167,41 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  onClick={() => router.push(`/student/${(row.original as { id: string }).id}`)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className='h-24 text-center'
+                >
                   No results.
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
-        <div className="flex items-center justify-end space-x-2 py-4">
+        <div className='flex items-center justify-end space-x-2 py-4'>
           <Button
-            variant="flat"
-            size="sm"
+            variant='ghost'
+            size='md'
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
             Previous
           </Button>
           <Button
-            variant="flat"
-            size="sm"
+            variant='ghost'
+            size='md'
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
@@ -212,5 +210,5 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
     </>
-  )
+  );
 }

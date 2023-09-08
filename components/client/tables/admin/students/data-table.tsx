@@ -20,15 +20,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useToast } from "@/components/ui/use-toast";
-import useStudentSyncText from '@/hooks/useStudentSyncText';
-import { syncStudentsWithDatabase } from "@/lib/students";
 import { Button, Input } from "@nextui-org/react";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { PiStudentBold } from "react-icons/pi";
 import { FaChalkboardTeacher } from 'react-icons/fa';
+import { PiStudentBold } from "react-icons/pi";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -41,10 +36,6 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [isSyncing, setIsSyncing] = useState(false);
-  const { toast } = useToast();
-  const router = useRouter();
-  const { data: session } = useSession();
   const table = useReactTable({
     data,
     columns,
@@ -59,50 +50,6 @@ export function DataTable<TData, TValue>({
       columnFilters,
     },
   });
-
-  async function handleSync() {
-    setIsSyncing(true);
-    try {
-      const { added, removed, updated } = await syncStudentsWithDatabase();
-
-      // Check for added, removed or updated students and update toast accordingly
-      if (added.length > 0) {
-        toast({
-          title: `Success: Added ${added.length} student(s)!`,
-          variant: "default",
-        });
-      }
-      if (removed.length > 0) {
-        toast({
-          title: `Notice: Unassigned ${removed.length} student(s)!`,
-          variant: "default",
-        });
-      }
-      if (updated.length > 0) {
-        toast({
-          title: `Success: Updated ${updated.length} student(s)!`,
-          variant: "default",
-        });
-      }
-      if (added.length === 0 && removed.length === 0 && updated.length === 0) {
-        toast({
-          title: "Everything's up-to-date!",
-          description: "No changes were made during the sync.",
-          variant: "default",
-        });
-      }
-    } catch (error: any) {
-      toast({
-        title: "Error: Something went wrong!",
-        description: `Failed to sync students: ${error.message}`,
-        variant: "destructive",
-      });
-    } finally {
-      setIsSyncing(false);
-      router.refresh();
-    }
-  }
-  const syncText = useStudentSyncText(isSyncing);
 
   return (
     <>

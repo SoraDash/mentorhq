@@ -22,9 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from '@nextui-org/react'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { PiUserPlus } from 'react-icons/pi'
 import { FaChalkboardTeacher } from 'react-icons/fa'
 
 
@@ -39,7 +37,6 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const router = useRouter()
   const table = useReactTable({
     data,
     columns,
@@ -130,7 +127,7 @@ export function DataTable<TData, TValue>({
         </Table>
         <div className="flex items-center justify-end space-x-2 py-4 mx-3">
           <Button
-            variant="outline"
+            variant="light"
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
@@ -138,7 +135,7 @@ export function DataTable<TData, TValue>({
             Previous
           </Button>
           <Button
-            variant="outline"
+            variant="light"
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}

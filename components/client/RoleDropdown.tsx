@@ -9,6 +9,7 @@ import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from '@
 import React from 'react';
 
 type RoleConfig = {
+  // eslint-disable-next-line no-unused-vars
   [key in Role]: {
     color: string;
     icon: React.ComponentType;

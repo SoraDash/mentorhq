@@ -9,6 +9,7 @@ import { useToast } from '../ui/use-toast';
 
 
 type ContactMethodConfig = {
+  // eslint-disable-next-line no-unused-vars
   [key in ContactMethod]: React.ComponentType; // The React.ComponentType signifies that each key of the ContactMethod enum will have an associated React component (i.e., icon).
 };
 
@@ -28,7 +29,6 @@ export const ContactMethodDropdown: React.FC<ContactMethodDropdownProps> = ({ st
   const { toast } = useToast();
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
 
 
 
@@ -42,7 +42,6 @@ export const ContactMethodDropdown: React.FC<ContactMethodDropdownProps> = ({ st
 
 
   const handleMethodChange = async (method: string) => {
-    setIsEditing(false); // Close the dropdown after selecting an option
     if (method === currentMethod) return;
     try {
       const student = await updateStudent(studentId, { contactMethod: method } as Partial<Student>);

@@ -1,88 +1,52 @@
-"use client";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { cn } from '@/lib/utils';
-import { Role } from '@prisma/client';
-import { LogOut } from "lucide-react";
-import { User } from "next-auth";
-import { signOut } from "next-auth/react";
+"use client"
+import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
+import { User as PrismaUser, Role } from '@prisma/client';
+import { User } from 'next-auth';
+import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { BiCog } from 'react-icons/bi';
-import { UserAvatar } from './UserAvatar';
+import { FaCog, FaLifeRing, FaSignOutAlt, FaUserCircle } from 'react-icons/fa';
+import { IconType } from 'react-icons/lib';
 import { knownRoles } from './RoleDropdown';
 
-type Props = {
-  user: User;
+interface Props {
+  user: PrismaUser & User
   role: Role
-};
-
-
+}
 export const UserAccountNav = ({ user, role }: Props) => {
-  const { color, icon: Icon } = knownRoles[role];
   const router = useRouter();
-
+  const Icon = knownRoles[role].icon as IconType;
+  const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        <UserAvatar user={user} />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="p-4">
-        <div className="mb-4">
-          Signed in as
-          <div className="flex items-center space-x-2 mb-2">
-
-            <p className="font-medium text-lg">{user.name}</p>
-            <Tooltip>
-              <TooltipTrigger>
-                <span className={cn("w-5 h-5", color ? color : 'text-white')}>
-                  <Icon />
-                </span>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p className='capitalize'>{role.toLocaleLowerCase()} Account</p>
-              </TooltipContent>
-            </Tooltip>
-          </div>
-          <p className="w-[200px] truncate text-sm text-secondary-foreground">
-            {user?.email}
-          </p>
-        </div>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onSelect={() => router.push('/profile')}
-          className="cursor-pointer flex items-center space-x-2 mb-2"
-        >
-          <span>Profile</span>
-          <BiCog className="w-4 h-4" />
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onSelect={() => router.push('/settings')}
-          className="cursor-pointer flex items-center space-x-2 mb-2"
-        >
-          <span>Settings</span>
-          <BiCog className="w-4 h-4" />
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onSelect={() => {
-            signOut();
-          }}
-          className="text-red-600 cursor-pointer flex items-center space-x-2"
-        >
-          <span>Sign out</span>
-          <LogOut className="w-4 h-4" />
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Dropdown placement="bottom-end">
+      <DropdownTrigger>
+        <Avatar
+          isBordered={user.isPremium}
+          color={user.isPremium ? "danger" : "default"}
+          as="button"
+          className="transition-transform"
+          src={user.github as string || user.image as string}
+          name={user?.name as string}
+          showFallback
+        />
+      </DropdownTrigger>
+      <DropdownMenu aria-label="Profile Actions" variant="flat">
+        <DropdownItem key="profile" className="h-14 gap-2">
+          <p className="font-semibold">Signed in as</p>
+          <p className="font-semibold">{user.email}</p>
+        </DropdownItem>
+        <DropdownItem key="team_settings" startContent={<FaUserCircle className={iconClasses} />}>My Profile</DropdownItem>
+        <DropdownItem key="settings" startContent={<FaCog className={iconClasses} />}>
+          My Settings
+        </DropdownItem>
+        <DropdownItem key="help_and_feedback" startContent={<FaLifeRing className={iconClasses} />}>
+          Help & Feedback
+        </DropdownItem>
+        <DropdownItem key="logout" color="danger" startContent={<FaSignOutAlt className={iconClasses} />} onClick={() => signOut()}>
+          Log Out
+        </DropdownItem>
+      </DropdownMenu>
+    </Dropdown>
   );
 };

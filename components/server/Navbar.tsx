@@ -1,8 +1,8 @@
 import { SignInButton } from '@/components/client/SignInButton';
-import { ThemeToggle } from '@/components/client/ThemeToggle';
 import { UserAccountNav } from '@/components/client/UserAccountNav';
 import MobileSidebar from '@/components/client/mobile-sidebar';
 import { getAuthSession, getUserRole } from '@/lib/auth/auth';
+import { SwitchTheme } from '../client/SwitchTheme';
 
 export const NavBar = async () => {
   const session = await getAuthSession();
@@ -11,8 +11,8 @@ export const NavBar = async () => {
     <div className='flex items-center p-4'>
       {session?.user && <MobileSidebar user={session?.user} />}
       <div className='flex justify-end w-full'>
-        <ThemeToggle className='mr-3' />
-        <div className='flex items-center'>
+        <SwitchTheme />
+        <div className='flex items-center ml-3'>
           {session?.user ?
             <UserAccountNav user={session.user} role={role || "USER"} /> : <SignInButton />
           }

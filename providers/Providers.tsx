@@ -1,24 +1,25 @@
 "use client";
-
-import { Toaster } from '@/components/ui/toaster';
-import { TooltipProvider } from '@/components/ui/tooltip';
+import { NextUIProvider } from "@nextui-org/react";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { type ThemeProviderProps } from "next-themes/dist/types";
+import { type ThemeProviderProps } from "next-themes/dist/types"
+import React from 'react';
+import { Toaster } from "@/components/ui/toaster"
+
 
 
 
 export function Providers({ children, ...props }: ThemeProviderProps) {
   return (
 
-    <NextThemesProvider attribute="class" defaultTheme="system" enableSystem {...props}>
-      <SessionProvider>
-        <TooltipProvider>
-          <Toaster />
+    <SessionProvider>
+      <NextUIProvider>
+        <NextThemesProvider {...props}>
           {children}
-        </TooltipProvider>
-      </SessionProvider>
-    </NextThemesProvider>
+          <Toaster />
+        </NextThemesProvider>
+      </NextUIProvider>
+    </SessionProvider>
 
 
   );

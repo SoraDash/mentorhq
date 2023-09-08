@@ -18,9 +18,9 @@ export default async function RootLayout({
 }) {
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <Providers>
+        <Providers attribute="class" defaultTheme="system" enableSystem>
           {children}
         </Providers>
       </body>

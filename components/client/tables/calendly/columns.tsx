@@ -1,14 +1,12 @@
 "use client"
-
-import { Button } from '@/components/ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { CalendlyEvent } from '@/lib/calendly/types'
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, cn } from '@nextui-org/react'
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, } from 'lucide-react'
+import { ArrowUpDown } from 'lucide-react'
 import Link from 'next/link'
 import { AiOutlineInfoCircle } from 'react-icons/ai'
 import { BiLinkExternal, BiLogoGoogle, BiLogoSlack, BiLogoZoom } from 'react-icons/bi'
-import { FaLink } from 'react-icons/fa'
+import { FaEllipsisV, FaLink } from 'react-icons/fa'
 import { PiStudent } from 'react-icons/pi'
 import { TbCalendarCancel } from 'react-icons/tb'
 import { MeetingInfoWithToast } from './MeetingInfo'
@@ -25,7 +23,7 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
     header: ({ column }) => {
       return (
         <Button
-          variant="ghost"
+          variant="light"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Student
@@ -102,46 +100,74 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
     enableHiding: true,
     header: "Actions",
     cell: ({ row }) => {
+      const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Tools</DropdownMenuLabel>
-            <DropdownMenuItem>
-              <PiStudent className="mr-2" />
-              Add New Session
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <BiLinkExternal className="mr-2" />
-              Join Meeting
-            </DropdownMenuItem>
-            <MeetingInfoWithToast event={row.original} >
-              <DropdownMenuItem>
-                <FaLink className="mr-2" />
-                Copy Meeting URL to clipboard
-              </DropdownMenuItem>
-            </MeetingInfoWithToast>
+        <>
+          <Dropdown
+            backdrop='blur'
+            showArrow
+            classNames={{
+              base: "py-1 px-1 border border-default-200 bg-gradient-to-br from-white to-default-200 dark:from-default-50 dark:to-black",
+              arrow: "bg-default-200",
+            }}
+          >
+            <DropdownTrigger>
+              <Button variant="light" className="h-8 w-8 p-0" color='warning'>
+                <span className="sr-only">Open menu</span>
+                <FaEllipsisV className="h-4 w-4" />
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu variant="faded" aria-label="Dropdown Actions for meeting">
+              <DropdownSection title="Current Meeting" showDivider>
+                <DropdownItem
+                  key="session"
+                  description="Record a new Session"
+                  startContent={<PiStudent className={iconClasses} />}
+                >
+                  New Session
+                </DropdownItem>
+                <DropdownItem
+                  key="meeting"
+                  description="Open the meeting in a new tab"
+                  startContent={<BiLinkExternal className={iconClasses} />}
+                >
+                  Join Meeting
+                </DropdownItem>
+                <DropdownItem
+                  key="meeting_url"
+                  description="Copy Meeting URL to clipboard"
+                  startContent={<FaLink className={iconClasses} />}
+                >
+                  <MeetingInfoWithToast event={row.original} >
+                    Meeting URL
+                  </MeetingInfoWithToast>
+                </DropdownItem>
 
-            <DropdownMenuSeparator />
-            <DropdownMenuLabel>
-              Meeting Tools
-            </DropdownMenuLabel>
-            <DropdownMenuItem>
-              <AiOutlineInfoCircle className="mr-2" />
-              Meeting Info
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => window.open(row.original.reschedule_url)}>
-              <TbCalendarCancel className="mr-2" />Rescheudle Meeting
-            </DropdownMenuItem>
+              </DropdownSection>
+              <DropdownSection title="Meeting Tools">
+                <DropdownItem
+                  key="meeting_info"
+                  description="Answers from Calendly Questions"
+                  startContent={<AiOutlineInfoCircle className={cn(iconClasses, "text-danger")} />}
+                >
+                  Meeting Info
+                </DropdownItem>
+                <DropdownItem
+                  key="reschedule"
+                  description="Reschedule this meeting"
+                  startContent={<TbCalendarCancel className={cn(iconClasses, "text-danger")} />}
+                  onClick={() => window.open(row.original.reschedule_url, "_blank")}
+                >
+                  Reschedule
+                </DropdownItem>
+              </DropdownSection>
+            </DropdownMenu>
+          </Dropdown>
+          {/* Old component */}
+        </>
 
-          </DropdownMenuContent>
-        </DropdownMenu >
       )
     },
   }
 ]
+

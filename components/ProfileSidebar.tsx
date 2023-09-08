@@ -1,7 +1,8 @@
-import Avatar from '@/components/client/Avatar';
+"use client"
 import { MentorWithCount } from '@/lib/admin/mentors';
 import { StudentWithCounts } from '@/lib/students';
 import { cn } from '@/lib/utils';
+import { Student } from '@prisma/client';
 import { capitalize } from 'lodash-es';
 import React from 'react';
 import { FaChalkboardTeacher, FaFileAlt, FaGraduationCap, FaHammer, FaUserEdit } from 'react-icons/fa';
@@ -13,12 +14,12 @@ import CalendlyStatus from './client/calendly/CalendlyStatus';
 import { SyncGithubBio } from './client/tables/admin/mentors/SyncGithubBio';
 import { BooleanIcon } from './server/BooleanIcon';
 import { Badge } from './ui/badge';
-import { Student } from '@prisma/client';
+import { Avatar } from '@nextui-org/react';
 
 type ProfileWithCounts = MentorWithCount | StudentWithCounts | Student
 
 interface ProfileSidebarProps {
-  profile: ProfileWithCounts;
+  profile: ProfileWithCounts & { isPremium: boolean, image: string, github: string }
 }
 
 export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ profile }) => {
@@ -41,7 +42,14 @@ export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ profile }) => {
   return (
     <div className="dark:bg-navbar bg-white shadow rounded-lg p-6">
       <div className="flex flex-col items-center space-y-5">
-        <Avatar entity={profile} className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0" profile />
+        <Avatar
+          isBordered={profile.isPremium}
+          color={profile.isPremium ? "danger" : "default"}
+          className="transition-transform w-32 h-32"
+          src={profile.github as string || profile.image as string}
+          name={profile?.name as string}
+          showFallback
+        />
 
         <h1 className="text-xl font-bold">{profile.name}</h1>
         {isMentor(profile) && profile.role && (
@@ -68,7 +76,7 @@ export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ profile }) => {
             </IconButton>
             {isMentor(profile) && (
               <>
-                <SyncGithubBio id={profile.id} />
+                {profile.github && <SyncGithubBio id={profile.id} />}
                 <CalendlyAuth />
               </>
             )}

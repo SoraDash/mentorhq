@@ -1,5 +1,5 @@
 "use client"
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, User } from "@nextui-org/react";
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Spinner, User } from "@nextui-org/react";
 import { User as PrismaUser, Role } from '@prisma/client';
 import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -18,11 +18,10 @@ export const UserAccountNav = ({ user, role }: Props) => {
 
 
   return (
-    <Dropdown placement="bottom-end">
+    <Dropdown placement="bottom-end" backdrop='blur' shouldCloseOnInteractOutside={() => true}>
       <DropdownTrigger>
         <User
           as="button"
-
           avatarProps={{
             isBordered: user.isPremium,
             src: user.github as string || user.image as string,

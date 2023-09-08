@@ -3,9 +3,8 @@
 import { RoleDropdown } from '@/components/client/RoleDropdown'
 import SensitiveInfo from '@/components/client/SensetiveInfo'
 import { BooleanIcon } from '@/components/server/BooleanIcon'
-import { Button } from '@/components/ui/button'
 import { MentorWithCount } from '@/lib/admin/mentors'
-import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
+import { Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, MoreHorizontal, } from 'lucide-react'
 import Link from 'next/link'
@@ -19,7 +18,7 @@ export const mentorColumns: ColumnDef<MentorWithCount>[] = [
     header: ({ column }) => {
       return (
         <Button
-          variant="ghost"
+          variant="flat"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Name

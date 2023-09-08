@@ -12,7 +12,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
   Table,
@@ -24,11 +23,12 @@ import {
 } from "@/components/ui/table"
 import { useToast } from '@/components/ui/use-toast'
 import { syncStudentsWithDatabase } from '@/lib/students'
+import { Button } from '@nextui-org/react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { RiRocketFill } from 'react-icons/ri'
 import { PiStudentBold } from 'react-icons/pi'
+import { RiRocketFill } from 'react-icons/ri'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -69,19 +69,19 @@ export function DataTable<TData, TValue>({
       if (added.length > 0) {
         toast({
           title: `Success: Added ${added.length} student(s)!`,
-          variant: "success",
+          variant: "default",
         });
       }
       if (removed.length > 0) {
         toast({
           title: `Notice: Unassigned ${removed.length} student(s)!`,
-          variant: "success",
+          variant: "default",
         });
       }
       if (updated.length > 0) {
         toast({
           title: `Success: Updated ${updated.length} student(s)!`,
-          variant: "success",
+          variant: "default",
         });
       }
       if (added.length === 0 && removed.length === 0 && updated.length === 0) {
@@ -123,12 +123,13 @@ export function DataTable<TData, TValue>({
 
           {/* Buttons */}
           <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
-            <Button variant={"secondary"}>
+            <Button variant={"flat"} color="secondary">
               <> Add Student <PiStudentBold className="ml-2" /></>
             </Button>
             {session?.user?.hasKey && (
               <Button
-                variant={!isSyncing ? "secondary" : "sync"}
+                color={!isSyncing ? "secondary" : "warning"}
+                variant={"light"}
                 onClick={handleSync}
                 disabled={isSyncing}
               >
@@ -193,7 +194,7 @@ export function DataTable<TData, TValue>({
         </Table>
         <div className="flex items-center justify-end space-x-2 py-4">
           <Button
-            variant="outline"
+            variant="solid"
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
@@ -201,7 +202,7 @@ export function DataTable<TData, TValue>({
             Previous
           </Button>
           <Button
-            variant="outline"
+            variant="solid"
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}

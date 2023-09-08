@@ -1,12 +1,12 @@
 "use client";
 
+import { Button } from '@nextui-org/react';
 import { signIn } from "next-auth/react";
-import { Button } from "@/components/ui/button";
 
 export const SignInButton = () => {
   return (
     <Button
-      variant="ghost"
+      variant="flat"
       onClick={() => {
         signIn();
       }}

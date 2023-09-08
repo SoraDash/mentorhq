@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@nextui-org/react'
 import { Student } from '@prisma/client'
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, } from 'lucide-react'
@@ -13,7 +13,7 @@ export const studentColumns: ColumnDef<Student>[] = [
     header: ({ column }) => {
       return (
         <Button
-          variant="ghost"
+          variant="flat"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Name

@@ -12,7 +12,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
   Table,
@@ -22,9 +21,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Button } from '@nextui-org/react'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { PiUserPlus } from 'react-icons/pi'
-import { useRouter } from 'next/navigation'
 
 
 interface DataTableProps<TData, TValue> {
@@ -74,7 +74,7 @@ export function DataTable<TData, TValue>({
 
           {/* Buttons */}
           <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
-            <Button variant={"secondary"}>
+            <Button variant={"faded"} color='secondary'>
               <> Add User <PiUserPlus className="ml-2" /></>
             </Button>
           </div>

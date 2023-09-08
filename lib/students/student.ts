@@ -1,53 +1,35 @@
 "use server"
-import { prisma } from '@/lib/db/prisma';
-import { Project, Session, Student, User } from '@prisma/client';
-import { getUser } from '../auth/auth';
-import { GoogleSheetStudent, PartialGoogleSheetStudent } from './types';
-import { handleFieldPriority, transformToPrismaStudent } from './utils';
 import { isAdmin } from '@/components/server/routeguards';
-import { getCourseByProgrammeID, generateProjectsForStudent } from '../course/courseUtils';
-import { splitName } from '../split-name';
+import { prisma } from '@/lib/db/prisma';
+import { Student, User } from '@prisma/client';
+import { getUser } from '../auth/auth';
+import { generateProjectsForStudent, getCourseByProgrammeID } from '../course/courseUtils';
+import { GoogleSheetStudent, PartialGoogleSheetStudent, StudentWithCounts, UnifiedStudent } from './types';
+import { handleFieldPriority, transformToPrismaStudent } from './utils';
 
-type UnifiedStudent = Student & {
-  sessions?: Session[]; // Assuming Session is a type you have
-  projects?: Project[]; // Assuming Project is a type you have
-}
-
-type UnifiedUser = User & {
-  mentoredStudents?: UnifiedStudent[];
-}
-
-export type StudentWithCounts = Student & {
-  _count: {
-    studentSession: number;
-    students: number;
-    sessions: number;
-  }
-}
 
 type FetchConditions = {
   id: string;
   mentorId?: string;
 }
 
-const updateStudent = async (existingStudent: Student, prismaStudentData: Student): Promise<Student> => {
-  const { firstName, lastName } = splitName(prismaStudentData.name!);
+const updateStudentFromGoogle = async (existingStudent: Student, prismaStudentData: Student): Promise<UnifiedStudent> => {
   return await prisma.student.update({
     where: {
       email: existingStudent.email,
     },
-    data: { ...prismaStudentData, firstName, lastName }
+    data: { ...prismaStudentData }
   });
 };
 
-const createStudent = async (prismaStudentData: Student): Promise<Student> => {
-  const { firstName, lastName } = splitName(prismaStudentData.name!);
+const createStudentFromGoogle = async (prismaStudentData: Student): Promise<UnifiedStudent> => {
+
   return await prisma.student.create({
-    data: { ...prismaStudentData, firstName, lastName }
+    data: { ...prismaStudentData }
   });
 };
 
-export const updateOrCreateStudent = async (
+export const updateOrCreateStudentFromGoogle = async (
   student: PartialGoogleSheetStudent,
   user: User
 ): Promise<{ action: 'added' | 'updated' | 'unchanged', changes?: string[], error?: string }> => {
@@ -71,7 +53,7 @@ export const updateOrCreateStudent = async (
 
       if (initialChanges.length > 0) {
         console.log("🔄 Updating existing student with new data...");
-        await updateStudent(existingStudent, prismaStudentData);
+        await updateStudentFromGoogle(existingStudent, prismaStudentData);
         console.log("✅ Student updated successfully.");
         return { action: 'updated', changes: initialChanges };
       }
@@ -81,7 +63,7 @@ export const updateOrCreateStudent = async (
     }
 
     console.log("🆕 Creating a new student...");
-    const createdStudent = await createStudent(prismaStudentData);
+    const createdStudent = await createStudentFromGoogle(prismaStudentData);
     console.log("✅ New student created successfully.");
 
     // Generate projects for the student if they have a course code
@@ -100,6 +82,17 @@ export const updateOrCreateStudent = async (
     return { action: 'unchanged', error: error.message };
   }
 };
+
+export const updateStudent = async (studentId: string, data: Partial<Student>) => {
+  return await prisma.student.update({
+    where: {
+      id: studentId,
+    },
+    data: {
+      ...data
+    }
+  })
+}
 
 
 export const unassignStudent = async (studentId: string) => {
@@ -124,7 +117,7 @@ const fetchStudentByCondition = async (conditions: FetchConditions) => {
   return student || {} as Student;
 };
 
-export const getAllStudents = async (): Promise<Student[]> => {
+export const getAllStudents = async (): Promise<UnifiedStudent[]> => {
   const user = await getUser();
   if (!user) return [];
 
@@ -132,14 +125,22 @@ export const getAllStudents = async (): Promise<Student[]> => {
 
   // If the user is an ADMIN, fetch all students.
   if (userIsAdmin) {
-    return prisma.student.findMany() || [];
+    return prisma.student.findMany({
+      include: {
+        projects: true,
+      }
+    }) || [];
   }
 
   // If not, fetch students associated with the user.
-  return prisma.student.findMany({ where: { mentorId: user.id } }) || [];
+  return prisma.student.findMany({
+    where: { mentorId: user.id }, include: {
+      projects: true,
+    }
+  }) || [];
 };
 
-export const getStudent = async (id: string): Promise<Student> => {
+export const getStudent = async (id: string): Promise<UnifiedStudent> => {
   const user = await getUser();
   if (!user) return {} as Student;
 

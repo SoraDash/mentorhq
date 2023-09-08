@@ -1,19 +1,22 @@
 "use client"
 
+import { BooleanIcon } from '@/components/server/BooleanIcon'
+import { cleanProgrammeID } from '@/lib/course/courseUtils'
+import { UnifiedStudent } from '@/lib/students'
 import { Button } from '@nextui-org/react'
-import { Student } from '@prisma/client'
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, } from 'lucide-react'
 import Link from 'next/link'
 import { BiLinkExternal } from 'react-icons/bi'
+import ContactMethodDropdown from '../../ContactMethodDropdown'
 
-export const studentColumns: ColumnDef<Student>[] = [
+export const studentColumns: ColumnDef<UnifiedStudent>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
       return (
         <Button
-          variant="flat"
+          variant="light"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Name
@@ -29,16 +32,36 @@ export const studentColumns: ColumnDef<Student>[] = [
   {
     accessorKey: "status",
     header: "Status",
-
   },
   {
-    accessorKey: "courseCode",
-    header: "Course Code",
+    accessorKey: "lmsAccess",
+    header: "LMS Access",
+    cell: ({ row }) => {
+      return (
+        <BooleanIcon condition={row.original.lmsAccess ?? false} />
+      )
+    }
+  },
+  {
+    id: "contactMethod",
+    cell: ({ row }) => {
+      return row.original.contactMethod && <ContactMethodDropdown studentId={row.original.id} currentMethod={row.original.contactMethod} />
+    },
+    header: "Prefered Meeting Method",
   },
   {
     accessorKey: "programmeID",
     header: "Programme ID",
-
+    cell: ({ row }) => {
+      return cleanProgrammeID(row.original.programmeID || "")
+    }
+  },
+  {
+    accessorKey: "projects",
+    header: "Projects",
+    cell: ({ row }) => {
+      return row.original.projects?.length || 0
+    }
   },
   {
     id: "actions",

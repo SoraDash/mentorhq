@@ -1,6 +1,6 @@
 "use server"
 import { prisma } from '@/lib/db/prisma';
-import { GoogleSheetStudent, extractGithubUsername, fetchStudentsFromApi, unassignStudent, updateOrCreateStudent } from '@/lib/students';
+import { GoogleSheetStudent, extractGithubUsername, fetchStudentsFromApi, unassignStudent, updateOrCreateStudentFromGoogle } from '@/lib/students';
 import { Student } from '@prisma/client';
 import { getUser } from '../auth/auth';
 import { lock } from '../utils/asyncLock';
@@ -57,7 +57,7 @@ export const syncStudentsWithDatabase = async (): Promise<{ added: string[], rem
   if (newStudents.length > 0) {
     for (const student of newStudents) {
       student.github = student.github ? extractGithubUsername(student.github) : student.github;
-      const result = await updateOrCreateStudent(student, user);
+      const result = await updateOrCreateStudentFromGoogle(student, user);
       if (result.action === 'added') added.push(student.name);
       if (result.action === 'updated') updated.push(student.name);
     }
@@ -67,7 +67,7 @@ export const syncStudentsWithDatabase = async (): Promise<{ added: string[], rem
 
     if (currentStudentEmails.includes(sheetStudent.email)) {
       sheetStudent.github = sheetStudent.github ? extractGithubUsername(sheetStudent.github) : sheetStudent.github;
-      const result = await updateOrCreateStudent(sheetStudent, user);
+      const result = await updateOrCreateStudentFromGoogle(sheetStudent, user);
 
       if (result.action === 'updated') updated.push(sheetStudent.name);
     }

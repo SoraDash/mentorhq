@@ -1,4 +1,4 @@
-import { Student } from '@prisma/client';
+import { Project, Session, Student, User } from '@prisma/client';
 
 export type GoogleSheetStudent = {
   name: string;
@@ -29,4 +29,14 @@ export type StudentWithCounts = Student & {
     students: number;
     sessions: number;
   }
+}
+
+
+export type UnifiedStudent = Student & {
+  sessions?: Session[];
+  projects?: Project[];
+}
+
+export type UnifiedUser = User & {
+  mentoredStudents?: UnifiedStudent[];
 }

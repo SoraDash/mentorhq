@@ -1,7 +1,8 @@
 import { Course, ProjectTemplate } from "@prisma/client";
 import { prisma } from "../db/prisma";
 
-const cleanProgrammeID = (programmeID: string) => {
+export const cleanProgrammeID = (programmeID: string) => {
+  if (!programmeID) return
   return programmeID.replace(/[0-9]/g, "");
 }
 

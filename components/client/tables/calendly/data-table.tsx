@@ -21,8 +21,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { useEffect, useState } from 'react'
 import { Button } from '@nextui-org/react'
+import { useEffect, useState } from 'react'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -121,7 +121,7 @@ export function DataTable<TData, TValue>({
         </Table>
         <div className="flex items-center justify-end space-x-2 py-4">
           <Button
-            variant="solid"
+            variant="flat"
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
@@ -129,7 +129,7 @@ export function DataTable<TData, TValue>({
             Previous
           </Button>
           <Button
-            variant="solid"
+            variant="flat"
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}

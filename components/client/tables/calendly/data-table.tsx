@@ -53,8 +53,7 @@ export function DataTable<TData, TValue>({
   useEffect(() => { setIsMounted(true) }, [])
   if (!isMounted) return null
 
-  async function handleAddStudent() {
-    // TODO: Add student
+  async function handleAddSession() {
   }
 
 

@@ -9,6 +9,7 @@ import { BiLinkExternal, BiLogoGoogle, BiLogoSlack, BiLogoZoom } from 'react-ico
 import { FaEllipsisV, FaLink } from 'react-icons/fa'
 import { PiStudent } from 'react-icons/pi'
 import { TbCalendarCancel } from 'react-icons/tb'
+import AddSessionModal from '../../AddSessionModal'
 import { MeetingInfoWithToast } from './MeetingInfo'
 
 
@@ -96,6 +97,13 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
 
   },
   {
+    id: "new_session",
+    header: "New Session",
+    cell: ({ row }) => {
+      return <AddSessionModal />
+    }
+  },
+  {
     id: "actions",
     enableHiding: true,
     header: "Actions",
@@ -106,10 +114,6 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
           <Dropdown
             backdrop='blur'
             showArrow
-            classNames={{
-              base: "py-1 px-1 border border-default-200 bg-gradient-to-br from-white to-default-200 dark:from-default-50 dark:to-black",
-              arrow: "bg-default-200",
-            }}
           >
             <DropdownTrigger>
               <Button variant="light" className="h-8 w-8 p-0" color='warning'>
@@ -122,8 +126,7 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
                 <DropdownItem
                   key="session"
                   description="Record a new Session"
-                  startContent={<PiStudent className={iconClasses} />}
-                >
+                  startContent={<PiStudent className={iconClasses} />}>
                   New Session
                 </DropdownItem>
                 <DropdownItem

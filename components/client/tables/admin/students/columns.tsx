@@ -60,7 +60,7 @@ export const studentColumns: ColumnDef<UnifiedStudent>[] = [
     accessorKey: "projects",
     header: "Projects",
     cell: ({ row }) => {
-      return row.original.projects?.length || 0
+      return row.original.projects?.length
     }
   },
   {

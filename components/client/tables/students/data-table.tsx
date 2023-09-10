@@ -127,7 +127,7 @@ export function DataTable<TData, TValue>({
 
           {/* Buttons */}
           <div className='flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2'>
-            <Button variant='flat'>
+            <Button variant='flat' color='success'>
               <>
                 {" "}
                 Add Student <PiStudentBold className='ml-2' />
@@ -136,7 +136,7 @@ export function DataTable<TData, TValue>({
             {session?.user?.hasKey && (
               <Button
                 variant='flat'
-                color={!isSyncing ? "default" : "warning"}
+                color={!isSyncing ? "primary" : "danger"}
                 onClick={handleSync}
                 disabled={isSyncing}
                 isLoading={isSyncing}

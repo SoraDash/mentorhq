@@ -15,7 +15,7 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   theme: {
-    "logo": "/logo_only.png"
+    "logo": "/logo_text_color.png"
   },
   events: {
     async signIn(message) {

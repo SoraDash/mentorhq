@@ -10,6 +10,53 @@ module.exports = {
     './src/**/*.{ts,tsx}',
     './lib/**/*.{ts,tsx}'
   ],
+  nextui: {
+    themes: {
+      dark: {
+        colors: {
+          "primary": "#EE327B",
+
+          "secondary": "#F37657",
+
+          "accent": "#F384AA",
+
+          "neutral": "#2a323c",
+
+          "base-100": "#1d232a",
+
+          "info": "#22d3ee",
+
+          "success": "#34d399",
+
+          "warning": "#fbbd23",
+
+          "error": "#f43f5e",
+        },
+      },
+      light: {
+        colors: {
+
+          "primary": "#FDE8EF",
+
+          "secondary": "#F37657",
+
+          "accent": "#F384AA",
+
+          "neutral": "#2a323c",
+
+          "base-100": "#f3f4f6",
+
+          "info": "#3abff8",
+
+          "success": "#36d399",
+
+          "warning": "#fbbd23",
+
+          "error": "#f87272",
+        }
+      }
+    },
+  },
   theme: {
     container: {
       center: true,
@@ -21,9 +68,6 @@ module.exports = {
     extend: {
       colors: {
         "navbar": "#111827",
-        "dark-purple": "#081A51",
-        "primary-purple": "#cd0e7f",
-        "light-white": "rgba(255,255,255,0.18)",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

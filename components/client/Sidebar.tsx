@@ -3,14 +3,15 @@ import { ADMIN_MENU, MAIN_MENU } from '@/lib/menu';
 import { cn } from '@/lib/utils';
 import { User as PrismaUser } from '@prisma/client';
 import { User } from 'next-auth';
-import { Montserrat } from 'next/font/google';
+import { Poppins } from 'next/font/google';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { CgClose } from 'react-icons/cg';
+import { ThemeImage } from '../ThemeImage';
 
-const monserrat = Montserrat({ weight: "600", subsets: ['latin'] });
+const poppins = Poppins({ weight: "600", subsets: ['latin'] });
 
 
 
@@ -28,10 +29,11 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
     <div className='space-y-4 py-4 px-5 flex flex-col h-full bg-navbar text-white'>
       <div className='flex-1 px-3 py-2'>
         <Link href='/dashboard' className='flex items-center pl-3 mb-14'>
-          <div className='relative w-8 h-8 mr-4'>
-            <Image fill alt="logo" src="/logo_only.png" />
+          <div className='relative w-full h-20'>
+            <Image src="/logo_text_color.png" fill alt="logo" />
+            {/* <ThemeImage alt='Logo' srcDark='/logo_only_dark.png' srcLight='/logo_only_light.png' fill /> */}
           </div>
-          <h1 className={cn("text-2xl font-bold", monserrat.className)}>MentorHQ</h1>
+          {/* <h1 className={cn("text-2xl font-bold", poppins.className)}>MentorHQ</h1> */}
         </Link>
         <div className='space-y-1'>
           {MAIN_MENU.map((route) => (

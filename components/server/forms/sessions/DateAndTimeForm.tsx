@@ -1,9 +1,11 @@
 "use client"
 import { PasswordInput } from '@/components/client/ShowHideInput';
+import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
 import { useStepStore } from '@/store/useStepStore';
 import { MiscFormData } from '@/types/FormDataTypes';
-import React from 'react';
+import { Button, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react';
+import React, { useState } from 'react';
 
 const MiscForm: React.FC = () => {
   const formData = useStepStore(state => state.formData.misc || {});
@@ -12,11 +14,26 @@ const MiscForm: React.FC = () => {
   const updateFields = (fields: Partial<MiscFormData>) => {
     updateFormData('misc', fields);
   };
+  const [date, setDate] = useState(new Date())
 
   return (
     <div className="grid grid-cols-1 gap-4 mt-3 mb-4 space-y-5">
 
       <div>
+        <Popover placement="right">
+          <PopoverTrigger>
+            <Button>Open Popover</Button>
+          </PopoverTrigger>
+          <PopoverContent>
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={setDate}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
+
         <label className="block text-gray-700 dark:text-white text-sm font-bold mb-2" htmlFor="paidPerHour">
           Paid Per Hour
         </label>

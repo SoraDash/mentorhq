@@ -1,11 +1,22 @@
 "use client"
 
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Skeleton } from '@nextui-org/react'
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
+import { useEffect, useState } from 'react'
 
 export function SwitchTheme() {
   const { setTheme } = useTheme()
+  const [isMounted, setIsMounted] = useState(false);
+
+
+
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  if (!isMounted) return <Skeleton className="flex rounded-full w-10 h-10" />
 
   return (
     <Dropdown backdrop='blur'>

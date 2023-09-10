@@ -116,7 +116,7 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
             showArrow
           >
             <DropdownTrigger>
-              <Button variant="light" className="h-8 w-8 p-0" color='warning'>
+              <Button variant="light" className="h-8 w-8 p-0" color='primary'>
                 <span className="sr-only">Open menu</span>
                 <FaEllipsisV className="h-4 w-4" />
               </Button>

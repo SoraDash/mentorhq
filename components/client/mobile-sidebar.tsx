@@ -22,7 +22,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ user }) => {
   return (
     <Sheet>
       <SheetTrigger className='md:hidden'>
-        <Menu />
+        <Menu className='text-[#fde8ef] dark:text-[#ee327b]' />
       </SheetTrigger>
       <SheetContent side="left" className='p-0'>
         <Sidebar user={user} />

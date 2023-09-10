@@ -10,53 +10,6 @@ module.exports = {
     './src/**/*.{ts,tsx}',
     './lib/**/*.{ts,tsx}'
   ],
-  nextui: {
-    themes: {
-      dark: {
-        colors: {
-          "primary": "#EE327B",
-
-          "secondary": "#F37657",
-
-          "accent": "#F384AA",
-
-          "neutral": "#2a323c",
-
-          "base-100": "#1d232a",
-
-          "info": "#22d3ee",
-
-          "success": "#34d399",
-
-          "warning": "#fbbd23",
-
-          "error": "#f43f5e",
-        },
-      },
-      light: {
-        colors: {
-
-          "primary": "#FDE8EF",
-
-          "secondary": "#F37657",
-
-          "accent": "#F384AA",
-
-          "neutral": "#2a323c",
-
-          "base-100": "#f3f4f6",
-
-          "info": "#3abff8",
-
-          "success": "#36d399",
-
-          "warning": "#fbbd23",
-
-          "error": "#f87272",
-        }
-      }
-    },
-  },
   theme: {
     container: {
       center: true,
@@ -123,5 +76,200 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), nextui()],
+  plugins: [require("tailwindcss-animate"), nextui({
+    themes: {
+      dark: {
+        extend: "dark", // <- inherit default values from dark theme
+        colors: {
+          background: "#101010",
+          foreground: "#ffffff",
+          primary: {
+            '50': '#fdf2f7',
+            '100': '#fce7f1',
+            '200': '#fccee3',
+            '300': '#fba6cb',
+            '400': '#f76fa8',
+            '500': '#ee327b',
+            '600': '#df2363',
+            '700': '#c2144a',
+            '800': '#a0143d',
+            '900': '#851637',
+            '950': '#52051c',
+            DEFAULT: "#ee327b",
+            forground: "#ffffff",
+          },
+
+          secondary: {
+            '50': '#fef4f2',
+            '100': '#fee8e2',
+            '200': '#ffd4c9',
+            '300': '#fdb6a4',
+            '400': '#fa8b6f',
+            '500': '#f37657',
+            '600': '#df4823',
+            '700': '#bb3a1a',
+            '800': '#9b3319',
+            '900': '#80301c',
+            '950': '#461509',
+            DEFAULT: "#f37657",
+            forground: "#fff"
+          },
+
+          success: {
+            '50': '#ecfdf7',
+            '100': '#d1faeb',
+            '200': '#a7f3d7',
+            '300': '#6ee7bb',
+            '400': '#34d399',
+            '500': '#10b97b',
+            '600': '#059661',
+            '700': '#04784e',
+            '800': '#065f3f',
+            '900': '#064e34',
+            '950': '#022c1d',
+            DEFAULT: "#34d399",
+            forground: "#101010",
+          },
+          warning: {
+            '50': '#fffbeb',
+            '100': '#fef3c7',
+            '200': '#fde58a',
+            '300': '#fcd24d',
+            '400': '#fbbd23',
+            '500': '#f59c0b',
+            '600': '#d97506',
+            '700': '#b45209',
+            '800': '#923f0e',
+            '900': '#78340f',
+            '950': '#451903',
+            DEFAULT: "#fbbd23",
+            forground: "#101010",
+          },
+          danger: {
+            '50': '#fff1f3',
+            '100': '#ffe4e9',
+            '200': '#fecdd5',
+            '300': '#fda4b3',
+            '400': '#fb7189',
+            '500': '#f43f5e',
+            '600': '#e11d3f',
+            '700': '#be122f',
+            '800': '#9f122a',
+            '900': '#881327',
+            '950': '#4c0511',
+            DEFAULT: "#f43f5e",
+            forground: "#fff",
+          },
+        },
+        layout: {
+          disabledOpacity: "0.3",
+          radius: {
+            small: "4px",
+            medium: "6px",
+            large: "8px",
+          },
+          borderWidth: {
+            small: "1px",
+            medium: "2px",
+            large: "3px",
+          },
+        },
+      },
+      light: {
+        extend: "light", // <- inherit default values from dark theme
+        colors: {
+          background: "#fff",
+          foreground: "#101010",
+          primary: {
+            '50': '#fdf2f5',
+            '100': '#fde8ef',
+            '200': '#fdcddd',
+            '300': '#fca5bf',
+            '400': '#f96d95',
+            '500': '#f3416f',
+            '600': '#e22048',
+            '700': '#c51131',
+            '800': '#a2122a',
+            '900': '#871427',
+            '950': '#530410',
+            DEFAULT: "#fde8ef",
+            foreground: "#101010",
+          },
+          secondary: {
+            '50': '#fef4f2',
+            '100': '#fee8e2',
+            '200': '#ffd4c9',
+            '300': '#fdb6a4',
+            '400': '#fa8b6f',
+            '500': '#f37657',
+            '600': '#df4823',
+            '700': '#bb3a1a',
+            '800': '#9b3319',
+            '900': '#80301c',
+            '950': '#461509',
+            DEFAULT: "#f37657",
+            forground: "#fff"
+          },
+          success: {
+            '50': '#ecfdf5',
+            '100': '#d1fae5',
+            '200': '#a7f3d0',
+            '300': '#6ee7b6',
+            '400': '#36d399',
+            '500': '#10b980',
+            '600': '#059668',
+            '700': '#047856',
+            '800': '#065f46',
+            '900': '#064e3b',
+            '950': '#022c22',
+            DEFAULT: "#36d399",
+            forground: "#101010"
+          },
+          warning: {
+            '50': '#fffbeb',
+            '100': '#fef3c7',
+            '200': '#fde58a',
+            '300': '#fcd24d',
+            '400': '#fbbd23',
+            '500': '#f59c0b',
+            '600': '#d97506',
+            '700': '#b45209',
+            '800': '#923f0e',
+            '900': '#78340f',
+            '950': '#451903',
+            DEFAULT: "#fbbd23",
+            forground: "#101010",
+          },
+          danger: {
+            '50': '#fef2f2',
+            '100': '#fee2e2',
+            '200': '#fecaca',
+            '300': '#fca5a5',
+            '400': '#f87272',
+            '500': '#ef4444',
+            '600': '#dc2626',
+            '700': '#b91c1c',
+            '800': '#991b1b',
+            '900': '#7f1d1d',
+            '950': '#450a0a',
+            DEFAULT: "#f87272",
+            forground: "#fff",
+          },
+        },
+        layout: {
+          disabledOpacity: "0.3",
+          radius: {
+            small: "4px",
+            medium: "6px",
+            large: "8px",
+          },
+          borderWidth: {
+            small: "1px",
+            medium: "2px",
+            large: "3px",
+          },
+        },
+      },
+    },
+  }),]
 }

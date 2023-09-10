@@ -26,7 +26,7 @@ export default function LoadingSpinner() {
   return (
     <div className='flex flex-col items-center justify-center min-h-screen'>
       <div className='animate-bounce'>
-        <Image width={120} height={120} src="/logo_only.svg" alt="Logo Spinner" />
+        <Image width={240} height={240} src="/logo_text_color.png" alt="Logo Spinner" />
 
       </div>
 

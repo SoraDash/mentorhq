@@ -7,7 +7,7 @@ export default function AddSessionModal() {
 
   return (
     <>
-      <Button onPress={onOpen} startContent={<FaChalkboardTeacher />} variant='light' color='warning'></Button>
+      <Button onPress={onOpen} startContent={<FaChalkboardTeacher />} variant='light' color='primary'></Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} backdrop='blur'>
         <ModalContent>
           {(onClose) => (

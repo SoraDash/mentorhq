@@ -108,7 +108,7 @@ model SessionType {
 
 model StudentSession {
   id          String          @id @default(uuid())
-  date        DateTime        @default(now())
+  date        String
   type        String?
   progress    SessionProgress @default(AVERAGE)
   summary     String?         @db.Text

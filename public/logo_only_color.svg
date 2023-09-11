@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 2134 2134" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-11603.1,-3712.5)">
+        <g transform="matrix(4.16667,0,0,4.16667,11603.1,3712.5)">
+            <rect id="Page-7" serif:id="Page 7" x="0" y="0" width="512" height="512" style="fill:none;"/>
+            <g id="Page-71" serif:id="Page 7">
+                <g transform="matrix(312.824,0,0,-312.824,85.6469,251.328)">
+                    <g id="Layer-1" serif:id="Layer 1">
+                        <path d="M0.766,0.332L0.498,0.064L0.234,0.328C0.18,0.382 0.094,0.382 0.04,0.328C-0.013,0.274 -0.013,0.188 0.04,0.134L0.498,-0.324L0.96,0.138C1.013,0.192 1.013,0.279 0.96,0.332C0.933,0.359 0.898,0.372 0.863,0.372C0.828,0.372 0.793,0.359 0.766,0.332ZM0.981,0.117L0.726,-0.139L0.726,-0.391L1,-0.391L1,0.139C0.995,0.131 0.988,0.124 0.981,0.117ZM0,-0.391L0.274,-0.391L0.274,-0.143L0.019,0.113C0.012,0.119 0.005,0.127 0,0.135L0,-0.391Z" style="fill:url(#_Linear1);fill-rule:nonzero;"/>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+    <defs>
+        <linearGradient id="_Linear1" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1,0,0,-1,0,-0.00915216)"><stop offset="0" style="stop-color:rgb(243,118,87);stop-opacity:1"/><stop offset="1" style="stop-color:rgb(238,49,123);stop-opacity:1"/></linearGradient>
+    </defs>
+</svg>

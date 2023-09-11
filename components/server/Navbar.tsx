@@ -1,7 +1,7 @@
-import { SignInButton } from '@/components/client/SignInButton';
 import { UserAccountNav } from '@/components/client/UserAccountNav';
 import MobileSidebar from '@/components/client/mobile-sidebar';
 import { getUser, getUserRole } from '@/lib/auth/auth';
+import SignIn from '../SignIn';
 import { SwitchTheme } from '../client/SwitchTheme';
 
 export const NavBar = async () => {
@@ -14,7 +14,7 @@ export const NavBar = async () => {
         <SwitchTheme />
         <div className='flex items-center mx-3'>
           {user ?
-            <UserAccountNav user={user} role={role || "USER"} /> : <SignInButton />
+            <UserAccountNav user={user} role={role || "USER"} /> : <SignIn />
           }
         </div>
       </div>

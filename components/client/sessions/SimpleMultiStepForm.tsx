@@ -1,5 +1,7 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import { useFormik } from 'formik';
+import React from 'react';
+import { FaCalendar, FaCheck, FaExclamationTriangle, FaInfo, FaStickyNote } from 'react-icons/fa';
 import { StepA } from './StepA';
 import { StepB } from './StepB';
 import { StepC } from './StepC';
@@ -8,20 +10,28 @@ import { StepE } from './StepE';
 import { StepFinal } from './StepFinal';
 
 interface MultiStepFormProps {
-  showStepNumber: string | number | boolean;
+  showStepNumber: boolean;
 }
 
-// STEP A Date & Time of Session
-// STEP B Session Information
-// STEP C Session Notes
-// STEP D CI Information
-// STEP E Confirmation
+type StepIconTextMapping = {
+  [key in Exclude<StepsEnum, StepsEnum.FINAL>]: {
+    icon: React.ReactNode;
+    text: string;
+  };
+};
 
-// STEP Final: Success Result
+export enum StepsEnum {
+  DATE_TIME = 'DATE_TIME',
+  SESSION_INFO = 'SESSION_INFO',
+  SESSION_NOTES = 'SESSION_NOTES',
+  CI_INFO = 'CI_INFO',
+  CONFIRMATION = 'CONFIRMATION',
+  FINAL = 'FINAL'
+}
 
-const intialFormData = {
+const initialFormData = {
   sessionDate: new Date().toISOString(),
-  sessionTime: 0 || "",
+  sessionTime: "",
   sessionType: "",
   projectType: "",
   sessionProgress: "",
@@ -30,72 +40,70 @@ const intialFormData = {
   resubmission: false,
   ciFollowUp: false,
 }
-const stepsToTake = ["A", "B", "C", "D", "E"]
 
 export const MultiStepForm: React.FC<MultiStepFormProps> = ({
   showStepNumber
 }) => {
-  const [step, setStep] = useState("A")
-  const [formData, setFormData] = useState(intialFormData)
+  const [currentStep, setCurrentStep] = React.useState(StepsEnum.DATE_TIME);
+  const formik = useFormik({
+    initialValues: initialFormData,
+    onSubmit: values => {
+      setCurrentStep(StepsEnum.FINAL);
+      console.log(values);
+    },
+  });
 
-  const handleNextStep = () => {
-    if (step === "A") setStep("B")
-    else if (step === "B") setStep("C")
-    else if (step === "C") setStep("D")
-    else if (step === "D") setStep("E")
-  }
-  const handlePrevStep = () => {
-    if (step === "E") setStep("D")
-    else if (step === "D") setStep("C")
-    else if (step === "C") setStep("B")
-    else if (step === "B") setStep("A")
-  }
+  const stepSequence = Object.values(StepsEnum).filter(step => step !== StepsEnum.FINAL);
 
-  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fieldName = e.target.name
-    let fieldValue;
-    if (fieldName === "resubmission" || fieldName === "ciFollowUp") {
-      fieldValue = e.target.checked
-    } else {
-      fieldValue = e.target.value
+  const nextStep = () => {
+    const index = stepSequence.indexOf(currentStep);
+    if (index < stepSequence.length - 1) {
+      setCurrentStep(stepSequence[index + 1]);
     }
-    setFormData({
-      ...formData,
-      [fieldName]: fieldValue
-    })
   }
-  const handleSubmitFormData = () => {
-    setStep("Final")
+
+  const prevStep = () => {
+    const index = stepSequence.indexOf(currentStep);
+    if (index > 0) {
+      setCurrentStep(stepSequence[index - 1]);
+    }
   }
 
   const renderTopStepNumbers = () => {
-    if (!showStepNumber || step === "Final") return null
+    if (!showStepNumber || currentStep === StepsEnum.FINAL) return null;
+
+    const stepIconsAndText: StepIconTextMapping = {
+      [StepsEnum.DATE_TIME]: { icon: <FaCalendar />, text: "Date & Time" },
+      [StepsEnum.SESSION_INFO]: { icon: <FaInfo />, text: "Session Info" },
+      [StepsEnum.SESSION_NOTES]: { icon: <FaStickyNote />, text: "Session Notes" },
+      [StepsEnum.CI_INFO]: { icon: <FaExclamationTriangle />, text: "CI Info" },
+      [StepsEnum.CONFIRMATION]: { icon: <FaCheck />, text: "Confirmation" },
+    };
+
     return (
       <div className="mt-2 mb-4 flex justify-between">
-        {stepsToTake.map((stepName, index) => (
-          <div key={stepName + index}
-            className={`w-8 h-8 rounded-full border-2 border-600 flex items-center justify-center ${stepName === step ? 'bg-primary' : ''}`}
-            onClick={() => setStep(stepName)}
+        { stepSequence.map(step => (
+          <div key={ step }
+            className={ `w-24 h-24 p-2 rounded-full border-2 border-600 flex flex-col items-center justify-center ${step === currentStep ? 'bg-primary' : ''}` }
+            onClick={ () => setCurrentStep(step) }
           >
-            {stepName}
+            { stepIconsAndText[step].icon }
           </div>
-        ))
-        }
-      </div >
-    )
+        )) }
+      </div>
+    );
   }
-  useEffect(() => {
-    console.log(formData)
-  }, [formData])
   return (
-    <div className='px-6 py-1 mx-auto rounded-lg  cursor-pointer'>
-      {renderTopStepNumbers()}
-      {step === "A" && <StepA />}
-      {step === "B" && <StepB />}
-      {step === "C" && <StepC />}
-      {step === "D" && <StepD />}
-      {step === "E" && <StepE />}
-      {step === "Final" && <StepFinal />}
+    <div className='px-6 py-1 mx-auto rounded-lg cursor-pointer'>
+      <form onSubmit={ formik.handleSubmit }>
+        { renderTopStepNumbers() }
+        { currentStep === StepsEnum.DATE_TIME && <StepA /> }
+        { currentStep === StepsEnum.SESSION_INFO && <StepB /> }
+        { currentStep === StepsEnum.SESSION_NOTES && <StepC /> }
+        { currentStep === StepsEnum.CI_INFO && <StepD /> }
+        { currentStep === StepsEnum.CONFIRMATION && <StepE /> }
+        { currentStep === StepsEnum.FINAL && <StepFinal /> }
+      </form>
     </div>
   );
 }

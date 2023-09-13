@@ -1,4 +1,5 @@
 import { Student, User } from '@prisma/client';
+import { cleanProgrammeID } from '../course/courseUtils';
 import { GoogleSheetStudent } from './types';
 
 export const fieldsToCheck: Array<keyof Student> = ['skype', 'slack', 'github'];
@@ -26,7 +27,7 @@ export const transformToPrismaStudent = (googleSheetData: GoogleSheetStudent, us
     email: googleSheetData.email,
     status: googleSheetData.status || "Unknown",
     courseCode: googleSheetData.courseCode,
-    programmeID: googleSheetData.programmeID,
+    programmeID: cleanProgrammeID(googleSheetData.programmeID),
     lmsAccess: googleSheetData.lmsAccess === "Active",
     mentorId: user.id,
     skype: googleSheetData.skype || null,

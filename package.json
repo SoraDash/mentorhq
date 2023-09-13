@@ -9,7 +9,8 @@
     "lint": "next lint",
     "env": "node ./scripts/generateEnv.js",
     "redis": "docker run -p 6379:6379 -it -d redis/redis-stack-server:latest",
-    "studio": "npx prisma studio"
+    "studio": "npx prisma studio",
+    "seed": "ts-node ./prisma/seed.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.0",

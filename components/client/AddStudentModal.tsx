@@ -1,3 +1,4 @@
+"use client"
 import { courses } from "@/prisma/data";
 import {
   Button,
@@ -12,14 +13,16 @@ import {
 import { ContactMethod, Student } from "@prisma/client";
 import { Form, Formik } from "formik";
 import { capitalize } from "lodash-es";
+import { useRouter } from 'next/navigation';
 import { FaSkype } from "react-icons/fa";
 import { PiStudentBold } from "react-icons/pi";
 import { FormikSelect } from "../FormikSelect";
 
 export default function AddStudentModal() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const router = useRouter();
 
-  const initialValues: Partial<Student> = {
+  const initialValues = {
     name: "",
     email: "",
     status: "Unknown",
@@ -30,7 +33,7 @@ export default function AddStudentModal() {
     github: "",
     linkedIn: "",
     contactMethod: "SLACK",
-  };
+  } as Student
 
   const programmeIdOptions = courses.map((course) => ({
     value: course.courseCode,
@@ -65,13 +68,16 @@ export default function AddStudentModal() {
               <Formik
                 initialValues={ initialValues }
 
-                onSubmit={ (values, actions) => {
+                onSubmit={ async (values, actions) => {
+                  actions.setSubmitting(true)
                   console.log({ values, actions });
-                  alert(JSON.stringify(values, null, 2));
+                  await createStudent(values);
                   actions.setSubmitting(false);
+                  router.refresh();
+
                 } }>
                 { formikProps => {
-                  const { values, handleChange, isValid, isSubmitting } = formikProps;
+                  const { values, handleChange, isSubmitting } = formikProps;
 
                   return (
                     <Form className='space-y-3'>

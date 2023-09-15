@@ -145,9 +145,9 @@ model Student {
   bio           String?        @db.Text()
   mentor        User?          @relation(fields: [mentorId], references: [id], onDelete: SetNull)
   mentorId      String?
-  created_at    DateTime       @default(now())
-  updated_at    DateTime       @updatedAt
-  isDeleted     Boolean        @default(false)
+  created_at    DateTime?      @default(now())
+  updated_at    DateTime?      @updatedAt
+  isDeleted     Boolean?       @default(false)
   unassignedAt  DateTime?      @default(now())
   courseId      String?
   Course        Course?        @relation(fields: [courseId], references: [id])

@@ -21,14 +21,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useToast } from "@/components/ui/use-toast";
-import useStudentSyncText from '@/hooks/useStudentSyncText';
 import { syncStudentsWithDatabase } from "@/lib/students";
 import { Button, Input } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { PiStudentBold } from "react-icons/pi";
 import { RiRocketFill } from "react-icons/ri";
+import AddStudentModal from '../../AddStudentModal';
+import { LoadingModal } from '../../LoadingModal';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -102,13 +102,13 @@ export function DataTable<TData, TValue>({
       router.refresh();
     }
   }
-  const syncText = useStudentSyncText(isSyncing);
+
 
   return (
     <>
       <div className='py-4'>
         <div className='flex flex-col md:flex-row md:items-center md:justify-between'>
-          {/* Input */}
+          {/* Input */ }
           <div className='mb-2 md:mb-0 md:max-w-sm md:mr-4'>
             <Input
               isClearable
@@ -118,42 +118,38 @@ export function DataTable<TData, TValue>({
               value={
                 (table.getColumn("name")?.getFilterValue() as string) ?? ""
               }
-              onChange={(event) =>
+              onChange={ (event) =>
                 table.getColumn("name")?.setFilterValue(event.target.value)
               }
-              onClear={() => table.getColumn("name")?.setFilterValue("")}
+              onClear={ () => table.getColumn("name")?.setFilterValue("") }
             />
           </div>
 
-          {/* Buttons */}
+          {/* Buttons */ }
           <div className='flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2'>
-            <Button variant='flat' color='success'>
-              <>
-                {" "}
-                Add Student <PiStudentBold className='ml-2' />
-              </>
-            </Button>
-            {session?.user?.hasKey && (
+            <AddStudentModal />
+            { session?.user?.hasKey && (
               <Button
                 variant='flat'
-                color={!isSyncing ? "primary" : "danger"}
-                onClick={handleSync}
-                disabled={isSyncing}
-                isLoading={isSyncing}
+                color={ !isSyncing ? "primary" : "danger" }
+                onClick={ handleSync }
+                disabled={ isSyncing }
+                isLoading={ isSyncing }
                 spinnerPlacement='end'
               >
-                {isSyncing ? (
+                { isSyncing ? (
                   <>
-                    {syncText}
+                    <LoadingModal close={ () => !isSyncing } isSyncing={ isSyncing } />
+                    { }
                   </>
                 ) : (
                   <>
-                    {" "}
+                    { " " }
                     Sync Students <RiRocketFill className='ml-2' />
                   </>
-                )}
+                ) }
               </Button>
-            )}
+            ) }
           </div>
         </div>
       </div>
@@ -161,66 +157,66 @@ export function DataTable<TData, TValue>({
       <div className='rounded-md border'>
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
+            { table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={ headerGroup.id }>
+                { headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
+                    <TableHead key={ header.id }>
+                      { header.isPlaceholder
                         ? null
                         : flexRender(
                           header.column.columnDef.header,
                           header.getContext()
-                        )}
+                        ) }
                     </TableHead>
                   );
-                })}
+                }) }
               </TableRow>
-            ))}
+            )) }
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            { table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  key={ row.id }
+                  data-state={ row.getIsSelected() && "selected" }
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
+                  { row.getVisibleCells().map((cell) => (
+                    <TableCell key={ cell.id }>
+                      { flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
-                      )}
+                      ) }
                     </TableCell>
-                  ))}
+                  )) }
                 </TableRow>
               ))
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={ columns.length }
                   className='h-24 text-center'
                 >
                   No results.
                 </TableCell>
               </TableRow>
-            )}
+            ) }
           </TableBody>
         </Table>
         <div className='flex items-center justify-end space-x-2 py-4'>
           <Button
             variant='ghost'
             size='md'
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            onClick={ () => table.previousPage() }
+            disabled={ !table.getCanPreviousPage() }
           >
             Previous
           </Button>
           <Button
             variant='ghost'
             size='md'
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            onClick={ () => table.nextPage() }
+            disabled={ !table.getCanNextPage() }
           >
             Next
           </Button>

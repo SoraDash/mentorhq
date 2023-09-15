@@ -5,6 +5,8 @@ import { GoogleSheetStudent } from './types';
 export const fieldsToCheck: Array<keyof Student> = ['skype', 'slack', 'github'];
 
 
+
+
 export const handleFieldPriority = (existingStudent: Student, incomingStudent: Student): Student => {
   fieldsToCheck.forEach(field => {
     if (existingStudent[field]) {

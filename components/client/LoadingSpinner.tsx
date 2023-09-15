@@ -26,12 +26,12 @@ export default function LoadingSpinner() {
   return (
     <div className='flex flex-col items-center justify-center min-h-screen'>
       <div className='animate-bounce'>
-        <Image width={240} height={240} src="/logo_text_color.png" alt="Logo Spinner" />
+        <Image width={ 240 } height={ 240 } src="/logos/logo_text_color.png" alt="Logo Spinner" />
 
       </div>
 
 
-      <h2 className='text-primary  mt-9 font-bold text-lg text-clip'>{loadingText} </h2>
+      <h2 className='text-primary  mt-9 font-bold text-lg text-clip'>{ loadingText } </h2>
     </div>
   )
 }

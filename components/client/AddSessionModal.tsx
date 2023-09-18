@@ -1,47 +1,45 @@
-import React from "react";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
+import { Student } from '@prisma/client';
+import { useEffect, useState } from 'react';
 import { FaChalkboardTeacher } from 'react-icons/fa';
 
-export default function AddSessionModal() {
+export default function AddSessionModal({ studentId }: { studentId: string }) {
+  console.log(studentId)
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [student, setStudent] = useState<Student | null>(null);
+  // use effect async to fetch a student by id
 
+  useEffect(() => {
+    const fetchStudent = async () => {
+      const student = await fetch(`/api/students/${studentId}`).then(res => res.json() as Promise<Student>);
+      setStudent(student);
+      console.log(student);
+    }
+    fetchStudent();
+  }, [studentId]);
   return (
     <>
-      <Button onPress={onOpen} startContent={<FaChalkboardTeacher />} variant='light' color='primary'></Button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} backdrop='blur'>
+      <Button onPress={ onOpen } startContent={ <FaChalkboardTeacher /> } variant='light' color='primary'></Button>
+      <Modal isOpen={ isOpen } onOpenChange={ onOpenChange } isDismissable={ true } backdrop='blur' size='3xl'>
         <ModalContent>
-          {(onClose) => (
+          { (onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">Let&apos;s record a session</ModalHeader>
               <ModalBody>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit
-                  dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis.
-                  Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod.
-                  Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur
-                  proident Lorem eiusmod et. Culpa deserunt nostrud ad veniam.
-                </p>
+                <pre>
+                  { JSON.stringify(student, null, 2) }
+                </pre>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
+                <Button color="danger" variant="light" onPress={ onClose }>
                   Close
                 </Button>
-                <Button color="primary" onPress={onClose}>
+                <Button color="primary" onPress={ onClose }>
                   Action
                 </Button>
               </ModalFooter>
             </>
-          )}
+          ) }
         </ModalContent>
       </Modal>
     </>

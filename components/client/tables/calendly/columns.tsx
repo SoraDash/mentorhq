@@ -25,7 +25,7 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
       return (
         <Button
           variant="light"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={ () => column.toggleSorting(column.getIsSorted() === "asc") }
         >
           Student
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -34,8 +34,8 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
     },
     cell: ({ row }) => {
       return (
-        <Link href={`/student/${row.original.studentID}`} className='cursor-pointer'>
-          {row.original.student_name}
+        <Link href={ `/student/${row.original.studentID}` } className='cursor-pointer'>
+          { row.original.student_name }
         </Link>
       )
     }
@@ -47,7 +47,7 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
         case "zoom_conference":
           return (
             <div className="inline-flex items-center text-[#2d8cff] cursor-pointer" >
-              <Link href={row.original.location.join_url} target='_blank' rel="noopener noreferrer" className='inline-flex'>
+              <Link href={ row.original.location.join_url } target='_blank' rel="noopener noreferrer" className='inline-flex'>
                 <BiLogoZoom className="w-6 h-6 mr-2" />
                 Zoom
               </Link>
@@ -63,7 +63,7 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
         case "google_conference":
           return (
             <div className="inline-flex items-center text-[#34a853] cursor-pointer">
-              <Link href={row.original.location.join_url} target='_blank' rel="noopener noreferrer" className='inline-flex'>
+              <Link href={ row.original.location.join_url } target='_blank' rel="noopener noreferrer" className='inline-flex'>
                 <BiLogoGoogle className="w-6 h-6 mr-2" />
                 Google Meet
               </Link>
@@ -100,7 +100,7 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
     id: "new_session",
     header: "New Session",
     cell: ({ row }) => {
-      return <AddSessionModal />
+      return <AddSessionModal studentId={ row.original.studentID } />
     }
   },
   {
@@ -126,22 +126,22 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
                 <DropdownItem
                   key="session"
                   description="Record a new Session"
-                  startContent={<PiStudent className={iconClasses} />}>
+                  startContent={ <PiStudent className={ iconClasses } /> }>
                   New Session
                 </DropdownItem>
                 <DropdownItem
                   key="meeting"
                   description="Open the meeting in a new tab"
-                  startContent={<BiLinkExternal className={iconClasses} />}
+                  startContent={ <BiLinkExternal className={ iconClasses } /> }
                 >
                   Join Meeting
                 </DropdownItem>
                 <DropdownItem
                   key="meeting_url"
                   description="Copy Meeting URL to clipboard"
-                  startContent={<FaLink className={iconClasses} />}
+                  startContent={ <FaLink className={ iconClasses } /> }
                 >
-                  <MeetingInfoWithToast event={row.original} >
+                  <MeetingInfoWithToast event={ row.original } >
                     Meeting URL
                   </MeetingInfoWithToast>
                 </DropdownItem>
@@ -151,22 +151,22 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
                 <DropdownItem
                   key="meeting_info"
                   description="Answers from Calendly Questions"
-                  startContent={<AiOutlineInfoCircle className={cn(iconClasses, "text-danger")} />}
+                  startContent={ <AiOutlineInfoCircle className={ cn(iconClasses, "text-danger") } /> }
                 >
                   Meeting Info
                 </DropdownItem>
                 <DropdownItem
                   key="reschedule"
                   description="Reschedule this meeting"
-                  startContent={<TbCalendarCancel className={cn(iconClasses, "text-danger")} />}
-                  onClick={() => window.open(row.original.reschedule_url, "_blank")}
+                  startContent={ <TbCalendarCancel className={ cn(iconClasses, "text-danger") } /> }
+                  onClick={ () => window.open(row.original.reschedule_url, "_blank") }
                 >
                   Reschedule
                 </DropdownItem>
               </DropdownSection>
             </DropdownMenu>
           </Dropdown>
-          {/* Old component */}
+          {/* Old component */ }
         </>
 
       )

@@ -10,7 +10,7 @@
     "env": "node ./scripts/generateEnv.js",
     "redis": "docker run -p 6379:6379 -it -d redis/redis-stack-server:latest",
     "studio": "npx prisma studio",
-    "seed": "ts-node ./prisma/seed.ts"
+    "seed": "ts-node -O '{\"module\": \"commonjs\"}' prisma/seed.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.0",

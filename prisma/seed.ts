@@ -1,23 +1,21 @@
-import { courses } from './data';
-
-const { PrismaClient } = require("@prisma/client");
+import { PrismaClient } from "@prisma/client";
+import { courses, sessions } from "./data";
 
 const prisma = new PrismaClient();
 
-
-async function main() {
+async function main(): Promise<void> {
   for (const courseInfo of courses) {
-    // Check if the course already exists
     const existingCourse = await prisma.course.findFirst({
-      where: { courseCode: courseInfo.courseCode }
+      where: { courseCode: courseInfo.courseCode },
     });
 
     if (existingCourse) {
-      console.warn(`⚠️ Course with code ${courseInfo.courseCode} already exists. Skipping...`);
+      console.warn(
+        `⚠️ Course with code ${courseInfo.courseCode} already exists. Skipping...`
+      );
       continue;
     }
 
-    // 1. Create Course
     const createdCourse = await prisma.course.create({
       data: {
         courseCode: courseInfo.courseCode,
@@ -30,9 +28,7 @@ async function main() {
       },
     });
 
-    // 2. Create associated ProjectTemplates for this course
-    type ProjectTemplateInput = { name: string; prefix: string; };
-    let projectTemplates: ProjectTemplateInput[] = [];
+    let projectTemplates: Array<any> = []; // Adjust the type if you have a specific type for project templates.
 
     if (courseInfo.projectStages) {
       projectTemplates = [...projectTemplates, ...courseInfo.projectStages];
@@ -43,17 +39,18 @@ async function main() {
     }
 
     for (const projectTemplateInfo of projectTemplates) {
-      // Check if the project template already exists
       const existingProjectTemplate = await prisma.projectTemplate.findFirst({
         where: {
           name: projectTemplateInfo.name,
           prefix: projectTemplateInfo.prefix,
-          courseId: createdCourse.id
-        }
+          courseId: createdCourse.id,
+        },
       });
 
       if (existingProjectTemplate) {
-        console.warn(`⚠️  Project template ${projectTemplateInfo.name} for course ${createdCourse.name} already exists. Skipping...`);
+        console.warn(
+          `⚠️ Project template ${projectTemplateInfo.name} for course ${createdCourse.name} already exists. Skipping...`
+        );
         continue;
       }
 
@@ -66,10 +63,37 @@ async function main() {
       });
     }
 
-    console.log(`✅ Created course ${courseInfo.name} and its project templates.`);
+    console.log(
+      `✅ Created course ${courseInfo.name} and its project templates.`
+    );
+  }
+
+  for (const session of sessions) {
+    try {
+      const existingSession = await prisma.sessionType.findFirst({
+        where: { name: session.name },
+      });
+
+      if (existingSession) {
+        console.warn(`⚠️ Session ${session.name} already exists. Skipping...`);
+        continue;
+      }
+
+      await prisma.sessionType.create({
+        data: {
+          name: session.name,
+          order: session.order,
+        },
+      });
+
+      console.log(`✅ Created session ${session.name}.`);
+    } catch (error: any) {
+      console.error(
+        `❌ Failed to seed session ${session.name}: ${error.message}`
+      );
+    }
   }
 }
-
 
 main()
   .catch((e) => {

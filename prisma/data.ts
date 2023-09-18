@@ -1,15 +1,25 @@
-
-export const ppCourses = [
+const ppCourses = [
   { name: "HTML/CSS Essentials (PP1)", prefix: "pp1" },
   { name: "JavaScript Essentials (PP2)", prefix: "pp2" },
   { name: "Python Essentials (PP3)", prefix: "pp3" },
   { name: "Full Stack Toolkit (PP4)", prefix: "pp4" },
 ];
-export const msCourses = [
+const msCourses = [
   { name: "User Centric Front End Development (MS1)", prefix: "ms1" },
   { name: "Interactive Front End Development (MS2)", prefix: "ms2" },
   { name: "Data Centric Development (MS3)", prefix: "ms3" },
   { name: "Full Stack Frameworks with Django (MS4)", prefix: "ms4" },
+];
+
+export const sessions = [
+  { name: "Intro", order: 0 },
+  { name: "Project inception", order: 1 },
+  { name: "Middle of project", order: 2 },
+  { name: "End of project", order: 3 },
+  { name: "Interview preparation and career advice", order: 4 },
+  { name: "Postponed (Valid Reason)", order: 5 },
+  { name: "**No-show**", order: 6 },
+  { name: "Other", order: 7 },
 ];
 
 export const courses = [

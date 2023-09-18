@@ -150,7 +150,7 @@ model Student {
   isDeleted     Boolean?       @default(false)
   unassignedAt  DateTime?      @default(now())
   courseId      String?
-  Course        Course?        @relation(fields: [courseId], references: [id])
+  course        Course?        @relation(fields: [courseId], references: [id])
   projects      Project[]
 }
 

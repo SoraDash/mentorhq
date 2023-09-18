@@ -6,7 +6,6 @@ let connectionRetries = 0;
 const MAX_RETRIES = 3;
 
 redis.on('connect', () => {
-  console.log('🚀 Connected to Redis!');
 });
 
 redis.on('error', (error) => {

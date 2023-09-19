@@ -11,8 +11,9 @@ export async function GET(request: NextRequest, { params }: { params: { studentI
     },
     include: {
       projects: true,
-      Course: true
+      course: true
     }
   })
+  if (!student) return NextResponse.json(null, { status: 404 })
   return NextResponse.json(student)
 }

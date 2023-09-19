@@ -1,16 +1,37 @@
 "use client";
 
-import { getCalendlyAuthURL, getCalendlyUser, deAuthCalendly } from '@/actions/calendly.actions';
+import { deAuthCalendly, getCalendlyAuthURL, getCalendlyUser } from '@/actions/calendly.actions';
+import { useToast } from '@/components/ui/use-toast';
+import { Button } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { TbCalendarCog, TbCalendarX } from 'react-icons/tb';
 
-export default function CalendlyAuth() {
+type ButtonColors = 'secondary' | 'danger' | 'default' | 'primary' | 'success' | 'warning' | undefined;
+type ButtonSize = "sm" | "md" | "lg" | undefined
+
+
+type CalendlyAuthProps = {
+  authButtonColor?: ButtonColors,
+  authButtonSize?: ButtonSize,
+  deAuthButtonColor?: ButtonColors,
+  deAuthButtonSize?: ButtonSize,
+  iconClass?: string
+}
+
+export default function CalendlyAuth({
+  authButtonColor = 'secondary',
+  authButtonSize = 'md',
+  deAuthButtonColor = 'danger',
+  deAuthButtonSize = 'md',
+  iconClass = 'inline-block mr-2'
+}: CalendlyAuthProps) {
   const [authURL, setAuthURL] = useState("");
   const [calendlyToken, setCalendlyToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [deAuthRequested, setDeAuthRequested] = useState(false);  // new state
+  const [deAuthRequested, setDeAuthRequested] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
   useEffect(() => {
     async function fetchAuthURL(redirectPath: string) {
@@ -55,21 +76,47 @@ export default function CalendlyAuth() {
     handleDeAuth();
   }, [deAuthRequested, router]);
 
+  useEffect(() => {
+    // Check if the current path matches the stored redirect path
+    const storedRedirectPath = localStorage.getItem('calendlyRedirectPath');
+
+    if (storedRedirectPath && storedRedirectPath === window.location.pathname) {
+      // Display success toast
+      toast({
+        title: 'Calendly Authorization Success',
+        description: 'You have successfully authorized with Calendly.',
+        variant: 'success'
+      });
+
+      // Clear the redirect path from local storage to prevent showing the toast again in the future
+      localStorage.removeItem('calendlyRedirectPath');
+    }
+  }, [toast]);
+
+  const handleAuth = () => {
+    toast({
+      title: 'Calendly Authorization',
+      description: 'We are currently redirecting you to Calendly to authorize your account.',
+      variant: 'default'
+    });
+    localStorage.setItem('calendlyRedirectPath', window.location.pathname);
+    window.location.href = authURL;
+  }
   if (!loading && authURL && !calendlyToken) {
     return (
-      <a href={authURL} className='px-6 py-2 bg-secondary text-secondary-foreground'>
-        <TbCalendarCog className='inline-block mr-2' />
+      <Button variant='solid' color={ authButtonColor } size={ authButtonSize } onClick={ handleAuth }>
+        <TbCalendarCog className={ iconClass } />
         Authorize with Calendly
-      </a>
+      </Button>
     );
   }
 
   if (calendlyToken) {
     return (
-      <button onClick={() => setDeAuthRequested(true)} className='px-6 py-2 bg-red-500 text-white'>
-        <TbCalendarX className='inline-block mr-2' />
+      <Button variant='ghost' color={ deAuthButtonColor } size={ deAuthButtonSize } onClick={ () => setDeAuthRequested(true) }>
+        <TbCalendarX className={ iconClass } />
         De-Authorize Calendly
-      </button>
+      </Button>
     );
   }
 

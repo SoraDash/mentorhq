@@ -12,11 +12,13 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
   useEffect(() => {
     const fetchStudent = async () => {
       const student = await fetch(`/api/students/${studentId}`).then(res => res.json() as Promise<Student>);
+      if (!student) return;
       setStudent(student);
       console.log(student);
     }
     fetchStudent();
   }, [studentId]);
+  if (!student) return null;
   return (
     <>
       <Button onPress={ onOpen } startContent={ <FaChalkboardTeacher /> } variant='light' color='primary'></Button>

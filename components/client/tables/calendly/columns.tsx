@@ -10,6 +10,7 @@ import { FaEllipsisV, FaLink } from 'react-icons/fa'
 import { PiStudent } from 'react-icons/pi'
 import { TbCalendarCancel } from 'react-icons/tb'
 import AddSessionModal from '../../AddSessionModal'
+import AddStudentModal from '../../AddStudentModal'
 import { MeetingInfoWithToast } from './MeetingInfo'
 
 
@@ -100,7 +101,7 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
     id: "new_session",
     header: "New Session",
     cell: ({ row }) => {
-      return <AddSessionModal studentId={ row.original.studentID } />
+      return (row.original.studentID ? <AddSessionModal studentId={ row.original.studentID } /> : <AddStudentModal />)
     }
   },
   {

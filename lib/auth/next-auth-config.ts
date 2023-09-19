@@ -50,6 +50,7 @@ export const authOptions: NextAuthOptions = {
         token.isPremium = db_user.isPremium
         token.hasKey = !!db_user.ciApiKey,
           token.role = db_user.role
+        token.calendly_token = db_user.calendly_token
       }
       return token;
     },
@@ -66,6 +67,7 @@ export const authOptions: NextAuthOptions = {
         session.user.hasKey = token.hasKey;
         session.user.isPremium = token.isPremium;
         session.user.role = token.role;
+        session.user.calendly_token = token.calendly_token;
       }
       return session;
     },

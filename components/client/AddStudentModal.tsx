@@ -71,7 +71,7 @@ export default function AddStudentModal() {
                 onSubmit={ async (values, actions) => {
                   actions.setSubmitting(true)
                   console.log({ values, actions });
-                  await createStudent(values);
+                  // await createStudent(values);
                   actions.setSubmitting(false);
                   router.refresh();
 

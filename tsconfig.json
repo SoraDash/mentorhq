@@ -31,7 +31,8 @@
     "lib/menuts",
     "scripts/generateEnv.js",
     "prisma/seed.ts",
-    "prisma/data.ts"
+    "prisma/data.ts",
+    "tailwind.config.ts"
   ],
   "exclude": ["node_modules"]
 }

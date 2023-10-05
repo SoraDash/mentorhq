@@ -29,6 +29,3 @@ export async function GET(req: NextRequest) {
     redirect(user?.calendly_last_path as string);
   }
 }
-
-// eslint-disable-next-line no-unused-vars
-export async function POST(req: NextRequest, res: NextResponse) { }

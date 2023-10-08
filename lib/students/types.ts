@@ -23,14 +23,6 @@ export type Deadline =
 
 export type PartialGoogleSheetStudent = Partial<GoogleSheetStudent>;
 
-export type StudentWithCounts = Student & {
-  _count: {
-    studentSession: number;
-    students: number;
-    sessions: number;
-  }
-}
-
 
 export type UnifiedStudent = Student & {
   sessions?: Session[];
@@ -39,14 +31,4 @@ export type UnifiedStudent = Student & {
 
 export type UnifiedUser = User & {
   mentoredStudents?: UnifiedStudent[];
-}
-
-export enum ProgrammeId {
-  DISDCC = "disdcc",
-  DISD = "disd",
-  DISDE = "disde",
-  DIWAD = "diwad",
-  SPADVFE = "spadvfe",
-  SPECOMM = "specomm",
-  SPPREDAN = "sppredan",
 }

@@ -1,31 +1,36 @@
-"use client"
-import { MentorWithCount } from '@/lib/admin/mentors';
-import { StudentWithCounts } from '@/lib/students';
-import { cn } from '@/lib/utils';
-import { Student } from '@prisma/client';
-import { capitalize } from 'lodash-es';
-import React from 'react';
-import { FaChalkboardTeacher, FaFileAlt, FaGraduationCap, FaHammer, FaUserEdit } from 'react-icons/fa';
-import { IconButton } from './client/IconButton';
-import { knownRoles } from './client/RoleDropdown';
-import { SocialMediaIcons } from './client/SocialMediaIcons';
-import CalendlyAuth from './client/calendly/Calendly';
-import CalendlyStatus from './client/calendly/CalendlyStatus';
-import { SyncGithubBio } from './client/tables/admin/mentors/SyncGithubBio';
-import { BooleanIcon } from './server/BooleanIcon';
-import { Badge } from './ui/badge';
-import { Avatar } from '@nextui-org/react';
-
-type ProfileWithCounts = MentorWithCount | StudentWithCounts | Student
+"use client";
+import { cn } from "@/lib/utils";
+import { Avatar } from "@nextui-org/react";
+import { User } from "@prisma/client";
+import { capitalize } from "lodash-es";
+import React from "react";
+import {
+  FaChalkboardTeacher,
+  FaFileAlt,
+  FaGraduationCap,
+  FaHammer,
+  FaUserEdit,
+} from "react-icons/fa";
+import { IconButton } from "./client/IconButton";
+import { knownRoles } from "./client/RoleDropdown";
+import { SocialMediaIcons } from "./client/SocialMediaIcons";
+import CalendlyAuth from "./client/calendly/Calendly";
+import CalendlyStatus from "./client/calendly/CalendlyStatus";
+import { SyncGithubBio } from "./client/tables/admin/mentors/SyncGithubBio";
+import { BooleanIcon } from "./server/BooleanIcon";
+import { Badge } from "./ui/badge";
 
 interface ProfileSidebarProps {
-  profile: ProfileWithCounts & { isPremium: boolean, image: string, github: string }
+  profile: UserAg & {
+    isPremium?: boolean;
+    image: string;
+    github: string;
+  };
 }
 
 export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ profile }) => {
-
-  const isMentor = (profile: ProfileWithCounts): profile is MentorWithCount => {
-    return (profile as MentorWithCount)._count !== undefined;
+  const isMentor = (profile: User): profile is User => {
+    return profile._count !== undefined;
   };
 
   let RoleIcon = FaChalkboardTeacher;
@@ -40,99 +45,116 @@ export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ profile }) => {
   }
 
   return (
-    <div className="dark:bg-navbar bg-white shadow rounded-lg p-6">
-      <div className="flex flex-col items-center space-y-5">
+    <div className='dark:bg-navbar bg-white shadow rounded-lg p-6'>
+      <div className='flex flex-col items-center space-y-5'>
         <Avatar
-          isBordered={ profile.isPremium }
-          color={ profile.isPremium ? "danger" : "default" }
-          className="transition-transform w-32 h-32"
-          src={ `https://github.com/${profile.github}.png` || profile.image as string }
-          name={ profile?.name as string }
+          isBordered={profile.isPremium ?? false}
+          color={profile.isPremium ? "danger" : "default"}
+          className='transition-transform w-32 h-32'
+          src={
+            `https://github.com/${profile.github}.png` ||
+            (profile.image as string)
+          }
+          name={profile?.name as string}
           showFallback
         />
 
-        <h1 className="text-xl font-bold">{ profile.name }</h1>
-        { isMentor(profile) && profile.role && (
-          <div className="text-gray-600 flex flex-col items-center space-y-3">
-            <div className="flex items-center font-bold">
-              { capitalize(profile.role) }
-              <span className={ cn("w-5 h-5 ml-1", color ? color : 'text-gray-600') }>
+        <h1 className='text-xl font-bold'>{profile.name}</h1>
+        {isMentor(profile) && profile.role && (
+          <div className='text-gray-600 flex flex-col items-center space-y-3'>
+            <div className='flex items-center font-bold'>
+              {capitalize(profile.role)}
+              <span
+                className={cn("w-5 h-5 ml-1", color ? color : "text-gray-600")}>
                 <RoleIcon />
               </span>
             </div>
-            { profile.isPremium && (
-              <Badge variant={ "premium" }>
-                Premium Member
-              </Badge>
-            ) }
+            {profile.isPremium && (
+              <Badge variant={"premium"}>Premium Member</Badge>
+            )}
           </div>
-        ) }
+        )}
 
-        <div className="mt-6 flex flex-wrap gap-4 justify-center">
-          <div className="mt-6 grid grid-cols-1 gap-3">
-
-            <IconButton color="bg-secondary text-secondary-foreground" icon={ FaUserEdit }>
+        <div className='mt-6 flex flex-wrap gap-4 justify-center'>
+          <div className='mt-6 grid grid-cols-1 gap-3'>
+            <IconButton
+              color='bg-secondary text-secondary-foreground'
+              icon={FaUserEdit}>
               Edit
             </IconButton>
-            { isMentor(profile) && (
+            {isMentor(profile) && (
               <>
-                { profile.github && <SyncGithubBio id={ profile.id } /> }
+                {profile.github && <SyncGithubBio id={profile.id} />}
                 <CalendlyAuth />
               </>
-            ) }
-            { isMentor(profile) && profile.role === 'ADMIN' && (
-              <IconButton color="bg-red-500 text-white" icon={ FaHammer }>
+            )}
+            {isMentor(profile) && profile.role === "ADMIN" && (
+              <IconButton
+                color='bg-red-500 text-white'
+                icon={FaHammer}>
                 Ban
               </IconButton>
-            ) }
+            )}
           </div>
         </div>
 
-
-        { isMentor(profile) && (
+        {isMentor(profile) && (
           <>
-            <hr className="my-6 border-t border-gray-300" />
-            <h3 className="text-gray-600 uppercase font-bold tracking-wider mb-2 text-left w-full">Stats</h3>
-            <div className="flex flex-col w-full">
-              <ul className="space-y-2">
-                <li className="flex items-center space-x-2">
-                  <FaFileAlt className="text-gray-500" />
-                  <span className="flex-grow">Sessions</span>
-                  <span>{ profile._count.studentSession }</span>
+            <hr className='my-6 border-t border-gray-300' />
+            <h3 className='text-gray-600 uppercase font-bold tracking-wider mb-2 text-left w-full'>
+              Stats
+            </h3>
+            <div className='flex flex-col w-full'>
+              <ul className='space-y-2'>
+                <li className='flex items-center space-x-2'>
+                  <FaFileAlt className='text-gray-500' />
+                  <span className='flex-grow'>Sessions</span>
+                  <span>{profile._count.studentSession}</span>
                 </li>
-                <li className="flex items-center space-x-2">
-                  <FaGraduationCap className="text-gray-500" />
-                  <span className="flex-grow">Students</span>
-                  <span>{ profile._count.students }</span>
+                <li className='flex items-center space-x-2'>
+                  <FaGraduationCap className='text-gray-500' />
+                  <span className='flex-grow'>Students</span>
+                  <span>{profile._count.students}</span>
                 </li>
-                { isMentor(profile) && (
+                {isMentor(profile) && (
                   <>
-                    <li className="flex items-center space-x-2">
-                      <span className="flex-grow">Onboarding Completed</span>
-                      <BooleanIcon condition={ profile.isOnboarded } className='items-center text-center w-6 h-6' />
+                    <li className='flex items-center space-x-2'>
+                      <span className='flex-grow'>Onboarding Completed</span>
+                      <BooleanIcon
+                        condition={profile.isOnboarded}
+                        className='items-center text-center w-6 h-6'
+                      />
                     </li>
-                    <li className="flex items-center space-x-2">
-                      <span className="flex-grow">Premium Member</span>
-                      <BooleanIcon condition={ profile.isPremium } className='items-center text-center w-6 h-6' />
+                    <li className='flex items-center space-x-2'>
+                      <span className='flex-grow'>Premium Member</span>
+                      <BooleanIcon
+                        condition={profile.isPremium}
+                        className='items-center text-center w-6 h-6'
+                      />
                     </li>
-                    <li className="flex items-center space-x-2">
+                    <li className='flex items-center space-x-2'>
                       <CalendlyStatus />
                     </li>
-                    <li className="flex items-center space-x-2">
-                      <span className="flex-grow">CI API Key set</span>
-                      <BooleanIcon condition={ !!profile.ciApiKey } className='items-center text-center w-6 h-6' />
+                    <li className='flex items-center space-x-2'>
+                      <span className='flex-grow'>CI API Key set</span>
+                      <BooleanIcon
+                        condition={!!profile.ciApiKey}
+                        className='items-center text-center w-6 h-6'
+                      />
                     </li>
                   </>
-                ) }
+                )}
               </ul>
             </div>
           </>
-        ) }
-        <h3 className="text-gray-600 uppercase font-bold tracking-wider my-3 text-left w-full">Social</h3>
-        <div className="flex justify-center items-center gap-6 my-6 w-full">
-          <SocialMediaIcons user={ profile } />
+        )}
+        <h3 className='text-gray-600 uppercase font-bold tracking-wider my-3 text-left w-full'>
+          Social
+        </h3>
+        <div className='flex justify-center items-center gap-6 my-6 w-full'>
+          <SocialMediaIcons user={profile} />
         </div>
       </div>
     </div>
   );
-}
+};

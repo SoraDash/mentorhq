@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   ColumnDef,
@@ -10,9 +10,9 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
-import { Input } from '@/components/ui/input'
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -20,21 +20,21 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Button } from '@nextui-org/react'
-import { useEffect, useState } from 'react'
+} from "@/components/ui/table";
+import { Button } from "@nextui-org/react";
+import { useEffect, useState } from "react";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
     data,
     columns,
@@ -48,95 +48,102 @@ export function DataTable<TData, TValue>({
       sorting,
       columnFilters,
     },
-  })
+  });
   const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => { setIsMounted(true) }, [])
-  if (!isMounted) return null
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  if (!isMounted) return null;
 
-  async function handleAddSession() {
-  }
-
+  // eslint-disable-next-line no-unused-vars
+  async function handleAddSession() {}
 
   return (
     <>
-      <div className="py-4">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-          {/* Input */ }
-          <div className="mb-2 md:mb-0 md:max-w-sm md:mr-4">
+      <div className='py-4'>
+        <div className='flex flex-col md:flex-row md:items-center md:justify-between'>
+          {/* Input */}
+          <div className='mb-2 md:mb-0 md:max-w-sm md:mr-4'>
             <Input
-              placeholder="Filter by name..."
-              value={ (table.getColumn("student_name")?.getFilterValue() as string) ?? "" }
-              onChange={ (event) =>
-                table.getColumn("student_name")?.setFilterValue(event.target.value)
+              placeholder='Filter by name...'
+              value={
+                (table.getColumn("student_name")?.getFilterValue() as string) ??
+                ""
+              }
+              onChange={(event) =>
+                table
+                  .getColumn("student_name")
+                  ?.setFilterValue(event.target.value)
               }
             />
           </div>
         </div>
       </div>
 
-
-      <div className="rounded-md border">
+      <div className='rounded-md border'>
         <Table>
           <TableHeader>
-            { table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={ headerGroup.id }>
-                { headerGroup.headers.map((header) => {
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={ header.id }>
-                      { header.isPlaceholder
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        ) }
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
-                  )
-                }) }
+                  );
+                })}
               </TableRow>
-            )) }
+            ))}
           </TableHeader>
           <TableBody>
-            { table.getRowModel().rows?.length ? (
+            {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
-                  key={ row.id }
-                  data-state={ row.getIsSelected() && "selected" }
-                >
-                  { row.getVisibleCells().map((cell) => (
-                    <TableCell key={ cell.id }>
-                      { flexRender(cell.column.columnDef.cell, cell.getContext()) }
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
-                  )) }
+                  ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={ columns.length } className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className='h-24 text-center'>
                   No results.
                 </TableCell>
               </TableRow>
-            ) }
+            )}
           </TableBody>
         </Table>
-        <div className="flex items-center justify-end space-x-2 py-4 mr-4">
+        <div className='flex items-center justify-end space-x-2 py-4 mr-4'>
           <Button
-            variant="flat"
-            size="sm"
-            onClick={ () => table.previousPage() }
-            disabled={ !table.getCanPreviousPage() }
-          >
+            variant='flat'
+            size='sm'
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}>
             Previous
           </Button>
           <Button
-            variant="flat"
-            size="sm"
-            onClick={ () => table.nextPage() }
-            disabled={ !table.getCanNextPage() }
-          >
+            variant='flat'
+            size='sm'
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}>
             Next
           </Button>
         </div>
       </div>
     </>
-  )
+  );
 }

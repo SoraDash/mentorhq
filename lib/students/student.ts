@@ -4,7 +4,7 @@ import { prisma } from '@/lib/db/prisma';
 import { Student, User } from '@prisma/client';
 import { getUser } from '../auth/auth';
 import { generateProjectsForStudent, getCourseByProgrammeID } from '../course/courseUtils';
-import { GoogleSheetStudent, PartialGoogleSheetStudent, StudentWithCounts, UnifiedStudent } from './types';
+import { GoogleSheetStudent, PartialGoogleSheetStudent, UnifiedStudent } from './types';
 import { handleFieldPriority, transformToPrismaStudent } from './utils';
 
 
@@ -107,15 +107,16 @@ export const unassignStudent = async (studentId: string) => {
 };
 
 const fetchStudentByCondition = async (conditions: FetchConditions) => {
-  const student = await prisma.student.findUnique({
+  return await prisma.student.findUnique({
     where: conditions,
     include: {
       projects: true,
+      _count: true
     }
-  });
 
-  return student || {} as Student;
+  });
 };
+
 
 export const getAllStudents = async (): Promise<UnifiedStudent[]> => {
   const user = await getUser();
@@ -140,9 +141,9 @@ export const getAllStudents = async (): Promise<UnifiedStudent[]> => {
   }) || [];
 };
 
-export const getStudent = async (id: string): Promise<UnifiedStudent> => {
+export const getStudent = async (id: string): Promise<UnifiedStudent | null> => {
   const user = await getUser();
-  if (!user) return {} as Student;
+  if (!user) return null
 
   let fetchConditions: FetchConditions = { id: id };
 
@@ -151,6 +152,7 @@ export const getStudent = async (id: string): Promise<UnifiedStudent> => {
   if (userIsAdmin) {
     fetchConditions.mentorId = user.id;
   }
+
 
   return fetchStudentByCondition(fetchConditions);
 };
@@ -177,7 +179,6 @@ export const getAllStudentsWithCountAdmin = async () => {
       }
     }
   });
-  if (!students) return [] as StudentWithCounts[];
   return students;
 };
 

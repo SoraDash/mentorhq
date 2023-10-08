@@ -3,13 +3,6 @@ import { isAdmin } from '@/components/server/routeguards';
 import { prisma } from '@/lib/db/prisma';
 import { User } from '@prisma/client';
 
-export type MentorWithCount = User & {
-  _count: {
-    studentSession: number;
-    students: number;
-    sessions: number;
-  }
-}
 
 export const getAllMentorsAdmin = async () => {
   if (!await isAdmin()) return [] as User[];
@@ -30,7 +23,7 @@ export const getMentorByIdAdmin = async (id: string) => {
 };
 
 export const getMentorById = async (id?: string) => {
-  if (!id) return {} as MentorWithCount;
+  if (!id) return null
   const mentor = await prisma.user.findUnique({
     where: {
       id: id
@@ -45,12 +38,12 @@ export const getMentorById = async (id?: string) => {
       }
     }
   });
-  if (!mentor) return {} as MentorWithCount;
+  if (!mentor) null
   return mentor;
 };
 
 export const getAllMentorsWithCountAdmin = async () => {
-  if (!await isAdmin()) return [] as MentorWithCount[];
+  if (!await isAdmin()) return []
 
   const mentors = await prisma.user.findMany({
     include: {
@@ -63,12 +56,12 @@ export const getAllMentorsWithCountAdmin = async () => {
       }
     }
   });
-  if (!mentors) return [] as MentorWithCount[];
+  if (!mentors) return []
   return mentors
 };
 
 export const getMentorByIdWithCountAdmin = async (id: string) => {
-  if (!await isAdmin()) return {} as MentorWithCount;
+  if (!await isAdmin()) null;
   const mentor = await prisma.user.findUnique({
     where: { id },
     include: {
@@ -81,6 +74,6 @@ export const getMentorByIdWithCountAdmin = async (id: string) => {
       }
     }
   });
-  if (!mentor) return {} as MentorWithCount;
+  if (!mentor) null;
   return mentor;
 };

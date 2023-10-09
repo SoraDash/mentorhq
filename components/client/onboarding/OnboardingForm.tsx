@@ -1,23 +1,27 @@
 "use client";
-import { onboardUser } from '@/actions/user.actions';
-import { useToast } from '@/components/ui/use-toast';
-import { getUser } from '@/lib/auth/auth';
-import { useStepStore } from '@/store/useStepStore';
-import { useRouter } from 'next/navigation';
-import React, { FormEvent, useEffect } from 'react';
-import { FaSave } from 'react-icons/fa';
+import { onboardUser } from "@/actions/user.actions";
+import { useToast } from "@/components/ui/use-toast";
+import { getUser } from "@/lib/auth/auth";
+import { useStepStore } from "@/store/useStepStore";
+import { useRouter } from "next/navigation";
+import React, { FormEvent, useEffect, useState } from "react";
+import { FaSave } from "react-icons/fa";
+import LoadingSpinner from "../LoadingSpinner";
+import { LoadingModal } from "../LoadingModal";
 
 const OnboardingForm: React.FC = () => {
   const { toast } = useToast();
   const router = useRouter();
-  const { currentStep, updateFormData, back, next, steps, isFirstStep } = useStepStore();
-  const formData = useStepStore(state => state.formData);
-  const isLastStep = useStepStore(state => state.isLastStep);
-
+  const [isLoaded, setIsLoaded] = useState(false);
+  const { currentStep, updateFormData, back, next, steps, isFirstStep } =
+    useStepStore();
+  const formData = useStepStore((state) => state.formData);
+  const isLastStep = useStepStore((state) => state.isLastStep);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        setIsLoaded(true);
         const user = await getUser();
 
         if (user) {
@@ -37,31 +41,28 @@ const OnboardingForm: React.FC = () => {
             linkedIn: user.linkedIn || "",
             slack: user.slack || "",
             skype: user.skype || "",
-            website: user.website || ""
+            website: user.website || "",
           };
-          updateFormData('name', nameData);
-          updateFormData('misc', miscData);
-          updateFormData('social', socialData);
+          updateFormData("name", nameData);
+          updateFormData("misc", miscData);
+          updateFormData("social", socialData);
         }
-
       } catch (error) {
         console.log(error);
       } finally {
+        setIsLoaded(false);
         console.log("finally");
       }
-    }
+    };
     fetchUserData();
-  }, [updateFormData]
-  );
-
-
+  }, [updateFormData]);
 
   const getMergedFormData = () => {
     const mergedData = {
       ...formData.name,
       ...formData.misc,
       ...formData.social,
-    }
+    };
     return mergedData;
   };
 
@@ -71,7 +72,7 @@ const OnboardingForm: React.FC = () => {
     e.preventDefault();
     if (!isLastStep) return next();
     onboardUser(mergedData, true)
-      .then(response => {
+      .then((response) => {
         if (response.success) {
           toast({
             title: "You've successfully completed onboarding.",
@@ -80,33 +81,43 @@ const OnboardingForm: React.FC = () => {
           });
         }
         setTimeout(() => router.refresh(), 300);
-        router.replace('/dashboard')
-        router.refresh()
+        router.replace("/dashboard");
+        router.refresh();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         toast({
           title: "Error: Something went wrong",
           description: "Please try again.",
           variant: "destructive",
         });
-      })
+      });
   };
 
-  const CurrentFormComponent = steps[currentStep] || (() => <div>Error: Unknown step!</div>);
+  const CurrentFormComponent =
+    steps[currentStep] || (() => <div>Error: Unknown step!</div>);
 
+  if (isLoaded)
+    return (
+      <>
+        <LoadingModal
+          close={() => !isLoaded}
+          isSyncing={isLoaded}
+        />
+        {}
+      </>
+    );
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen scroll-pt-4">
-      <div className="w-3/4  bg-white dark:bg-gray-700 shadow-lg p-8 rounded-lg">
+    <div className='flex flex-col justify-center items-center min-h-screen scroll-pt-4'>
+      <div className='w-3/4  bg-white dark:bg-gray-700 shadow-lg p-8 rounded-lg'>
         <CurrentFormComponent />
 
-        <div className="flex justify-center mt-8 space-x-4">
+        <div className='flex justify-center mt-8 space-x-4'>
           {/* Show Back button if it's not the first step */}
           {!isFirstStep && (
             <button
-              className="px-4 py-2 bg-blue-600 text-white rounded mr-2"
-              onClick={back}
-            >
+              className='px-4 py-2 bg-blue-600 text-white rounded mr-2'
+              onClick={back}>
               Prev
             </button>
           )}
@@ -114,9 +125,8 @@ const OnboardingForm: React.FC = () => {
           {/* Show Next button if it's not the last step */}
           {!isLastStep && (
             <button
-              className="px-4 py-2 bg-blue-600 text-white rounded"
-              onClick={next}
-            >
+              className='px-4 py-2 bg-blue-600 text-white rounded'
+              onClick={next}>
               Next
             </button>
           )}
@@ -124,11 +134,10 @@ const OnboardingForm: React.FC = () => {
           {/* Show Submit button only on the last step */}
           {isLastStep && (
             <button
-              className="px-4 py-2 bg-green-600 text-white rounded inline-flex justify-between items-center"
-              onClick={handleSubmit}
-            >
+              className='px-4 py-2 bg-green-600 text-white rounded inline-flex justify-between items-center'
+              onClick={handleSubmit}>
               Save Profile
-              <FaSave className="m-2" />
+              <FaSave className='m-2' />
             </button>
           )}
         </div>

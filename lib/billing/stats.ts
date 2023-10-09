@@ -12,7 +12,8 @@ export const getLatestStats = async () => {
   const year = getYear(now);
 
   const data = await getBilling(month.toString(), year.toString());
-  if (!data || data?.aggregates) return { status: 'empty', message: 'No billing data available.' };
+  if (!data || !data?.aggregates) return { status: 'empty', message: 'No billing data available.' };
+
   const sessionCount = parseInt(data?.aggregates?.session_count);
   const eurosBillable = data?.aggregates?.euros_billable;
 

@@ -10,7 +10,6 @@ import { User as PrismaUser } from "@prisma/client";
 import { Cog, LifeBuoy, LogOut, UserCircle } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { FaCog, FaLifeRing, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 
 interface Props {
   user: PrismaUser;

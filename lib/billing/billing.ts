@@ -1,5 +1,5 @@
 "use server"
-import { getAuthSession } from '@/lib/auth/auth';
+import { getUser } from '@/lib/auth/auth';
 import { getUserByEmail } from '@/lib/db/user';
 import { lock } from '@/lib/utils/asyncLock';
 import Cache from '@/lib/utils/cacheConfig';
@@ -8,16 +8,16 @@ import Cache from '@/lib/utils/cacheConfig';
 export const getBilling = async (month: string, year: string) => {
   return await lock.acquire("billing", async () => {
     try {
-      const session = await getAuthSession();
-      if (!session || !session.user?.email) {
+      const session = await getUser();
+      if (!session || !session.email) {
         console.debug("No session found or email missing from session.");
         return { error: true, message: 'Not authenticated', status: 401 }
       }
 
-      const user = await getUserByEmail(session.user.email);
+      const user = await getUserByEmail(session.email);
 
       if (!user) {
-        console.debug(`No user found for email: ${session.user.email}`);
+        console.debug(`No user found for email: ${session.email}`);
         return { error: true, message: 'User not found', status: 404 }
       }
 
@@ -46,6 +46,7 @@ export const getBilling = async (month: string, year: string) => {
         try {
           response = await fetch(apiUrl);
           success = true; // If fetch succeeds, set success to true
+          console.log("Success got some data")
         } catch (error: any) {
           retryCount++;
           console.error(`Fetch failed. Retry count: ${retryCount}. Error:`, error.message);
@@ -76,7 +77,6 @@ export const getBilling = async (month: string, year: string) => {
       // If the data is not an error and is not empty, cache it
       if (responseData.status !== "error" && responseData.status !== "empty") {
         Cache.set("billing", user.email, responseData);
-
       }
 
       // Now, handle any error conditions

@@ -27,8 +27,17 @@ export type PartialGoogleSheetStudent = Partial<GoogleSheetStudent>;
 export type UnifiedStudent = Student & {
   sessions?: Session[];
   projects?: Project[];
-}
-
+  _count?: {
+    mentor: number;
+    course: number;
+    projects: number;
+    sessions: number;
+  };
+};
 export type UnifiedUser = User & {
   mentoredStudents?: UnifiedStudent[];
+  _count?: {
+    mentoredStudents: number;
+
+  };
 }

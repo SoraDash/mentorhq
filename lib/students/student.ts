@@ -141,7 +141,7 @@ export const getAllStudents = async (): Promise<UnifiedStudent[]> => {
   }) || [];
 };
 
-export const getStudent = async (id: string): Promise<UnifiedStudent | null> => {
+export const getStudent = async (id: string) => {
   const user = await getUser();
   if (!user) return null
 

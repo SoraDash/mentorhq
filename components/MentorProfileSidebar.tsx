@@ -1,6 +1,7 @@
+"use client";
 import { cn } from "@/lib/utils";
 import { Avatar } from "@nextui-org/react";
-import { Prisma, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { capitalize } from "lodash-es";
 import React from "react";
 import {
@@ -22,8 +23,8 @@ import { Badge } from "./ui/badge";
 interface MentorProfileSidebarProps {
   profile: User & {
     isPremium?: boolean;
-    image?: string;
-    github?: string;
+    image?: string | null;
+    github?: string | null | undefined;
   };
 }
 
@@ -97,12 +98,12 @@ export const MentorProfileSidebar: React.FC<MentorProfileSidebarProps> = ({
             <li className='flex items-center space-x-2'>
               <FaFileAlt className='text-gray-500' />
               <span className='flex-grow'>Sessions</span>
-              <span>{profile._count.studentSession}</span>
+              {/* <span>{profile._count.studentSession}</span> */}
             </li>
             <li className='flex items-center space-x-2'>
               <FaGraduationCap className='text-gray-500' />
               <span className='flex-grow'>Students</span>
-              <span>{profile._count.students}</span>
+              {/* <span>{profile._count.students}</span> */}
             </li>
             <li className='flex items-center space-x-2'>
               <span className='flex-grow'>Onboarding Completed</span>

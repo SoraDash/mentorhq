@@ -32,9 +32,6 @@ const StudentProfilePage: React.FC<StudentProfilePageProps> = async ({
             <ProfileSidebar
               profile={{
                 ...student,
-                isPremium: false,
-                image: "",
-                github: student.github || "",
               }}
             />
           </div>

@@ -1,5 +1,5 @@
+import { MentorProfileSidebar } from "@/components/MentorProfileSidebar";
 import { Profile } from "@/components/Profile";
-import { ProfileSidebar } from "@/components/ProfileSidebar";
 import { getMentorById } from "@/lib/admin/mentors";
 import { getUser } from "@/lib/auth/auth";
 import React from "react";
@@ -18,7 +18,7 @@ const UserProfilePage: React.FC = async () => {
       <div className='container mx-auto py-8'>
         <div className='grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-12 gap-6 px-4'>
           <div className='col-span-4 sm:col-span-3'>
-            <ProfileSidebar
+            <MentorProfileSidebar
               profile={{
                 ...mentor,
                 isPremium: mentor.isPremium || false,

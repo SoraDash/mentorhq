@@ -6,7 +6,6 @@ import { useStepStore } from "@/store/useStepStore";
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useEffect, useState } from "react";
 import { FaSave } from "react-icons/fa";
-import LoadingSpinner from "../LoadingSpinner";
 import { LoadingModal } from "../LoadingModal";
 
 const OnboardingForm: React.FC = () => {

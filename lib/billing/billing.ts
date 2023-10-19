@@ -30,11 +30,10 @@ export const getBilling = async (month: string, year: string) => {
       const userEmail = ciEmail || email;
 
       // Check if data is cached
-      const cachedData = await Cache.get("billing", user.email);
+      const cachedData = await Cache.get("billing", userEmail);
       if (cachedData) {
         return cachedData;
       }
-
       const apiUrl = constructApiUrl(userEmail, ciApiKey, month, year);
 
       const MAX_RETRIES = 3;
@@ -76,7 +75,7 @@ export const getBilling = async (month: string, year: string) => {
 
       // If the data is not an error and is not empty, cache it
       if (responseData.status !== "error" && responseData.status !== "empty") {
-        Cache.set("billing", user.email, responseData);
+        Cache.set("billing", userEmail, responseData);
       }
 
       // Now, handle any error conditions

@@ -1,23 +1,10 @@
-import { faker } from '@faker-js/faker';
-import { times, sample, random } from 'lodash';
-import { CalendlyEvent } from './types';
 import { prisma } from '@/lib/db/prisma';
+import { faker } from '@faker-js/faker';
+import { Student } from '@prisma/client';
+import { random, sample, times } from 'lodash';
+import { CalendlyEvent } from './types';
 
 type KindType = 'google' | 'zoom' | 'slack';
-
-async function fetchStudentUUIDs(): Promise<string[]> {
-  try {
-    const students = await prisma.student.findMany({
-      select: {
-        id: true
-      }
-    });
-    return students.map(student => student.id);
-  } catch (error) {
-    console.error('Error fetching student UUIDs:', error);
-    throw error; // re-throw to ensure we stop execution if there's an issue
-  }
-}
 
 const config = {
   baseURLs: {
@@ -33,16 +20,33 @@ const config = {
   ],
 };
 
+async function getAllStudents(): Promise<Student[]> {
+  try {
+    const students = await prisma.student.findMany({
+    });
+    return students;
+  } catch (error) {
+    console.error('Error fetching students from the database:', error);
+    return [];
+  }
+}
+
 export const generateCalendlyEvents = async (count: number): Promise<CalendlyEvent[]> => {
   let studentUUIDs: string[] = [];
+  let realStudents: Student[] = [];
+
   try {
-    studentUUIDs = await fetchStudentUUIDs();
+    realStudents = await getAllStudents();
+    studentUUIDs = realStudents.map(student => student.id);
   } catch (error) {
+    studentUUIDs = times(10, () => faker.string.uuid());
     console.error('Error in generateCalendlyEvents:', error);
-    return []; // return an empty array or handle this as appropriate
   }
+
   return times(count, (): CalendlyEvent => {
     const kind: KindType = faker.helpers.arrayElement(['google', 'zoom', 'slack']);
+
+    const isRealStudentAvailable = realStudents.length > 0;
 
     return {
       calendar_event: {
@@ -75,8 +79,12 @@ export const generateCalendlyEvents = async (count: number): Promise<CalendlyEve
       status: 'active',
       updated_at: faker.date.recent().toISOString(),
       uri: `${config.baseURLs.events}/${faker.string.uuid()}`,
-      student_name: faker.person.fullName(),
-      student_email: faker.internet.email(),
+      student_name: isRealStudentAvailable
+        ? sample(realStudents)?.name || '' // Use a random real student name or empty string
+        : `${faker.person.fullName()} (fake)`, // Use a fake student name
+      student_email: isRealStudentAvailable
+        ? sample(realStudents)?.email || '' // Use a random real student email or empty string
+        : faker.internet.email(), // Use a fake student email
       cancel_url: `${config.baseURLs.cancellations}/${faker.string.uuid()}`,
       reschedule_url: `${config.baseURLs.reschedulings}/${faker.string.uuid()}`,
       questions: [
@@ -91,8 +99,9 @@ export const generateCalendlyEvents = async (count: number): Promise<CalendlyEve
           question: 'What project is this?',
         },
       ],
-      studentID: sample(studentUUIDs) || faker.string.uuid(),
+      studentID: isRealStudentAvailable
+        ? sample(realStudents)?.id ?? '' // Use a random real student ID or empty string
+        : sample(studentUUIDs) ?? faker.string.uuid(), // Use either a random fake or real student ID
     };
   });
 };
-

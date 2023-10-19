@@ -91,7 +91,7 @@ export const generateCalendlyEvents = async (count: number): Promise<CalendlyEve
           question: 'What project is this?',
         },
       ],
-      studentID: sample(studentUUIDs),
+      studentID: sample(studentUUIDs) || faker.string.uuid(),
     };
   });
 };

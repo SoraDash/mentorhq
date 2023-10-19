@@ -7,7 +7,7 @@ interface IUser extends DefaultUser {
   lastName: string;
   isOnboarded: boolean;
   isPremium: boolean;
-  calendly_token?: string | null;
+  calendly_token?: string | null | undefined;
   hasKey?: boolean;
   role: Role
 }
@@ -19,6 +19,5 @@ declare module "next-auth" {
 }
 declare module "next-auth/jwt" {
   interface JWT extends IUser {
-    calendly_token?: string | null;
   }
 }

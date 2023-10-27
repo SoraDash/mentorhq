@@ -12,14 +12,14 @@ const msCourses = [
 ];
 
 export const sessions = [
-  { name: "Intro", order: 0 },
-  { name: "Project inception", order: 1 },
-  { name: "Middle of project", order: 2 },
-  { name: "End of project", order: 3 },
-  { name: "Interview preparation and career advice", order: 4 },
-  { name: "Postponed (Valid Reason)", order: 5 },
-  { name: "**No-show**", order: 6 },
-  { name: "Other", order: 7 },
+  { name: "Intro", order: 0, icon: "🤝" },
+  { name: "Project inception", order: 1, icon: "📝" },
+  { name: "Middle of project", order: 2, icon: "👨‍💻" },
+  { name: "End of project", order: 3, icon: "💪 " },
+  { name: "Interview preparation and career advice", order: 4, icon: "👔" },
+  { name: "Postponed (Valid Reason)", order: 5, icon: "📅" },
+  { name: "**No-show**", order: 6, icon: "🚫" },
+  { name: "Other", order: 7, icon: "🤷" }
 ];
 
 export const courses = [

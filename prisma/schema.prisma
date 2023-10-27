@@ -104,6 +104,7 @@ model SessionType {
   id    String @id @default(uuid())
   name  String @unique
   order Int
+  icon  String
 }
 
 model StudentSession {

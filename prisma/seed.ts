@@ -83,6 +83,7 @@ async function main(): Promise<void> {
         data: {
           name: session.name,
           order: session.order,
+          icon: session.icon,
         },
       });
 

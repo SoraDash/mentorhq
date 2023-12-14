@@ -29,7 +29,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { syncStudentsWithDatabase } from "@/lib/students";
 import { useRouter } from "next/navigation";
 import { refreshCalendlyEventsForUser } from "@/actions/calendly.actions";
-import { CalendarHeart } from "lucide-react";
+import { CalendarSearch } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -43,6 +43,7 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [currentAction, setCurrentAction] = useState<string | null>(null);
   const { toast } = useToast();
   const router = useRouter();
   const table = useReactTable({
@@ -61,6 +62,7 @@ export function DataTable<TData, TValue>({
   });
   async function handleSync() {
     setIsSyncing(true);
+    setCurrentAction("sync");
     try {
       const { added, removed, updated } = await syncStudentsWithDatabase();
 
@@ -98,12 +100,20 @@ export function DataTable<TData, TValue>({
       });
     } finally {
       setIsSyncing(false);
+      setCurrentAction(null);
       router.refresh();
     }
   }
   async function refreshCalendly() {
-    await refreshCalendlyEventsForUser();
-    router.refresh();
+    setIsSyncing(true);
+    setCurrentAction("calendly");
+    try {
+      await refreshCalendlyEventsForUser();
+    } finally {
+      setIsSyncing(false);
+      setCurrentAction(null);
+      router.refresh();
+    }
   }
 
   const [isMounted, setIsMounted] = useState(false);
@@ -134,12 +144,16 @@ export function DataTable<TData, TValue>({
               }
             />
           </div>
-          <div>
+
+          <div className="flex justify-end space-x-2">
             <Button
               variant="flat"
-              color="primary"
+              color={!isSyncing ? "primary" : "danger"}
+              disabled={isSyncing}
+              isLoading={isSyncing}
+              spinnerPlacement="end"
               onClick={refreshCalendly}
-              startContent={<CalendarHeart />}>
+              endContent={<CalendarSearch />}>
               Refresh Calendly
             </Button>
             <Button
@@ -154,8 +168,12 @@ export function DataTable<TData, TValue>({
                   <LoadingModal
                     close={() => !isSyncing}
                     isSyncing={isSyncing}
+                    headerText={
+                      currentAction === "sync"
+                        ? "Fetching students from Google"
+                        : "Refreshing Calendly..."
+                    }
                   />
-                  {}
                 </>
               ) : (
                 <>

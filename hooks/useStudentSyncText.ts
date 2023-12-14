@@ -1,11 +1,12 @@
 "use client"
+import { LOADING_TEXT } from '@/constants/loading-text';
 import { useEffect, useState } from 'react';
 
 
 
 const getRandomSyncMessage = (): string => {
-  const randomIndex = Math.floor(Math.random() * syncingTexts.length);
-  return syncingTexts[randomIndex];
+  const randomIndex = Math.floor(Math.random() * LOADING_TEXT.length);
+  return LOADING_TEXT[randomIndex];
 }
 function useStudentSyncText(isSyncing: boolean): string {
   const [syncText, setSyncText] = useState<string>("Sync in progress");
@@ -15,6 +16,7 @@ function useStudentSyncText(isSyncing: boolean): string {
   }
 
   useEffect(() => {
+    // eslint-disable-next-line no-undef
     let syncAnimation: NodeJS.Timeout | null = null;
 
     if (isSyncing) {
@@ -35,20 +37,4 @@ function useStudentSyncText(isSyncing: boolean): string {
 
 export default useStudentSyncText;
 
-
-const syncingTexts = [
-  "Gathering students",
-  "Still at roll call",
-  "No student left behind",
-  "Giving them a quick pep talk",
-  "Teaching them to line up",
-  "Guiding the Git",
-  "Coaching the code",
-  "Syncing the students' skills",
-  "Pairing the programmers",
-  "Directing the database download",
-  "Linking the learners",
-  "Tutoring the tables",
-  "Instructing the internet inputs",
-];
 

@@ -10,6 +10,7 @@ import {
   ModalHeader,
   Select,
   SelectItem,
+  Textarea,
   useDisclosure,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
@@ -33,7 +34,42 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
   const [student, setStudent] = useState<UnifiedStudent | null>(null);
   const [sessions, setSessions] = useState<SessionType[]>([]); // TODO: Replace with SessionType[
   const [currentSection, setCurrentSection] = useState(1);
+  const [summary, setSummary] = useState<string | null>(null);
   const form = useForm();
+
+  const progressOptions = [
+    {
+      text: "Poor",
+      value: "POOR",
+      startContent: <>👎</>,
+    },
+    {
+      text: "Average",
+      value: "AVERAGE",
+      startContent: <>👍</>,
+    },
+    {
+      text: "Excellent",
+      value: "EXCELLENT",
+      startContent: <>🙌</>,
+    },
+  ];
+  const submissionOptions = [
+    {
+      value: "First Time Submission",
+    },
+    {
+      value: "Project Resubmission",
+    },
+  ];
+  const followUpOptions = [
+    {
+      value: "Yes",
+    },
+    {
+      value: "No",
+    },
+  ];
 
   useEffect(() => {
     const fetchSessions = async () => {
@@ -101,14 +137,14 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
-                Let&apos;s record a session
-              </ModalHeader>
-              <ModalBody>
-                <Form {...form}>
-                  <form
-                    className="space-y-8"
-                    onSubmit={form.handleSubmit(onSubmit)}>
+              <Form {...form}>
+                <form
+                  className="space-y-8"
+                  onSubmit={form.handleSubmit(onSubmit)}>
+                  <ModalHeader className="flex flex-col gap-1">
+                    Let&apos;s record a session
+                  </ModalHeader>
+                  <ModalBody>
                     {currentSection === 1 && (
                       <>
                         <FormField
@@ -170,7 +206,7 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
                                         alt={item.data?.name}
                                         className="flex-shrink-0"
                                         size="sm"
-                                        color="danger"
+                                        color="default"
                                         name={item.data?.icon}
                                       />
                                       <div className="flex flex-col">
@@ -188,7 +224,7 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
                                         alt={session.name}
                                         className="flex-shrink-0"
                                         size="sm"
-                                        color="danger"
+                                        color="default"
                                         name={session.icon}
                                       />
                                       <div className="flex flex-col">
@@ -271,27 +307,18 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
                             <FormItem>
                               <FormLabel />
                               <FormControl />
+
                               <Select
                                 label="Progress"
                                 placeholder="Select student progress">
-                                <SelectItem
-                                  key={"POOR"}
-                                  value="POOR"
-                                  startContent={<>👎</>}>
-                                  Poor
-                                </SelectItem>
-                                <SelectItem
-                                  key={"AVERAGE"}
-                                  value="AVERAGE"
-                                  startContent={<>👍</>}>
-                                  Average
-                                </SelectItem>
-                                <SelectItem
-                                  key={"EXCELLENT"}
-                                  value="EXCELLENT"
-                                  startContent={<>🙌</>}>
-                                  Excellent
-                                </SelectItem>
+                                {progressOptions.map((option) => (
+                                  <SelectItem
+                                    key={option.value}
+                                    value={option.value}
+                                    startContent={option.startContent}>
+                                    {option.text}
+                                  </SelectItem>
+                                ))}
                               </Select>
                               <FormDescription />
                               <FormMessage />
@@ -300,34 +327,106 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
                         />
                       </>
                     )}
-                    {currentSection === 3 && <></>}
-                    {currentSection === 4 && <></>}
-                  </form>
-                </Form>
-              </ModalBody>
-              <ModalFooter className="flex justify-between">
-                {currentSection > 1 && (
-                  <Button
-                    color="default"
-                    onPress={() => setCurrentSection((prev) => prev - 1)}>
-                    Back
-                  </Button>
-                )}
-                {currentSection < 3 && (
-                  <Button
-                    color="primary"
-                    onPress={() => setCurrentSection((prev) => prev + 1)}>
-                    Next
-                  </Button>
-                )}
-                {currentSection === 3 && (
-                  <Button
-                    type="submit"
-                    color="success">
-                    Submit
-                  </Button>
-                )}
-              </ModalFooter>
+                    {currentSection === 3 && (
+                      <>
+                        <Textarea
+                          isRequired
+                          maxRows={4}
+                          label="Summary"
+                          labelPlacement="outside"
+                          placeholder="Summary of the session"
+                          value={summary!}
+                          onChange={(e) => setSummary(e.target.value)}
+                        />
+                        <Textarea
+                          maxRows={4}
+                          label="Personal Notes"
+                          labelPlacement="outside"
+                          placeholder="Personal Notes (Not given to CI)"
+                        />
+                      </>
+                    )}
+                    {currentSection === 4 && (
+                      <>
+                        <FormField
+                          control={form.control}
+                          name="submission"
+                          render={() => (
+                            <FormItem>
+                              <FormLabel />
+                              <FormControl />
+
+                              <Select
+                                label="Was this for a first time project submission or a project re-submission?"
+                                placeholder="Select type of submission"
+                                isRequired>
+                                {submissionOptions.map((option) => (
+                                  <SelectItem
+                                    key={option.value}
+                                    value={option.value}
+                                    defaultValue={"First Time Submission"}>
+                                    {option.value}
+                                  </SelectItem>
+                                ))}
+                              </Select>
+                              <FormDescription />
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="followup"
+                          render={() => (
+                            <FormItem>
+                              <FormLabel />
+                              <FormControl />
+                              <Select
+                                isRequired
+                                label="Do you want Student Care to follow up with the student?"
+                                placeholder="Is a follow up required">
+                                {followUpOptions.map((option) => (
+                                  <SelectItem
+                                    key={option.value}
+                                    value={option.value}
+                                    defaultValue={"No"}>
+                                    {option.value}
+                                  </SelectItem>
+                                ))}
+                              </Select>
+                              <FormDescription />
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </>
+                    )}
+                  </ModalBody>
+                  <ModalFooter className="flex justify-between">
+                    {currentSection > 1 && (
+                      <Button
+                        color="default"
+                        onPress={() => setCurrentSection((prev) => prev - 1)}>
+                        Back
+                      </Button>
+                    )}
+                    {currentSection < 4 && (
+                      <Button
+                        color="primary"
+                        onPress={() => setCurrentSection((prev) => prev + 1)}>
+                        Next
+                      </Button>
+                    )}
+                    {currentSection === 4 && (
+                      <Button
+                        type="submit"
+                        color="success">
+                        Submit
+                      </Button>
+                    )}
+                  </ModalFooter>
+                </form>
+              </Form>
             </>
           )}
         </ModalContent>

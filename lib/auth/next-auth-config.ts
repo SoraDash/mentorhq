@@ -33,7 +33,7 @@ export const authOptions: NextAuthOptions = {
     }
   },
   callbacks: {
-    jwt: async ({ token }) => {
+    jwt: async ({ token, user }) => {
       const db_user = await prisma.user.findFirst({
         where: {
           email: token.email as string,
@@ -49,6 +49,7 @@ export const authOptions: NextAuthOptions = {
         token.isOnboarded = db_user.isOnboarded
         token.isPremium = db_user.isPremium
         token.hasKey = !!db_user.ciApiKey,
+
           token.role = db_user.role
         token.calendly_token = db_user.calendly_token?.toString()
       }

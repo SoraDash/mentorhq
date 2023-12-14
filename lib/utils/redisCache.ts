@@ -19,9 +19,15 @@ redis.on('reconnecting', () => {
     redis.quit();
   }
 });
-
-const set = async (key: string, value: any) => {
-  await redis.set(key, JSON.stringify(value));
+const set = async (key: string, value: any, ttl: number = 0) => {
+  const serializedValue = JSON.stringify(value);
+  if (ttl > 0) {
+    // Set key with expiration
+    await redis.set(key, serializedValue, 'EX', ttl);
+  } else {
+    // Set key without expiration
+    await redis.set(key, serializedValue);
+  }
 };
 
 const get = async (key: string) => {

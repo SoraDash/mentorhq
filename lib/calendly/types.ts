@@ -48,3 +48,14 @@ export interface CalendlyEvent {
   questions: Question[];
   studentID: string;
 }
+
+export interface CalendlyToken {
+  owner: string;
+  scope: string;
+  created_at: number;
+  expires_in: number;
+  token_type: string;
+  access_token: string;
+  organization: string;
+  refresh_token: string;
+}

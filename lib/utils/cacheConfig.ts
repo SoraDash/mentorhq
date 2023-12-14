@@ -3,60 +3,67 @@ import REDIS from './redisCache';
 const CACHE_CONFIG = {
   students: {
     key: 'students',
-    TTL: 60 * 60 * 24 * 7, // 1 week
+    // Should be 3 hours
+    TTL: 60 * 60 * 3, // 3 hours
     enabled: true
   },
   billing: {
     key: 'billing',
-    TTL: 60 * 60 * 24 * 7, // 1 week
+    TTL: 60 * 60, // 1 hour
     enabled: true
-  }
-}
+  },
+  events: {
+    key: 'events',
+    TTL: 60 * 60, // 1 hour
+    enabled: true
+  },
+};
 
-const getCacheKey = (serviceType: keyof typeof CACHE_CONFIG, uniqueValue: string) => {
+type ServiceType = keyof typeof CACHE_CONFIG;
+
+const getCacheKey = (serviceType: ServiceType, uniqueValue: string) => {
   const configKey = CACHE_CONFIG[serviceType]?.key;
   return `${configKey}:${uniqueValue}`;
 };
 
-const shouldUseCache = (key: keyof typeof CACHE_CONFIG): boolean => {
+const shouldUseCache = (key: ServiceType): boolean => {
   return CACHE_CONFIG[key]?.enabled ?? false;
 };
 
-const set = async (serviceType: keyof typeof CACHE_CONFIG, uniqueValue: string, value: any) => {
+const set = async (serviceType: ServiceType, uniqueValue: string, value: any) => {
   const key = getCacheKey(serviceType, uniqueValue);
   if (shouldUseCache(serviceType)) {
-    await REDIS.set(key, value);
-    console.debug(`🤖 Data stored in cache for key: ${key}`);
+    const ttl = CACHE_CONFIG[serviceType].TTL;
+    await REDIS.set(key, value, ttl);
+    console.info(`📝 Data stored in cache for key: ${key}, with TTL: ${ttl} seconds`);
   }
 };
 
-const get = async <T>(serviceType: keyof typeof CACHE_CONFIG, uniqueValue: string): Promise<T | null> => {
+const get = async (serviceType: ServiceType, uniqueValue: string) => {
   const key = getCacheKey(serviceType, uniqueValue);
   if (shouldUseCache(serviceType)) {
-    try {
-      const cachedData = await REDIS.get(key);
-      if (cachedData) {
-        console.debug(`🎉 Cache HIT for key: ${key}`);
-        return cachedData as T;
-      }
-      console.debug(`❌ Cache MISS for key: ${key}`);
-    } catch (error) {
-      console.error(`🔥 Error retrieving from cache for key ${key}:`, error);
+    const cachedData = await REDIS.get(key);
+    if (cachedData) {
+      console.info(`✅ Cache HIT for key: ${key}`);
+      return cachedData;
+    } else {
+      console.info(`❌ Cache MISS for key: ${key}`);
     }
   }
   return null;
 };
 
-const remove = async (key: keyof typeof CACHE_CONFIG) => {
-  if (shouldUseCache(key)) {
+const remove = async (serviceType: ServiceType, uniqueValue: string) => {
+  const key = getCacheKey(serviceType, uniqueValue);
+  if (shouldUseCache(serviceType)) {
     await REDIS.del(key);
-    console.debug(`Data deleted from cache for key: ${key}`);
+    console.info(`🗑️ Data deleted from cache for key: ${key}`);
   }
 };
 
 const flush = async () => {
   await REDIS.flushAll();
-  console.log('Cleared all cache');
+  console.info('🧹 Cleared all cache');
 };
 
 const CacheConfig = {

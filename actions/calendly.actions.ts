@@ -1,10 +1,15 @@
 "use server"
-import { getAuthSession, getUser } from '@/lib/auth/auth';
+import { ExtendedUser, getAuthSession, getUser } from '@/lib/auth/auth';
+import { CalendlyEvent } from '@/lib/calendly/types';
 import { prisma } from '@/lib/db/prisma';
+import CacheConfig from '@/lib/utils/cacheConfig';
+import axios from 'axios';
+import startOfToday from 'date-fns/startOfToday';
 
 // Common constants
 const CLIENT_ID = process.env.CALENDLY_CLIENT_ID as string;
 const CLIENT_SECRET = process.env.CALENDLY_CLIENT_SECRET as string;
+const REDIRECT_URL = process.env.CALENDLY_REDIRECT_URL as string;
 const TOKEN_INTROSPECT_ENDPOINT = 'https://auth.calendly.com/oauth/introspect';
 
 export async function exchangeCodeForToken(code: string) {
@@ -13,7 +18,7 @@ export async function exchangeCodeForToken(code: string) {
     client_id: CLIENT_ID,
     client_secret: CLIENT_SECRET,
     code: code,
-    redirect_uri: process.env.CALENDLY_REDIRECT_URL,
+    redirect_uri: REDIRECT_URL,
     grant_type: 'authorization_code'
   };
 
@@ -42,7 +47,7 @@ export const getCalendlyAuthURL = async (redirectPath: string = '') => {
       calendly_last_path: redirectPath as string
     }
   })
-  return `https://auth.calendly.com/oauth/authorize?client_id=${process.env.CALENDLY_CLIENT_ID}&response_type=code&redirect_uri=${process.env.CALENDLY_REDIRECT_URL}`
+  return `https://auth.calendly.com/oauth/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URL}`
 }
 
 export const getCalendlyUser = async () => {
@@ -123,3 +128,165 @@ export const deAuthCalendly = async () => {
     return false;
   }
 }
+
+export const refreshCalendlyToken = async () => {
+  try {
+    const user = await getUser() as ExtendedUser;
+    console.log("🔄 Refreshing token...");
+
+    const refreshObject = {
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      grant_type: "refresh_token",
+      refresh_token: user?.calendly_token?.refresh_token
+    };
+
+    const response = await axios.post("https://auth.calendly.com/oauth/token", refreshObject);
+    const tokenResponse = response.data;
+
+    user.calendly_token = tokenResponse;
+    await prisma.user.update({
+      where: {
+        id: user.id
+      },
+      data: {
+        calendly_token: tokenResponse
+      }
+    });
+    return user?.calendly_token?.access_token;
+  } catch (err) {
+    console.error("🚫 Error in refreshCalendlyToken:", err);
+  }
+};
+
+
+export const checkCalendlyToken = async () => {
+  try {
+    const user = await getUser() as ExtendedUser;
+    console.log("🔍 Checking token");
+
+    const request = {
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      token: user?.calendly_token?.access_token || '',
+    };
+
+    const response = await axios.post("https://auth.calendly.com/oauth/introspect", request);
+    const events = response.data;
+
+    if (events.active === false) {
+      let outcome = await refreshCalendlyToken();
+      return outcome;
+    } else {
+      return user?.calendly_token?.access_token;
+    }
+  } catch (error) {
+    console.error("🚫 Error in checkCalendlyToken:");
+  }
+};
+
+export const idByEmail = async (events: any[], token: string) => {
+  let sortedCalendlyData: CalendlyEvent[] = [];
+
+  for await (let event of events) {
+    if (event.status === "canceled") continue;
+    let uri = event.uri.replace("https://api.calendly.com/scheduled_events/", "");
+    try {
+      const response = await axios.get(`https://api.calendly.com/scheduled_events/${uri}/invitees`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+
+
+      event.student_name = response.data.collection[0]?.name;
+      event.student_email = response.data.collection[0]?.email;
+      event.cancel_url = response.data.collection[0]?.cancel_url;
+      event.reschedule_url = response.data.collection[0]?.reschedule_url;
+      event.questions = response.data.collection[0]?.questions_and_answers;
+
+      const student = await prisma.student.findUnique({
+        where: {
+          email: event.student_email
+        }
+      });
+      if (student) {
+        event.studentID = student.id ? student.id : null;
+        event.student_name = student.name;
+      }
+
+      sortedCalendlyData.push(event);
+    } catch (error: any) {
+      if (error.response && error.response.status === 429) {
+        const rateLimitReset = error.response.headers['x-ratelimit-reset'];
+        console.error(`🚫 Rate limit exceeded. Waiting for ${rateLimitReset} seconds.`);
+        await new Promise(resolve => setTimeout(resolve, rateLimitReset * 1000));
+      } else {
+        console.error("🚫 Error in idByEmail:", error);
+      }
+    }
+  }
+  return sortedCalendlyData;
+};
+
+
+
+export const getCalendlyEvents = async (bypassCache = false) => {
+  try {
+    const user = await getUser() as ExtendedUser;
+    const userEmail = user?.email; // Assuming user object has an email property
+    const { owner } = user?.calendly_token || {};
+
+    if (!owner || !userEmail) return null;
+
+    let checkedUser = await checkCalendlyToken();
+
+    const cacheKey = 'events';
+    if (!bypassCache) {
+      const cachedEvents = await CacheConfig.get(cacheKey, userEmail);
+      if (cachedEvents) {
+        console.log("✅ Found events in cache.");
+        return cachedEvents;
+      }
+    }
+
+    // Fetch and process data from Calendly API
+    return await fetchAndCacheCalendlyEvents(owner, userEmail, checkedUser!);
+  } catch (error) {
+    console.error("🚫 Error in getCalendlyEvents:", error);
+  }
+};
+
+const fetchAndCacheCalendlyEvents = async (
+  owner: string,
+  userEmail: string,
+  checkedUser: string
+): Promise<Array<CalendlyEvent> | null> => {
+  const args = `&sort=start_time:asc&count=100&min_start_time=`;
+  let baseURL = "https://api.calendly.com/scheduled_events?user=";
+  const headers = { Authorization: `Bearer ${checkedUser}` };
+  const response = await axios.get(`${baseURL}${owner}${args}` + encodeURI(startOfToday().toUTCString()), { headers });
+  let events = response.data.collection;
+
+  const returnEntity = await idByEmail(events, checkedUser!);
+
+  console.log(`🗂️ Storing events in cache for user: ${userEmail}`);
+  await CacheConfig.set('events', userEmail, returnEntity);
+
+  return returnEntity as CalendlyEvent[];
+};
+
+export const refreshCalendlyEventsForUser = async () => {
+  const user = await getUser() as ExtendedUser;
+  if (!user?.email) {
+    console.error("User email is missing.");
+    return null;
+  }
+
+  // Invalidate the cache
+  await CacheConfig.remove('events', user.email);
+  console.log(`🔄 Cache for Calendly events cleared for user: ${user.email}`);
+
+  // Refetch the events, bypassing the cache
+  return await getCalendlyEvents(true);
+};

@@ -3,7 +3,11 @@ import { prisma } from '@/lib/db/prisma';
 import { Role, User } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './next-auth-config';
+import { CalendlyToken } from '../calendly/types';
 
+export type ExtendedUser = User & {
+  calendly_token?: CalendlyToken | null;
+};
 export const getAuthSession = () => {
   return getServerSession(authOptions);
 };

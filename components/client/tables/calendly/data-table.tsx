@@ -170,7 +170,7 @@ export function DataTable<TData, TValue>({
                     isSyncing={isSyncing}
                     headerText={
                       currentAction === "sync"
-                        ? "Fetching students from Google"
+                        ? "Fetching your students from CI Spreadsheet..."
                         : "Refreshing Calendly..."
                     }
                   />

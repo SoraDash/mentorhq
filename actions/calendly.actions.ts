@@ -163,7 +163,7 @@ export const refreshCalendlyToken = async () => {
 export const checkCalendlyToken = async () => {
   try {
     const user = await getUser() as ExtendedUser;
-    console.log("🔍 Checking token");
+    console.log(`🔍 Validating token for ${user?.email}...`);
 
     const request = {
       client_id: CLIENT_ID,

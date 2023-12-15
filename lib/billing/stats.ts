@@ -2,9 +2,11 @@ import { getUserBySession } from '@/lib/db/user';
 import { getMonth, getYear } from 'date-fns';
 import { getBilling } from './billing';
 import { FaUsers, FaCalendar, FaEuroSign, FaClock } from 'react-icons/fa';
+import { getAllStudents } from '../students';
 
 export const getLatestStats = async () => {
   const user = await getUserBySession();
+  const students = await getAllStudents();
   if (!user?.ciApiKey) return { status: 'empty', message: 'No user session found.' };
 
   const now = new Date();
@@ -26,7 +28,7 @@ export const getLatestStats = async () => {
     {
       title: 'Total Students',
       icon: FaUsers,
-      content: data?.details?.length.toString(),
+      content: students.length.toString(),
       color: 'bg-green-100',
       textColor: 'text-green-500',
     },

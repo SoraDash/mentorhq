@@ -24,7 +24,7 @@ import { PiStudent } from "react-icons/pi";
 import { TbCalendarCancel } from "react-icons/tb";
 import AddSessionModal from "../../AddSessionModal";
 import AddStudentModal from "../../AddStudentModal";
-import { MeetingInfoWithToast } from "./MeetingInfo";
+import { copyToClipboard } from "../../copyToClipboard";
 
 export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
   {
@@ -36,10 +36,10 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
     header: ({ column }) => {
       return (
         <Button
-          variant='light'
+          variant="light"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
           Student
-          <ArrowUpDown className='ml-2 h-4 w-4' />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
@@ -47,7 +47,7 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
       return (
         <Link
           href={`/student/${row.original.studentID}`}
-          className='cursor-pointer'>
+          className="cursor-pointer">
           {row.original.student_name}
         </Link>
       );
@@ -59,33 +59,33 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
       switch (row.original.location.type) {
         case "zoom_conference":
           return (
-            <div className='inline-flex items-center text-[#2d8cff] cursor-pointer'>
+            <div className="inline-flex items-center text-[#2d8cff] cursor-pointer">
               <Link
                 href={row.original.location.join_url}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='inline-flex'>
-                <BiLogoZoom className='w-6 h-6 mr-2' />
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex">
+                <BiLogoZoom className="w-6 h-6 mr-2" />
                 Zoom
               </Link>
             </div>
           );
         case "slack_conference":
           return (
-            <div className='flex items-center text-[#e01563] cursor-default'>
-              <BiLogoSlack className='w-6 h-6 mr-2' />
+            <div className="flex items-center text-[#e01563] cursor-default">
+              <BiLogoSlack className="w-6 h-6 mr-2" />
               Slack Huddle
             </div>
           );
         case "google_conference":
           return (
-            <div className='inline-flex items-center text-[#34a853] cursor-pointer'>
+            <div className="inline-flex items-center text-[#34a853] cursor-pointer">
               <Link
                 href={row.original.location.join_url}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='inline-flex'>
-                <BiLogoGoogle className='w-6 h-6 mr-2' />
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex">
+                <BiLogoGoogle className="w-6 h-6 mr-2" />
                 Google Meet
               </Link>
             </div>
@@ -114,10 +114,10 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
     header: ({ column }) => {
       return (
         <Button
-          variant='light'
+          variant="light"
           onClick={() => column.toggleSorting(column.getIsSorted() === "desc")}>
           Date
-          <ArrowUpDown className='ml-2 h-4 w-4' />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
@@ -150,58 +150,62 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
       return (
         <>
           <Dropdown
-            backdrop='blur'
+            backdrop="blur"
             showArrow>
             <DropdownTrigger>
               <Button
-                variant='light'
-                className='h-8 w-8 p-0'
-                color='primary'>
-                <span className='sr-only'>Open menu</span>
-                <FaEllipsisV className='h-4 w-4' />
+                variant="light"
+                className="h-8 w-8 p-0"
+                color="primary">
+                <span className="sr-only">Open menu</span>
+                <FaEllipsisV className="h-4 w-4" />
               </Button>
             </DropdownTrigger>
             <DropdownMenu
-              variant='faded'
-              aria-label='Dropdown Actions for meeting'>
+              variant="faded"
+              aria-label="Dropdown Actions for meeting">
               <DropdownSection
-                title='Current Meeting'
+                title="Current Meeting"
                 showDivider>
                 <DropdownItem
-                  key='session'
-                  description='Record a new Session'
-                  startContent={<PiStudent className={iconClasses} />}>
-                  New Session
-                </DropdownItem>
+                  key="session"
+                  description="Record a new Session"
+                  startContent={<PiStudent className={iconClasses} />}
+                  title="New Session"
+                />
                 <DropdownItem
-                  key='meeting'
-                  description='Open the meeting in a new tab'
-                  startContent={<BiLinkExternal className={iconClasses} />}>
-                  Join Meeting
-                </DropdownItem>
+                  key="meeting"
+                  description="Open the meeting in a new tab"
+                  startContent={<BiLinkExternal className={iconClasses} />}
+                  href={row.original.location.join_url}
+                  target="_blank"
+                  rel="noopener"
+                  title="Join Meeting"
+                />
                 <DropdownItem
-                  key='meeting_url'
-                  description='Copy Meeting URL to clipboard'
-                  startContent={<FaLink className={iconClasses} />}>
-                  <MeetingInfoWithToast event={row.original}>
-                    Meeting URL
-                  </MeetingInfoWithToast>
-                </DropdownItem>
+                  key="meeting_url"
+                  description="Copy Meeting URL to clipboard"
+                  startContent={<FaLink className={iconClasses} />}
+                  title="Meeting URL"
+                  onPress={() =>
+                    copyToClipboard(row.original.location.join_url)
+                  }
+                />
               </DropdownSection>
-              <DropdownSection title='Meeting Tools'>
+              <DropdownSection title="Meeting Tools">
                 <DropdownItem
-                  key='meeting_info'
-                  description='Answers from Calendly Questions'
+                  key="meeting_info"
+                  description="Answers from Calendly Questions"
                   startContent={
                     <AiOutlineInfoCircle
                       className={cn(iconClasses, "text-danger")}
                     />
-                  }>
-                  Meeting Info
-                </DropdownItem>
+                  }
+                  title="Meeting Info"
+                />
                 <DropdownItem
-                  key='reschedule'
-                  description='Reschedule this meeting'
+                  key="reschedule"
+                  description="Reschedule this meeting"
                   startContent={
                     <TbCalendarCancel
                       className={cn(iconClasses, "text-danger")}
@@ -209,9 +213,9 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
                   }
                   onClick={() =>
                     window.open(row.original.reschedule_url, "_blank")
-                  }>
-                  Reschedule
-                </DropdownItem>
+                  }
+                  title="Reschedule"
+                />
               </DropdownSection>
             </DropdownMenu>
           </Dropdown>

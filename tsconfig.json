@@ -32,7 +32,8 @@
     "scripts/generateEnv.js",
     "prisma/seed.ts",
     "prisma/data.ts",
-    "tailwind.config.ts"
+    "tailwind.config.ts",
+    "lib/last-word.jsx"
   ],
   "exclude": [
     "node_modules",

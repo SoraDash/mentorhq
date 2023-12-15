@@ -24,25 +24,21 @@ import { PiStudent } from "react-icons/pi";
 import { TbCalendarCancel } from "react-icons/tb";
 import AddSessionModal from "../../AddSessionModal";
 import AddStudentModal from "../../AddStudentModal";
-import { copyToClipboard } from "../../copyToClipboard";
+import { copyToClipboard } from "../../CopyToClipboard";
+import { MeetingStatus } from "./MeetingStatus";
+import { getLastWord } from "@/lib/last-word";
 
 export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
   {
     accessorKey: "status",
     header: "Status",
+    cell: ({ row }) => {
+      return <MeetingStatus event={row.original} />;
+    },
   },
   {
     accessorKey: "student_name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="light"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          Student
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "Student",
     cell: ({ row }) => {
       return (
         <Link
@@ -99,28 +95,21 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
   {
     accessorKey: "name",
     header: "Meeting Type",
+    cell: ({ row }) => {
+      return <>{getLastWord(row.original.name)}</>;
+    },
   },
   {
     accessorFn: (row) => {
       const date = new Date(row.start_time);
       return new Intl.DateTimeFormat("en-GB", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
         day: "2-digit",
-        month: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
       }).format(date);
     },
     accessorKey: "Date",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="light"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "desc")}>
-          Date
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
   },
   {
     accessorFn: (row) => {

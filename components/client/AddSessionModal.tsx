@@ -13,7 +13,7 @@ import {
   Textarea,
   useDisclosure,
 } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaChalkboardTeacher } from "react-icons/fa";
 
@@ -31,10 +31,10 @@ import { SessionType } from "@prisma/client";
 
 export default function AddSessionModal({ studentId }: { studentId: string }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [student, setStudent] = useState<UnifiedStudent | null>(null);
-  const [sessions, setSessions] = useState<SessionType[]>([]); // TODO: Replace with SessionType[
   const [currentSection, setCurrentSection] = useState(1);
   const [summary, setSummary] = useState<string | null>(null);
+  const [sessions, setSessions] = useState<SessionType[]>([]); // TODO: Replace with SessionType[
+  const [student, setStudent] = useState<UnifiedStudent | null>(null);
   const form = useForm();
 
   const progressOptions = [
@@ -80,10 +80,13 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
       if (!sessions) return;
       sessions.sort((a: SessionType, b: SessionType) => a.order - b.order);
       setSessions(sessions);
-      console.log(sessions);
     };
     fetchSessions();
   }, []);
+  const sortedSessions = useMemo(() => {
+    return sessions.sort((a: SessionType, b: SessionType) => a.order - b.order);
+  }, [sessions]);
+
   useEffect(() => {
     const fetchStudent = async () => {
       const student = await fetch(`/api/students/${studentId}`).then((res) =>
@@ -190,7 +193,7 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
                               <FormLabel />
                               <FormControl />
                               <Select
-                                items={sessions}
+                                items={sortedSessions}
                                 label="Session Type"
                                 placeholder="Select Session Type"
                                 labelPlacement="outside"

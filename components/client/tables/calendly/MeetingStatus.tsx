@@ -1,7 +1,6 @@
 import { CalendlyEvent } from "@/lib/calendly/types";
 import {
   addDays,
-  addHours,
   addMinutes,
   differenceInDays,
   formatDistanceStrict,
@@ -55,32 +54,35 @@ export const MeetingStatus = ({ event }: MeetingStatusProps) => {
   const eventInPast = (session: string) => {
     const sessionDate = new Date(parseISO(session));
     const currentDate = new Date();
-    if (isPast(sessionDate) && sessionDate > addMinutes(currentDate, -45)) {
+    const sessionEndTime = addMinutes(sessionDate, 45); // 45 minutes after session starts
+
+    // Session in progress
+    if (currentDate >= sessionDate && currentDate <= sessionEndTime) {
       return "Session In Progress";
-    } else if (isPast(sessionDate)) {
+    }
+
+    // Session is scheduled for later today
+    if (isToday(sessionDate) && currentDate < sessionDate) {
+      const timeToStart = formatDistanceStrict(sessionDate, currentDate);
+      return `Today (in ${timeToStart})`;
+    }
+
+    // Session complete
+    if (currentDate > sessionEndTime) {
       return "Session Complete";
-    } else {
-      if (isToday(sessionDate)) {
-        return `Today (in ${formatDistanceStrict(currentDate, sessionDate)})`;
+    }
+
+    // Future session (not today)
+    if (!isToday(sessionDate)) {
+      if (differenceInDays(sessionDate, currentDate) === 0) {
+        return "Tomorrow";
       }
+
       return `In ${differenceInDays(sessionDate, currentDate)} days`;
     }
   };
 
-  const shouldRenderSession = (session: any) => {
-    const sessionDate = new Date(parseISO(session));
-    const currentDate = new Date();
-    // get the end time of the session
-    const endTime = addHours(sessionDate, 2);
-    // check if current time is after end time
-    if (isAfter(currentDate, endTime)) {
-      return false;
-    }
-    return true;
-  };
-  if (event.status !== "active" || !shouldRenderSession(event.start_time)) {
-    return null; // Or some placeholder if needed
-  }
+  if (event.status !== "active") return null;
 
   const renderStatus = () => {
     const sessionDate = parseISO(event.start_time);

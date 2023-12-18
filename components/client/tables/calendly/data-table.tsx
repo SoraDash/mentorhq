@@ -12,6 +12,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+import { refreshCalendlyEventsForUser } from "@/actions/calendly.actions";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -21,15 +22,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@nextui-org/react";
-import { useEffect, useState } from "react";
-import { RiRocketFill } from "react-icons/ri";
-import { LoadingModal } from "../../LoadingModal";
 import { useToast } from "@/components/ui/use-toast";
 import { syncStudentsWithDatabase } from "@/lib/students";
-import { useRouter } from "next/navigation";
-import { refreshCalendlyEventsForUser } from "@/actions/calendly.actions";
+import { Button } from "@nextui-org/react";
+import { addHours, isAfter, parseISO } from "date-fns";
 import { CalendarSearch } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { RiRocketFill } from "react-icons/ri";
+import { LoadingModal } from "../../LoadingModal";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -60,6 +61,7 @@ export function DataTable<TData, TValue>({
       columnFilters,
     },
   });
+
   async function handleSync() {
     setIsSyncing(true);
     setCurrentAction("sync");
@@ -102,8 +104,10 @@ export function DataTable<TData, TValue>({
       setIsSyncing(false);
       setCurrentAction(null);
       router.refresh();
+      await refreshCalendly();
     }
   }
+
   async function refreshCalendly() {
     setIsSyncing(true);
     setCurrentAction("calendly");
@@ -116,14 +120,30 @@ export function DataTable<TData, TValue>({
     }
   }
 
+  const shouldRenderRow = (sessionStartTime: string) => {
+    const sessionDate = new Date(parseISO(sessionStartTime));
+    const endTime = addHours(sessionDate, 2);
+    return !isAfter(new Date(), endTime);
+  };
+
+  // ... other component code ...
+
+  const filteredRows = useMemo(() => {
+    return table.getRowModel().rows.filter((row) => {
+      const startTime = (row.original as any).start_time;
+      return shouldRenderRow(startTime);
+    });
+  }, [table]);
+
+  // eslint-disable-next-line no-unused-vars
+  async function handleAddSession() {}
+
   const [isMounted, setIsMounted] = useState(false);
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
   if (!isMounted) return null;
-
-  // eslint-disable-next-line no-unused-vars
-  async function handleAddSession() {}
 
   return (
     <>
@@ -207,8 +227,8 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+            {filteredRows.length ? (
+              filteredRows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}>

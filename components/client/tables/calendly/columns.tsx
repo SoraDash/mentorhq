@@ -1,5 +1,6 @@
 "use client";
 import { CalendlyEvent } from "@/lib/calendly/types";
+import { getLastWord } from "@/lib/last-word";
 import {
   Button,
   Dropdown,
@@ -10,7 +11,6 @@ import {
   cn,
 } from "@nextui-org/react";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
 import Link from "next/link";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import {
@@ -26,7 +26,6 @@ import AddSessionModal from "../../AddSessionModal";
 import AddStudentModal from "../../AddStudentModal";
 import { copyToClipboard } from "../../CopyToClipboard";
 import { MeetingStatus } from "./MeetingStatus";
-import { getLastWord } from "@/lib/last-word";
 
 export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
   {
@@ -40,12 +39,14 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
     accessorKey: "student_name",
     header: "Student",
     cell: ({ row }) => {
-      return (
+      return row.original.studentID ? (
         <Link
           href={`/student/${row.original.studentID}`}
           className="cursor-pointer">
           {row.original.student_name}
         </Link>
+      ) : (
+        <div className="cursor-default">{row.original.student_name}</div>
       );
     },
   },

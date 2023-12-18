@@ -57,7 +57,7 @@ const remove = async (serviceType: ServiceType, uniqueValue: string) => {
   const key = getCacheKey(serviceType, uniqueValue);
   if (shouldUseCache(serviceType)) {
     await REDIS.del(key);
-    console.info(`🗑️ Data deleted from cache for key: ${key}`);
+    console.info(`🗑️  Data deleted from cache for key: ${key}`);
   }
 };
 

@@ -232,6 +232,7 @@ export const idByEmail = async (events: any[], token: string) => {
 
 
 export const getCalendlyEvents = async (bypassCache = false) => {
+  console.log(`🦄 Bypassing cache for Calendly events`)
   try {
     const user = await getUser() as ExtendedUser;
     const userEmail = user?.email; // Assuming user object has an email property
@@ -270,7 +271,7 @@ const fetchAndCacheCalendlyEvents = async (
 
   const returnEntity = await idByEmail(events, checkedUser!);
 
-  console.log(`🗂️ Storing events in cache for user: ${userEmail}`);
+  console.log(`🗂️  Storing events in cache for user: ${userEmail}`);
   await CacheConfig.set('events', userEmail, returnEntity);
 
   return returnEntity as CalendlyEvent[];

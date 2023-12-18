@@ -1,4 +1,5 @@
-import { Select, Avatar, SelectItem } from "@nextui-org/react";
+import { FormikSelect } from "@/components/FormikSelect";
+import { Avatar, Select, SelectItem } from "@nextui-org/react";
 import { Project, SessionType } from "@prisma/client";
 import { FormikValues, useFormikContext } from "formik";
 import React from "react";
@@ -12,126 +13,63 @@ const progressOptions = [
   {
     text: "Poor",
     value: "POOR",
-    startContent: <>👎</>,
+    emoji: "👎",
   },
   {
     text: "Average",
     value: "AVERAGE",
-    startContent: <>👍</>,
+    emoji: "👍",
   },
   {
     text: "Excellent",
     value: "EXCELLENT",
-    startContent: <>🙌</>,
+    emoji: "🙌",
   },
 ];
 
 export const StepB: React.FC<StepBProps> = ({ sortedSessions, projects }) => {
   const { values, handleChange } = useFormikContext<FormikValues>();
+  const sessionOptions = sortedSessions.map((session) => ({
+    value: session.id, // Using 'id' as the unique identifier
+    label: session.name,
+    sessionType: {
+      id: session.id,
+      name: session.name,
+      icon: session.icon,
+    },
+  }));
+
+  // Transform Project data for FormikSelect
+  console.log("projects", projects);
+  const projectOptions = projects?.map((project) => ({
+    value: project.id, // Using 'id' as the unique identifier
+    label: project.name,
+    project: {
+      id: project.id,
+      name: project.name,
+      prefix: project.prefix,
+    },
+  }));
   return (
     <div>
-      <Select
-        items={sortedSessions}
+      <FormikSelect
+        options={sessionOptions}
         label="Session Type"
+        name="Session Type"
         placeholder="Select Session Type"
-        labelPlacement="outside"
-        classNames={{
-          trigger: "h-12",
-        }}
-        renderValue={(items) => {
-          return items.map((item) => (
-            <div
-              key={item.key}
-              className="flex items-center gap-2">
-              <Avatar
-                alt={item.data?.name}
-                className="flex-shrink-0"
-                size="sm"
-                color="default"
-                name={item.data?.icon}
-              />
-              <div className="flex flex-col">
-                <span>{item?.data?.name}</span>
-              </div>
-            </div>
-          ));
-        }}>
-        {(session) => (
-          <SelectItem
-            key={session.id}
-            textValue={session.name}>
-            <div className="flex gap-2 items-center">
-              <Avatar
-                alt={session.name}
-                className="flex-shrink-0"
-                size="sm"
-                color="default"
-                name={session.icon}
-              />
-              <div className="flex flex-col">
-                <span className="text-small">{session.name}</span>
-              </div>
-            </div>
-          </SelectItem>
-        )}
-      </Select>
-      <Select
-        items={projects}
+      />
+      <FormikSelect
+        options={projectOptions || []}
         label="Project"
+        name="Project"
         placeholder="Select Project"
-        labelPlacement="outside"
-        classNames={{
-          trigger: "h-12",
-        }}
-        renderValue={(items) => {
-          return items.map((item) => (
-            <div
-              key={item.key}
-              className="flex items-center gap-2">
-              <Avatar
-                alt={item.data?.prefix.toUpperCase()}
-                className="flex-shrink-0"
-                size="sm"
-                color="danger"
-                name={item.data?.prefix.toUpperCase()}
-              />
-              <div className="flex flex-col">
-                <span>{item?.data?.name}</span>
-              </div>
-            </div>
-          ));
-        }}>
-        {(project) => (
-          <SelectItem
-            key={project.id}
-            textValue={project.name}>
-            <div className="flex gap-2 items-center">
-              <Avatar
-                alt={project.name}
-                className="flex-shrink-0"
-                size="sm"
-                color="danger"
-                name={project.prefix.toUpperCase()}
-              />
-              <div className="flex flex-col">
-                <span className="text-small">{project.name}</span>
-              </div>
-            </div>
-          </SelectItem>
-        )}
-      </Select>
-      <Select
+      />
+      <FormikSelect
+        options={progressOptions}
         label="Progress"
-        placeholder="Select student progress">
-        {progressOptions.map((option) => (
-          <SelectItem
-            key={option.value}
-            value={option.value}
-            startContent={option.startContent}>
-            {option.text}
-          </SelectItem>
-        ))}
-      </Select>
+        name="Progress"
+        placeholder="Select Progress"
+      />
     </div>
   );
 };

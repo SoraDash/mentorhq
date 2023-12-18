@@ -35,8 +35,8 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
     progress: "",
     summary: "",
     personalNotes: "",
-    submission: "",
-    followup: "",
+    submissionType: "First Time Submission",
+    follow_up: "No",
     // Add other form fields as needed
   };
 
@@ -52,9 +52,6 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
     };
     fetchSessions();
   }, []);
-  const sortedSessions = useMemo(() => {
-    return sessions.sort((a: SessionType, b: SessionType) => a.order - b.order);
-  }, [sessions]);
 
   useEffect(() => {
     const fetchStudent = async () => {
@@ -120,7 +117,7 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
                     {currentSection === 1 && <StepA />}
                     {currentSection === 2 && (
                       <StepB
-                        sortedSessions={sortedSessions}
+                        sortedSessions={sessions}
                         projects={student.projects}
                       />
                     )}

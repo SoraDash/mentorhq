@@ -61,6 +61,9 @@ async function main(): Promise<void> {
           courseId: createdCourse.id,
         },
       });
+      console.log(
+        `🎉 Created project template ${projectTemplateInfo.name}.`
+      );
     }
 
     console.log(

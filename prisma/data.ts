@@ -24,7 +24,7 @@ export const sessions = [
 
 export const courses = [
   {
-    courseCode: "diwad",
+    courseCode: "disd",
     months: 12,
     projectCount: 4,
     prefix: "MS",
@@ -34,7 +34,7 @@ export const courses = [
     description: "The old 4 project course",
   },
   {
-    courseCode: "disd",
+    courseCode: "diwad",
     months: 12,
     projectCount: 5,
     prefix: "PP",

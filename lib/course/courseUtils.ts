@@ -39,12 +39,19 @@ export async function generateProjectsForStudent(course: Course & { projects: Pr
 
   // Generate projects for the student
   for (const template of course.projects) {
+    const existingProject = await prisma.project.findFirst({
+      where: {
+        studentId: studentId,
+        templateId: template.id,
+      }
+    });
     const project = await prisma.project.create({
       data: {
         name: template.name,
         templateId: template.id,
         studentId,
         prefix: template.prefix,
+        order: template.order,
         status: "NOTSTARTED",
       }
     });

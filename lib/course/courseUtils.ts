@@ -9,7 +9,7 @@ export const cleanProgrammeID = (programmeID: string) => {
 export async function getCourseByProgrammeID(id: string) {
   const courseCode = cleanProgrammeID(id);
 
-  console.log(`🔍 Looking up course with code: ${courseCode}`); // Searching emoji
+  console.log(`🔍 Looking up course with code: ${courseCode}`);
   const course = await prisma.course.findUnique({
     where: {
       courseCode
@@ -20,25 +20,38 @@ export async function getCourseByProgrammeID(id: string) {
   });
 
   if (!course) {
-    console.log(`❌ Invalid course code: ${courseCode}`); // Error emoji
-    throw new Error("Invalid course code");
+    console.log(`❌ Invalid course code: ${courseCode}`);
+    return null;
   }
 
-  console.log(`✅ Found course: ${course.name}`); // Check mark emoji
+  console.log(`✅ Found course: ${course.name} (${course.courseCode})`);
   return course;
 }
 
 export async function generateProjectsForStudent(course: Course & { projects: ProjectTemplate[] }, studentId: string) {
+  // Check if the course is valid
+  if (!course) {
+    console.log(`❌ Cannot generate projects. Invalid course code provided for student ID: ${studentId}`);
+    return []; // Return an empty array or handle the error as needed
+  }
+
   const projects = [];
 
   // Generate projects for the student
   for (const template of course.projects) {
+    const existingProject = await prisma.project.findFirst({
+      where: {
+        studentId: studentId,
+        templateId: template.id,
+      }
+    });
     const project = await prisma.project.create({
       data: {
         name: template.name,
         templateId: template.id,
         studentId,
         prefix: template.prefix,
+        order: template.order,
         status: "NOTSTARTED",
       }
     });

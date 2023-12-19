@@ -58,7 +58,7 @@ export const updateOrCreateStudentFromGoogle = async (
         return { action: 'updated', changes: initialChanges };
       }
 
-      console.log("ℹ️ No changes detected for the student.");
+      console.log("ℹ️  No changes detected for the student.");
       return { action: 'unchanged' };
     }
 

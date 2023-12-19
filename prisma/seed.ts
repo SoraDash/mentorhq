@@ -34,10 +34,6 @@ async function main(): Promise<void> {
       projectTemplates = [...projectTemplates, ...courseInfo.projectStages];
     }
 
-    if (courseInfo.specialization) {
-      projectTemplates = [...projectTemplates, ...courseInfo.specialization];
-    }
-
     for (const projectTemplateInfo of projectTemplates) {
       const existingProjectTemplate = await prisma.projectTemplate.findFirst({
         where: {
@@ -59,8 +55,12 @@ async function main(): Promise<void> {
           name: projectTemplateInfo.name,
           prefix: projectTemplateInfo.prefix,
           courseId: createdCourse.id,
+          order: projectTemplateInfo.order,
         },
       });
+      console.log(
+        `🎉 Created project template ${projectTemplateInfo.name}.`
+      );
     }
 
     console.log(

@@ -1,33 +1,23 @@
 "use client";
 import {
-  Avatar,
   Button,
-  Input,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  Select,
-  SelectItem,
-  Textarea,
   useDisclosure,
 } from "@nextui-org/react";
 import { useEffect, useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
 import { FaChalkboardTeacher } from "react-icons/fa";
 
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { UnifiedStudent } from "@/lib/students";
 import { SessionType } from "@prisma/client";
+import { Formik } from "formik";
+import { StepA } from "./sessions/StepA";
+import { StepB } from "./sessions/StepB";
+import { StepC } from "./sessions/StepC";
+import { StepD } from "./sessions/StepD";
 
 export default function AddSessionModal({ studentId }: { studentId: string }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -35,41 +25,20 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
   const [summary, setSummary] = useState<string | null>(null);
   const [sessions, setSessions] = useState<SessionType[]>([]); // TODO: Replace with SessionType[
   const [student, setStudent] = useState<UnifiedStudent | null>(null);
-  const form = useForm();
 
-  const progressOptions = [
-    {
-      text: "Poor",
-      value: "POOR",
-      startContent: <>👎</>,
-    },
-    {
-      text: "Average",
-      value: "AVERAGE",
-      startContent: <>👍</>,
-    },
-    {
-      text: "Excellent",
-      value: "EXCELLENT",
-      startContent: <>🙌</>,
-    },
-  ];
-  const submissionOptions = [
-    {
-      value: "First Time Submission",
-    },
-    {
-      value: "Project Resubmission",
-    },
-  ];
-  const followUpOptions = [
-    {
-      value: "Yes",
-    },
-    {
-      value: "No",
-    },
-  ];
+  const initialValues = {
+    // Todays date as a string
+    date: new Date().toISOString().split("T")[0],
+    duration: "11",
+    session: "",
+    project: "",
+    progress: "",
+    summary: "",
+    personalNotes: "",
+    submissionType: "First Time Submission",
+    follow_up: "No",
+    // Add other form fields as needed
+  };
 
   useEffect(() => {
     const fetchSessions = async () => {
@@ -83,9 +52,6 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
     };
     fetchSessions();
   }, []);
-  const sortedSessions = useMemo(() => {
-    return sessions.sort((a: SessionType, b: SessionType) => a.order - b.order);
-  }, [sessions]);
 
   useEffect(() => {
     const fetchStudent = async () => {
@@ -139,271 +105,24 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
         size="3xl">
         <ModalContent>
           {(onClose) => (
-            <>
-              <Form {...form}>
-                <form
-                  className="space-y-8"
-                  onSubmit={form.handleSubmit(onSubmit)}>
+            <Formik
+              initialValues={initialValues}
+              onSubmit={onSubmit}>
+              {({ values, setFieldValue, handleSubmit }) => (
+                <form onSubmit={handleSubmit}>
                   <ModalHeader className="flex flex-col gap-1">
                     Let&apos;s record a session
                   </ModalHeader>
                   <ModalBody>
-                    {currentSection === 1 && (
-                      <>
-                        <FormField
-                          control={form.control}
-                          name="date"
-                          render={() => (
-                            <FormItem>
-                              <FormLabel />
-                              <FormControl />
-                              <FormLabel>Session Date</FormLabel>
-                              <Input type="date" />
-                              <FormDescription />
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name="duration"
-                          render={() => (
-                            <FormItem>
-                              <FormLabel />
-                              <FormControl />
-                              <FormLabel>Session Duration</FormLabel>
-                              <Input type="number" />
-                              <FormDescription>
-                                System will add 4 minutes automatically
-                              </FormDescription>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </>
-                    )}
+                    {currentSection === 1 && <StepA />}
                     {currentSection === 2 && (
-                      <>
-                        <FormField
-                          control={form.control}
-                          name="session"
-                          render={() => (
-                            <FormItem>
-                              <FormLabel />
-                              <FormControl />
-                              <Select
-                                items={sortedSessions}
-                                label="Session Type"
-                                placeholder="Select Session Type"
-                                labelPlacement="outside"
-                                classNames={{
-                                  trigger: "h-12",
-                                }}
-                                renderValue={(items) => {
-                                  return items.map((item) => (
-                                    <div
-                                      key={item.key}
-                                      className="flex items-center gap-2">
-                                      <Avatar
-                                        alt={item.data?.name}
-                                        className="flex-shrink-0"
-                                        size="sm"
-                                        color="default"
-                                        name={item.data?.icon}
-                                      />
-                                      <div className="flex flex-col">
-                                        <span>{item?.data?.name}</span>
-                                      </div>
-                                    </div>
-                                  ));
-                                }}>
-                                {(session) => (
-                                  <SelectItem
-                                    key={session.id}
-                                    textValue={session.name}>
-                                    <div className="flex gap-2 items-center">
-                                      <Avatar
-                                        alt={session.name}
-                                        className="flex-shrink-0"
-                                        size="sm"
-                                        color="default"
-                                        name={session.icon}
-                                      />
-                                      <div className="flex flex-col">
-                                        <span className="text-small">
-                                          {session.name}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </SelectItem>
-                                )}
-                              </Select>
-                              <FormDescription />
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name="project"
-                          render={() => (
-                            <FormItem>
-                              <FormLabel />
-                              <FormControl />
-                              <Select
-                                items={student.projects}
-                                label="Project"
-                                placeholder="Select Project"
-                                labelPlacement="outside"
-                                classNames={{
-                                  trigger: "h-12",
-                                }}
-                                renderValue={(items) => {
-                                  return items.map((item) => (
-                                    <div
-                                      key={item.key}
-                                      className="flex items-center gap-2">
-                                      <Avatar
-                                        alt={item.data?.prefix.toUpperCase()}
-                                        className="flex-shrink-0"
-                                        size="sm"
-                                        color="danger"
-                                        name={item.data?.prefix.toUpperCase()}
-                                      />
-                                      <div className="flex flex-col">
-                                        <span>{item?.data?.name}</span>
-                                      </div>
-                                    </div>
-                                  ));
-                                }}>
-                                {(project) => (
-                                  <SelectItem
-                                    key={project.id}
-                                    textValue={project.name}>
-                                    <div className="flex gap-2 items-center">
-                                      <Avatar
-                                        alt={project.name}
-                                        className="flex-shrink-0"
-                                        size="sm"
-                                        color="danger"
-                                        name={project.prefix.toUpperCase()}
-                                      />
-                                      <div className="flex flex-col">
-                                        <span className="text-small">
-                                          {project.name}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </SelectItem>
-                                )}
-                              </Select>
-                              <FormDescription />
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name="progress"
-                          render={() => (
-                            <FormItem>
-                              <FormLabel />
-                              <FormControl />
-
-                              <Select
-                                label="Progress"
-                                placeholder="Select student progress">
-                                {progressOptions.map((option) => (
-                                  <SelectItem
-                                    key={option.value}
-                                    value={option.value}
-                                    startContent={option.startContent}>
-                                    {option.text}
-                                  </SelectItem>
-                                ))}
-                              </Select>
-                              <FormDescription />
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </>
+                      <StepB
+                        sortedSessions={sessions}
+                        projects={student.projects}
+                      />
                     )}
-                    {currentSection === 3 && (
-                      <>
-                        <Textarea
-                          isRequired
-                          maxRows={4}
-                          label="Summary"
-                          labelPlacement="outside"
-                          placeholder="Summary of the session"
-                          value={summary!}
-                          onChange={(e) => setSummary(e.target.value)}
-                        />
-                        <Textarea
-                          maxRows={4}
-                          label="Personal Notes"
-                          labelPlacement="outside"
-                          placeholder="Personal Notes (Not given to CI)"
-                        />
-                      </>
-                    )}
-                    {currentSection === 4 && (
-                      <>
-                        <FormField
-                          control={form.control}
-                          name="submission"
-                          render={() => (
-                            <FormItem>
-                              <FormLabel />
-                              <FormControl />
-
-                              <Select
-                                label="Was this for a first time project submission or a project re-submission?"
-                                placeholder="Select type of submission"
-                                isRequired>
-                                {submissionOptions.map((option) => (
-                                  <SelectItem
-                                    key={option.value}
-                                    value={option.value}
-                                    defaultValue={"First Time Submission"}>
-                                    {option.value}
-                                  </SelectItem>
-                                ))}
-                              </Select>
-                              <FormDescription />
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name="followup"
-                          render={() => (
-                            <FormItem>
-                              <FormLabel />
-                              <FormControl />
-                              <Select
-                                isRequired
-                                label="Do you want Student Care to follow up with the student?"
-                                placeholder="Is a follow up required">
-                                {followUpOptions.map((option) => (
-                                  <SelectItem
-                                    key={option.value}
-                                    value={option.value}
-                                    defaultValue={"No"}>
-                                    {option.value}
-                                  </SelectItem>
-                                ))}
-                              </Select>
-                              <FormDescription />
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </>
-                    )}
+                    {currentSection === 3 && <StepC />}
+                    {currentSection === 4 && <StepD />}
                   </ModalBody>
                   <ModalFooter className="flex justify-between">
                     {currentSection > 1 && (
@@ -429,8 +148,8 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
                     )}
                   </ModalFooter>
                 </form>
-              </Form>
-            </>
+              )}
+            </Formik>
           )}
         </ModalContent>
       </Modal>

@@ -1,14 +1,15 @@
 const ppCourses = [
-  { name: "HTML/CSS Essentials (PP1)", prefix: "pp1" },
-  { name: "JavaScript Essentials (PP2)", prefix: "pp2" },
-  { name: "Python Essentials (PP3)", prefix: "pp3" },
-  { name: "Full Stack Toolkit (PP4)", prefix: "pp4" },
+  { name: "HTML/CSS Essentials (PP1)", prefix: "pp1", order: 1 },
+  { name: "JavaScript Essentials (PP2)", prefix: "pp2", order: 2 },
+  { name: "Python Essentials (PP3)", prefix: "pp3", order: 3 },
+  { name: "Full Stack Toolkit (PP4)", prefix: "pp4", order: 4 },
+  { name: "eCommerce (PP5)", prefix: "pp5", order: 5 }
 ];
 const msCourses = [
-  { name: "User Centric Front End Development (MS1)", prefix: "ms1" },
-  { name: "Interactive Front End Development (MS2)", prefix: "ms2" },
-  { name: "Data Centric Development (MS3)", prefix: "ms3" },
-  { name: "Full Stack Frameworks with Django (MS4)", prefix: "ms4" },
+  { name: "User Centric Front End Development (MS1)", prefix: "ms1", order: 1 },
+  { name: "Interactive Front End Development (MS2)", prefix: "ms2", order: 2 },
+  { name: "Data Centric Development (MS3)", prefix: "ms3", order: 3 },
+  { name: "Full Stack Frameworks with Django (MS4)", prefix: "ms4", order: 4 },
 ];
 
 export const sessions = [
@@ -24,7 +25,7 @@ export const sessions = [
 
 export const courses = [
   {
-    courseCode: "diwad",
+    courseCode: "disd",
     months: 12,
     projectCount: 4,
     prefix: "MS",
@@ -34,10 +35,11 @@ export const courses = [
     description: "The old 4 project course",
   },
   {
-    courseCode: "disd",
+    courseCode: "diwad",
     months: 12,
     projectCount: 5,
     prefix: "PP",
+    hasSpecialization: false,
     projectStages: [...ppCourses],
     name: "Diploma In Software Development",
     description: "5 project course up to specialisations (PP1-PP4)",
@@ -47,6 +49,7 @@ export const courses = [
     months: 12,
     projectCount: 4,
     prefix: "PP",
+    hasSpecialization: false,
     projectStages: [...ppCourses],
     name: "Diploma In Software Development Common Curriculum",
     description: "5 project course up to specialisations (PP1-PP4)",
@@ -56,8 +59,8 @@ export const courses = [
     months: 12,
     projectCount: 5,
     prefix: "PP",
+    hasSpecialization: false,
     projectStages: [...ppCourses],
-    specialization: [{ name: "eCommerce (PP5)", prefix: "pp5" }],
     name: "Diploma In Software Development E-commerce (Default)",
     description:
       "E-commerce specialisation course assigned by default (PP1-PP5)",
@@ -67,8 +70,8 @@ export const courses = [
     months: 12,
     projectCount: 5,
     prefix: "PP",
+    projectStages: [...ppCourses],
     hasSpecialization: true,
-    specialization: [{ name: "eCommerce (PP5)", prefix: "pp5" }],
     name: "Diploma In Software Development E-commerce (Chosen)",
     description:
       "E-commerce specialisation course chosen by the student (PP1-PP5)",
@@ -78,6 +81,7 @@ export const courses = [
     months: 12,
     projectCount: 5,
     prefix: "PP",
+    hasSpecialization: true,
     projectStages: [...ppCourses],
     name: "Specialization in Predictive Analytics",
     description: "Predictive Analytics specialisation course (PP1-PP5)",
@@ -87,6 +91,7 @@ export const courses = [
     months: 12,
     projectCount: 5,
     prefix: "PP",
+    hasSpecialization: true,
     projectStages: [...ppCourses],
     name: "Specialization in Advanced Frontend",
     description: "Advanced Frontend specialisation course (PP1-PP5)",

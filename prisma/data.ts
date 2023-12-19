@@ -70,6 +70,7 @@ export const courses = [
     months: 12,
     projectCount: 5,
     prefix: "PP",
+    projectStages: [...ppCourses],
     hasSpecialization: true,
     name: "Diploma In Software Development E-commerce (Chosen)",
     description:

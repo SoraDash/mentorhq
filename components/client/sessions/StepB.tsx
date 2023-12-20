@@ -1,5 +1,4 @@
-import { FormikSelect } from "@/components/FormikSelect";
-import { Avatar, Select, SelectItem } from "@nextui-org/react";
+import { FormikSelect } from "@/components/forms/FormikSelect";
 import { Project, SessionType } from "@prisma/client";
 import { FormikValues, useFormikContext } from "formik";
 import React from "react";
@@ -11,63 +10,59 @@ interface StepBProps {
 
 const progressOptions = [
   {
-    text: "Poor",
+    label: "Poor",
     value: "POOR",
     emoji: "👎",
   },
   {
-    text: "Average",
+    label: "Average",
     value: "AVERAGE",
     emoji: "👍",
   },
   {
-    text: "Excellent",
+    label: "Excellent",
     value: "EXCELLENT",
     emoji: "🙌",
   },
 ];
 
 export const StepB: React.FC<StepBProps> = ({ sortedSessions, projects }) => {
-  const { values, handleChange } = useFormikContext<FormikValues>();
+  const { values, handleChange, setFieldValue } =
+    useFormikContext<FormikValues>();
+
   const sessionOptions = sortedSessions.map((session) => ({
-    value: session.id, // Using 'id' as the unique identifier
+    value: session.id, // Correct: Use ID as the value for selection
     label: session.name,
-    sessionType: {
-      id: session.id,
-      name: session.name,
-      icon: session.icon,
-    },
+    emoji: session.icon,
+    sessionType: session, // Include the whole session object
   }));
 
-  // Transform Project data for FormikSelect
-  console.log("projects", projects);
-  const projectOptions = projects?.map((project) => ({
-    value: project.id, // Using 'id' as the unique identifier
+  const projectOptions = (projects || []).map((project) => ({
+    value: project.id, // Correct: Use ID as the value for selection
     label: project.name,
-    project: {
-      id: project.id,
-      name: project.name,
-      prefix: project.prefix,
-    },
+    emoji: project.prefix.toUpperCase(),
+    project: project, // Include the whole project object
   }));
+
   return (
     <div>
       <FormikSelect
-        options={sessionOptions}
+        options={sessionOptions} // Directly use sessionOptions without remapping
         label="Session Type"
-        name="Session Type"
+        name="session"
         placeholder="Select Session Type"
       />
       <FormikSelect
-        options={projectOptions || []}
+        options={projectOptions} // Directly use projectOptions without remapping
         label="Project"
-        name="Project"
+        name="project"
         placeholder="Select Project"
       />
+
       <FormikSelect
         options={progressOptions}
         label="Progress"
-        name="Progress"
+        name="progress"
         placeholder="Select Progress"
       />
     </div>

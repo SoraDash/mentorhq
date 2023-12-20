@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaSkype } from "react-icons/fa";
 import { PiStudentBold } from "react-icons/pi";
-import { FormikSelect } from "../FormikSelect";
+import { FormikSelect } from "../forms/FormikSelect";
 
 export default function AddStudentModal() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -55,15 +55,15 @@ export default function AddStudentModal() {
       <Button
         onPress={onOpen}
         startContent={<PiStudentBold />}
-        color='primary'>
+        color="primary">
         Add Student
       </Button>
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         isDismissable={false}
-        backdrop='blur'
-        size='3xl'>
+        backdrop="blur"
+        size="3xl">
         <ModalContent>
           {() => (
             <Formik
@@ -79,28 +79,28 @@ export default function AddStudentModal() {
                 const { values, handleChange, isSubmitting } = formikProps;
 
                 return (
-                  <Form className='space-y-3'>
-                    <ModalHeader className='flex flex-col gap-1'>
+                  <Form className="space-y-3">
+                    <ModalHeader className="flex flex-col gap-1">
                       Let&apos;s record a session
                     </ModalHeader>
                     <ModalBody>
                       {currentSection === 1 && (
                         <>
                           <Input
-                            type='text'
-                            label='Student Full Name'
-                            id='name'
+                            type="text"
+                            label="Student Full Name"
+                            id="name"
                             isRequired
-                            className='my-5'
+                            className="my-5"
                             value={values.name}
                             onChange={handleChange}
                           />
                           <Input
-                            type='email'
-                            label='Student Email'
-                            id='email'
+                            type="email"
+                            label="Student Email"
+                            id="email"
                             isRequired
-                            className='mb-5'
+                            className="mb-5"
                             value={values.email}
                             onChange={handleChange}
                           />
@@ -110,25 +110,25 @@ export default function AddStudentModal() {
                       {currentSection === 2 && (
                         <>
                           <Input
-                            type='text'
-                            label='Course Code'
-                            id='courseCode'
+                            type="text"
+                            label="Course Code"
+                            id="courseCode"
                             isRequired
-                            className='mb-5'
+                            className="mb-5"
                             value={values.courseCode || ""}
                             onChange={handleChange}
                           />
                           <FormikSelect
-                            name='programmeID'
-                            label='Programme ID'
+                            name="programmeID"
+                            label="Programme ID"
                             options={programmeIdOptions}
                             isRequired
                           />
                           <FormikSelect
-                            name='contactMethod'
-                            label='Prefered Contact Method'
+                            name="contactMethod"
+                            label="Prefered Contact Method"
                             options={courseOptions}
-                            className='mb-5'
+                            className="mb-5"
                             isRequired
                           />
                         </>
@@ -138,20 +138,20 @@ export default function AddStudentModal() {
                         <>
                           {/* Add your social fields here */}
                           <Input
-                            type='text'
-                            label='Skype Username'
-                            id='skype'
+                            type="text"
+                            label="Skype Username"
+                            id="skype"
                             startContent={<FaSkype />}
                             value={values.skype || ""}
                             onChange={handleChange}
                           />
                           <Input
-                            type='text'
-                            label='Slack Handle'
-                            id='slack'
+                            type="text"
+                            label="Slack Handle"
+                            id="slack"
                             startContent={
-                              <div className='pointer-events-none flex items-center'>
-                                <span className='text-default-400 text-small'>
+                              <div className="pointer-events-none flex items-center">
+                                <span className="text-default-400 text-small">
                                   @
                                 </span>
                               </div>
@@ -160,12 +160,12 @@ export default function AddStudentModal() {
                             onChange={handleChange}
                           />
                           <Input
-                            type='text'
-                            label='GitHub Username'
-                            id='github'
+                            type="text"
+                            label="GitHub Username"
+                            id="github"
                             startContent={
-                              <div className='pointer-events-none flex items-center'>
-                                <span className='text-default-400 text-small'>
+                              <div className="pointer-events-none flex items-center">
+                                <span className="text-default-400 text-small">
                                   @
                                 </span>
                               </div>
@@ -174,12 +174,12 @@ export default function AddStudentModal() {
                             onChange={handleChange}
                           />
                           <Input
-                            type='text'
-                            label='LinkedIn Username'
-                            id='linkedIn'
+                            type="text"
+                            label="LinkedIn Username"
+                            id="linkedIn"
                             startContent={
-                              <div className='pointer-events-none flex items-center'>
-                                <span className='text-default-400 text-small'>
+                              <div className="pointer-events-none flex items-center">
+                                <span className="text-default-400 text-small">
                                   https://linkedin.com/in/
                                 </span>
                               </div>
@@ -190,25 +190,25 @@ export default function AddStudentModal() {
                         </>
                       )}
                     </ModalBody>
-                    <ModalFooter className='flex justify-between'>
+                    <ModalFooter className="flex justify-between">
                       {currentSection > 1 && (
                         <Button
-                          color='default'
+                          color="default"
                           onPress={() => setCurrentSection((prev) => prev - 1)}>
                           Back
                         </Button>
                       )}
                       {currentSection < 3 && (
                         <Button
-                          color='primary'
+                          color="primary"
                           onPress={() => setCurrentSection((prev) => prev + 1)}>
                           Next
                         </Button>
                       )}
                       {currentSection === 3 && (
                         <Button
-                          type='submit'
-                          color='success'
+                          type="submit"
+                          color="success"
                           disabled={isSubmitting}>
                           Submit
                         </Button>

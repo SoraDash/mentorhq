@@ -1,4 +1,4 @@
-import { FormikSelect } from "@/components/FormikSelect";
+import { FormikSelect } from "@/components/forms/FormikSelect";
 import { FormikValues, useFormikContext } from "formik";
 import React from "react";
 
@@ -43,34 +43,8 @@ export const StepD: React.FC<StepDProps> = () => {
         name="follow_up"
         label="Do you want Student Care to follow up with the student?"
         options={followUpOptions}
-        placeholder="Is a follow up required"
         isRequired
       />
-      {/* <Select
-        label="Was this for a first time project submission or a project re-submission?"
-        placeholder="Select type of submission"
-        isRequired>
-        {submissionOptions.map((option) => (
-          <SelectItem
-            key={option.value}
-            value={option.value}>
-            {option.value}
-          </SelectItem>
-        ))}
-      </Select> */}
-      {/* <Select
-        isRequired
-        label="Do you want Student Care to follow up with the student?"
-        placeholder="Is a follow up required">
-        {followUpOptions.map((option) => (
-          <SelectItem
-            key={option.value}
-            value={option.value}
-            onChange={handleChange}>
-            {option.value}
-          </SelectItem>
-        ))}
-      </Select> */}
     </div>
   );
 };

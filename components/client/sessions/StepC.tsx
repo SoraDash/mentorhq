@@ -11,12 +11,14 @@ export const StepC: React.FC<StepCProps> = () => {
     <div>
       <Textarea
         isRequired
+        name="summary"
         maxRows={4}
         label="Summary"
         labelPlacement="outside"
         placeholder="Summary of the session"
       />
       <Textarea
+        name="personalNotes"
         maxRows={4}
         label="Personal Notes"
         labelPlacement="outside"

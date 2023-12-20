@@ -121,6 +121,8 @@ model StudentSession {
   notes          String?         @db.Text
   duration       Int?
   session_url    String?
+  student        Student         @relation(fields: [studentId], references: [id])
+  studentId      String
   user           User            @relation(fields: [userId], references: [id])
   userId         String
   project        Project         @relation(fields: [projectId], references: [id])
@@ -132,13 +134,13 @@ model StudentSession {
 }
 
 model Student {
-  id            String         @id @default(uuid())
+  id            String           @id @default(uuid())
   name          String
-  email         String         @unique
+  email         String           @unique
   firstName     String?
   lastName      String?
-  contactMethod ContactMethod? @default(SLACK)
-  lastContact   DateTime?      @updatedAt
+  contactMethod ContactMethod?   @default(SLACK)
+  lastContact   DateTime?        @updatedAt
   github        String?
   slack         String?
   skype         String?
@@ -148,16 +150,17 @@ model Student {
   startDate     DateTime?
   lmsAccess     Boolean?
   status        String?
-  bio           String?        @db.Text()
-  mentor        User?          @relation(fields: [mentorId], references: [id], onDelete: SetNull)
+  bio           String?          @db.Text()
+  mentor        User?            @relation(fields: [mentorId], references: [id], onDelete: SetNull)
   mentorId      String?
-  created_at    DateTime?      @default(now())
-  updated_at    DateTime?      @updatedAt
-  isDeleted     Boolean?       @default(false)
-  unassignedAt  DateTime?      @default(now())
+  created_at    DateTime?        @default(now())
+  updated_at    DateTime?        @updatedAt
+  isDeleted     Boolean?         @default(false)
+  unassignedAt  DateTime?        @default(now())
   courseId      String?
-  course        Course?        @relation(fields: [courseId], references: [id])
+  course        Course?          @relation(fields: [courseId], references: [id])
   projects      Project[]
+  sessions      StudentSession[]
 }
 
 model Account {

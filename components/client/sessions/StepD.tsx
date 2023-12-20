@@ -37,12 +37,14 @@ export const StepD: React.FC<StepDProps> = () => {
         name="submissionType"
         label="Select type of submission"
         options={submissionOptions}
+        onChange={handleChange}
         isRequired
       />
       <FormikSelect
         name="follow_up"
         label="Do you want Student Care to follow up with the student?"
         options={followUpOptions}
+        onChange={handleChange}
         isRequired
       />
     </div>

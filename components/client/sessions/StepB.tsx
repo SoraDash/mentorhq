@@ -30,18 +30,19 @@ export const StepB: React.FC<StepBProps> = ({ sortedSessions, projects }) => {
   const { values, handleChange, setFieldValue } =
     useFormikContext<FormikValues>();
 
+  if (!values.progress) {
+    setFieldValue("progress", progressOptions[1]);
+  }
   const sessionOptions = sortedSessions.map((session) => ({
     value: session.id, // Correct: Use ID as the value for selection
     label: session.name,
     emoji: session.icon,
-    sessionType: session, // Include the whole session object
   }));
 
   const projectOptions = (projects || []).map((project) => ({
     value: project.id, // Correct: Use ID as the value for selection
     label: project.name,
     emoji: project.prefix.toUpperCase(),
-    project: project, // Include the whole project object
   }));
 
   return (

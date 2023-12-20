@@ -24,7 +24,6 @@ interface Option {
   sessionType?: SessionType;
   project?: Project;
 }
-
 interface FormikSelectProps {
   name: string;
   label: string;
@@ -32,30 +31,26 @@ interface FormikSelectProps {
   placeholder?: string;
   className?: string;
   options: Option[];
+  onChange?: (value: string) => void;
 }
 
 export const FormikSelect: React.FC<FormikSelectProps> = ({
   label,
   options,
   className,
+  onChange,
   ...props
 }) => {
   const [field, meta, helpers] = useField(props.name);
-  const { setValue, setTouched } = helpers;
+  const { setTouched } = helpers;
   const [description, setDescription] = useState<string>("");
-  const isValid = meta.touched ? !meta.error : true;
-  const { setFieldValue, errors, touched } = useFormikContext<FormikValues>();
+  const { setFieldValue } = useFormikContext<FormikValues>();
 
-  const handleSelectionChange = (value: string) => {
+  const defaultHandleSelectionChange = (value: string) => {
     const selectedOption = options.find((option) => option.value === value);
-    if (selectedOption) {
-      // Set the entire selected object in Formik's state
-      setFieldValue(
-        props.name,
-        selectedOption.sessionType || selectedOption.project
-      );
 
-      // Update the displayed description
+    if (selectedOption) {
+      setFieldValue(props.name, selectedOption);
       setDescription(selectedOption.label || "");
     }
   };
@@ -63,24 +58,27 @@ export const FormikSelect: React.FC<FormikSelectProps> = ({
   return (
     <Select
       {...props}
-      aria-label={label} // Providing an aria-label for accessibility
+      aria-label={label}
       label={label}
-      isInvalid={!isValid}
+      isInvalid={meta.touched && !!meta.error}
       description={description}
-      value={field.value ? field.value.id : ""}
+      value={field.value}
       isRequired={props.isRequired}
       errorMessage={meta.error}
       className={cn("w-full space-y-5", className)}
-      onChange={(e) => handleSelectionChange(e.target.value)}
+      onChange={(e) =>
+        onChange
+          ? onChange(e.target.value)
+          : defaultHandleSelectionChange(e.target.value)
+      }
       onClose={() => setTouched(true)}>
       {options.map((option) => (
         <SelectItem
           key={option.value}
-          textValue={description || option.value}>
+          textValue={option.label || ""}>
           <OptionItem
             label={option.label || ""}
             emoji={option.emoji}
-            prefix={option.project?.prefix} // Assume project options have a prefix
           />
         </SelectItem>
       ))}

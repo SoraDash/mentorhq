@@ -16,6 +16,8 @@ export const StepC: React.FC<StepCProps> = () => {
         label="Summary"
         labelPlacement="outside"
         placeholder="Summary of the session"
+        value={values.summary}
+        onChange={handleChange}
       />
       <Textarea
         name="personalNotes"
@@ -23,6 +25,9 @@ export const StepC: React.FC<StepCProps> = () => {
         label="Personal Notes"
         labelPlacement="outside"
         placeholder="Personal Notes (Not given to CI)"
+        defaultValue={values.personalNotes}
+        value={values.personalNotes}
+        onChange={handleChange}
       />
     </div>
   );

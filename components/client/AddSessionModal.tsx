@@ -19,6 +19,7 @@ import { StepB } from "./sessions/StepB";
 import { StepC } from "./sessions/StepC";
 import { StepD } from "./sessions/StepD";
 import React from "react";
+import { StepFinal } from "./sessions/StepFinal";
 
 interface StepComponent {
   Component: React.FC<any>;
@@ -31,12 +32,13 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
   const [sessions, setSessions] = useState<SessionType[]>([]); // TODO: Replace with SessionType[
   const [student, setStudent] = useState<UnifiedStudent | null>(null);
   const initialValues = {
+    studentId,
     id: null,
     date: new Date().toISOString().split("T")[0],
     duration: "11",
     session: {},
     project: {},
-    progress: "",
+    progress: {},
     summary: "",
     personalNotes: "",
     submissionType: "First Time Submission",
@@ -54,6 +56,7 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
     },
     { Component: StepC, props: {} },
     { Component: StepD, props: {} },
+    { Component: StepFinal, props: {} },
   ];
   const totalSteps = stepComponents.length;
   const CurrentStepComponent = stepComponents[currentSection - 1].Component;
@@ -104,11 +107,18 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
   const onSubmit = (values: FormikValues) => {
     if (currentSection === totalSteps) {
       console.log("Final part of the form submitted", values);
+      onOpenChange();
     } else {
       console.log(`Submitting Step ${currentSection}`, values);
-      onOpenChange();
       setCurrentSection((prev) => prev + 1);
     }
+  };
+
+  const handleModalChange = (isOpen: boolean) => {
+    if (!isOpen) {
+      setCurrentSection(1);
+    }
+    onOpenChange();
   };
 
   return (
@@ -123,7 +133,7 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
         backdrop="blur"
         isDismissable={true}
         isOpen={isOpen}
-        onOpenChange={onOpenChange}
+        onOpenChange={handleModalChange}
         size="3xl">
         <ModalContent>
           <Formik

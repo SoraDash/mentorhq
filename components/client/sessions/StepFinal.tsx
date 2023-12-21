@@ -16,6 +16,8 @@ import React from 'react';
 export const StepFinal = () => {
   const { values } = useFormikContext<FormikValues>();
 
+  console.log(values);
+
   return (
     <div className="grid grid-cols-2 gap-4">
       <p className="col-span-2">
@@ -53,12 +55,12 @@ export const StepFinal = () => {
       <p>
         <PlaneIcon className="w-4 h-4 inline-block mr-2" />
         <span className="font-semibold mr-1">Submission Type:</span>
-        <span>{values.submissionType}</span>
+        <span>{values.submissionType.value}</span>
       </p>
       <p>
         <MailboxIcon className="w-4 h-4 inline-block mr-2" />
         <span className="font-semibold mr-1">Follow-up:</span>
-        <span>{values.follow_up}</span>
+        <span>{values.follow_up.value}</span>
       </p>
       {values.personalNotes && (
         <p className="col-span-2">

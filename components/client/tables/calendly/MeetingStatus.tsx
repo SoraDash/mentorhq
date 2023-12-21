@@ -99,7 +99,7 @@ export const MeetingStatus = ({ event }: MeetingStatusProps) => {
 
     return (
       <div className={`flex items-center ${statusClasses.class}`}>
-        <div className={`${statusClasses.bg} ${dotClass}`}></div>
+        <div className={`${statusClasses.bg} ${dotClass}`} />
         <span className="ml-2">{status}</span>
       </div>
     );

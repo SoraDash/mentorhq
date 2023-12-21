@@ -1,10 +1,3 @@
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-} from '@nextui-org/react';
 import { format } from 'date-fns';
 import { FormikValues, useFormikContext } from 'formik';
 import {
@@ -20,10 +13,10 @@ import {
 } from 'lucide-react';
 import React from 'react';
 
-interface StepFinalProps {}
-
-export const StepFinal: React.FC<StepFinalProps> = () => {
+export const StepFinal = () => {
   const { values } = useFormikContext<FormikValues>();
+
+  console.log(values);
 
   return (
     <div className="grid grid-cols-2 gap-4">
@@ -62,12 +55,12 @@ export const StepFinal: React.FC<StepFinalProps> = () => {
       <p>
         <PlaneIcon className="w-4 h-4 inline-block mr-2" />
         <span className="font-semibold mr-1">Submission Type:</span>
-        <span>{values.submissionType}</span>
+        <span>{values.submissionType.value}</span>
       </p>
       <p>
         <MailboxIcon className="w-4 h-4 inline-block mr-2" />
         <span className="font-semibold mr-1">Follow-up:</span>
-        <span>{values.follow_up}</span>
+        <span>{values.follow_up.value}</span>
       </p>
       {values.personalNotes && (
         <p className="col-span-2">

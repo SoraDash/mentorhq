@@ -61,7 +61,7 @@ export const FormikSelect: React.FC<FormikSelectProps> = ({
     <Select
       {...props}
       aria-label={label}
-      className={cn('w-full space-y-5', className)}
+      className={cn('space-y-5 w-full', className)}
       description={description}
       errorMessage={meta.error}
       isInvalid={meta.touched && !!meta.error}
@@ -76,7 +76,11 @@ export const FormikSelect: React.FC<FormikSelectProps> = ({
       value={field.value}
     >
       {options.map((option) => (
-        <SelectItem key={option.value} textValue={option.label || ''}>
+        <SelectItem
+          key={option.value}
+          textValue={option.label || ''}
+          value={option.value}
+        >
           <OptionItem emoji={option.emoji} label={option.label || ''} />
         </SelectItem>
       ))}

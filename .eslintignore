@@ -1,3 +1,4 @@
 components/ui/**/*
 components/ui/**/*.*
 lib/calendly/fake-events.ts
+tailwind.config.ts

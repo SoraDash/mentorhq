@@ -8,9 +8,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "env": "node ./scripts/generateEnv.js",
-    "env:ts": "ts-node ./scripts/generateEnvTypes.ts",
+    "lint": "eslint ./ --ignore-path .gitignore",
+    "lint:fix": "yarn lint -- --fix",
+    "format": "prettier --write \"{,!(node_modules)/**/}*.js\"",
+    "env": "ts-node ./scripts/generateEnvTypes.ts",
     "redis": "docker run -p 6379:6379 -it -d redis/redis-stack-server:latest",
     "studio": "yarn prisma studio",
     "seed": "ts-node -O '{\"module\": \"commonjs\"}' prisma/seed.ts"

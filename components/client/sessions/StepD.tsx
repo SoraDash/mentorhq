@@ -3,8 +3,6 @@ import React from 'react';
 
 import { FormikSelect } from '@/components/forms/FormikSelect';
 
-interface StepDProps {}
-
 const submissionOptions = [
   {
     value: 'First Time Submission',
@@ -30,8 +28,8 @@ const followUpOptions = [
   },
 ];
 
-export const StepD: React.FC<StepDProps> = () => {
-  const { handleChange, values } = useFormikContext<FormikValues>();
+export const StepD = () => {
+  const { handleChange } = useFormikContext<FormikValues>();
 
   return (
     <div>

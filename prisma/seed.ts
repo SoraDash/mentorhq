@@ -1,5 +1,6 @@
-import { PrismaClient } from "@prisma/client";
-import { courses, sessions } from "./data";
+import { PrismaClient } from '@prisma/client';
+
+import { courses, sessions } from './data';
 
 const prisma = new PrismaClient();
 
@@ -11,7 +12,7 @@ async function main(): Promise<void> {
 
     if (existingCourse) {
       console.warn(
-        `⚠️ Course with code ${courseInfo.courseCode} already exists. Skipping...`
+        `⚠️ Course with code ${courseInfo.courseCode} already exists. Skipping...`,
       );
       continue;
     }
@@ -28,7 +29,7 @@ async function main(): Promise<void> {
       },
     });
 
-    let projectTemplates: Array<any> = []; // Adjust the type if you have a specific type for project templates.
+    let projectTemplates: any[] = []; // Adjust the type if you have a specific type for project templates.
 
     if (courseInfo.projectStages) {
       projectTemplates = [...projectTemplates, ...courseInfo.projectStages];
@@ -45,7 +46,7 @@ async function main(): Promise<void> {
 
       if (existingProjectTemplate) {
         console.warn(
-          `⚠️ Project template ${projectTemplateInfo.name} for course ${createdCourse.name} already exists. Skipping...`
+          `⚠️ Project template ${projectTemplateInfo.name} for course ${createdCourse.name} already exists. Skipping...`,
         );
         continue;
       }
@@ -58,13 +59,11 @@ async function main(): Promise<void> {
           order: projectTemplateInfo.order,
         },
       });
-      console.log(
-        `🎉 Created project template ${projectTemplateInfo.name}.`
-      );
+      console.log(`🎉 Created project template ${projectTemplateInfo.name}.`);
     }
 
     console.log(
-      `✅ Created course ${courseInfo.name} and its project templates.`
+      `✅ Created course ${courseInfo.name} and its project templates.`,
     );
   }
 
@@ -90,7 +89,7 @@ async function main(): Promise<void> {
       console.log(`✅ Created session ${session.name}.`);
     } catch (error: any) {
       console.error(
-        `❌ Failed to seed session ${session.name}: ${error.message}`
+        `❌ Failed to seed session ${session.name}: ${error.message}`,
       );
     }
   }
@@ -102,6 +101,6 @@ main()
     throw e;
   })
   .finally(async () => {
-    console.log("🔚 Seeding process finished. Disconnecting...");
+    console.log('🔚 Seeding process finished. Disconnecting...');
     await prisma.$disconnect();
   });

@@ -2,9 +2,7 @@ import { Textarea } from '@nextui-org/react';
 import { FormikValues, useFormikContext } from 'formik';
 import React from 'react';
 
-interface StepCProps {}
-
-export const StepC: React.FC<StepCProps> = () => {
+export const StepC = () => {
   const { handleChange, values } = useFormikContext<FormikValues>();
 
   return (

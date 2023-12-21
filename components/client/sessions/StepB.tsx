@@ -49,12 +49,14 @@ export const StepB: React.FC<StepBProps> = ({ projects, sortedSessions }) => {
   return (
     <div>
       <FormikSelect
+        isRequired
         label="Session Type"
         name="session"
         options={sessionOptions}
         placeholder="Select Session Type"
       />
       <FormikSelect
+        isRequired
         label="Project"
         name="project"
         options={projectOptions}
@@ -63,6 +65,7 @@ export const StepB: React.FC<StepBProps> = ({ projects, sortedSessions }) => {
 
       <FormikSelect
         defaultValue={progressOptions[1]}
+        isRequired
         label="Progress"
         name="progress"
         options={progressOptions}

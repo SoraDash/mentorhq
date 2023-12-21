@@ -1,14 +1,17 @@
-"use client";
+'use client';
 
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { User as PrismUser } from "@prisma/client";
-import { Menu } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import Sidebar from "./Sidebar";
+import { User as PrismUser } from '@prisma/client';
+import { Menu } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+
+import Sidebar from './Sidebar';
 
 interface MobileSidebarProps {
   user: PrismUser;
 }
+
 const MobileSidebar: React.FC<MobileSidebarProps> = ({ user }) => {
   const [isMounted, setIsMounted] = useState(false);
 
@@ -17,14 +20,13 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ user }) => {
   }, []);
 
   if (!isMounted) return null;
+
   return (
     <Sheet>
-      <SheetTrigger className='md:hidden'>
-        <Menu className='text-[#fde8ef] dark:text-[#ee327b]' />
+      <SheetTrigger className="md:hidden">
+        <Menu className="text-[#fde8ef] dark:text-[#ee327b]" />
       </SheetTrigger>
-      <SheetContent
-        side='left'
-        className='p-0'>
+      <SheetContent className="p-0" side="left">
         <Sidebar user={user} />
       </SheetContent>
     </Sheet>

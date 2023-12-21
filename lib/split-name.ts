@@ -1,11 +1,14 @@
 type NameParts = {
   firstName: string;
-  lastName: string;
   fullName: string;
+  lastName: string;
   middleName: string;
 };
 
-export function splitName(name: string, includeMiddleNameInFirst: boolean = false): NameParts {
+export function splitName(
+  name: string,
+  includeMiddleNameInFirst: boolean = false,
+): NameParts {
   const capitalize = (word: string): string =>
     word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 
@@ -29,7 +32,7 @@ export function splitName(name: string, includeMiddleNameInFirst: boolean = fals
     firstName,
     lastName,
     fullName: words.join(' '),
-    middleName
+    middleName,
   };
 }
 
@@ -37,5 +40,6 @@ export function getInitials(name: string): string {
   const { firstName, lastName } = splitName(name);
   const firstInitial = firstName ? firstName[0] : '';
   const lastInitial = lastName ? lastName[0] : '';
+
   return `${firstInitial}${lastInitial}`.toUpperCase();
 }

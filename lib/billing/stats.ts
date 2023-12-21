@@ -1,27 +1,35 @@
-import { getUserBySession } from '@/lib/db/user';
 import { getMonth, getYear } from 'date-fns';
+import { FaCalendar, FaClock, FaEuroSign, FaUsers } from 'react-icons/fa';
+
+import { getUserBySession } from '@/lib/db/user';
+
 import { getBilling } from './billing';
-import { FaUsers, FaCalendar, FaEuroSign, FaClock } from 'react-icons/fa';
 import { getAllStudents } from '../students';
 
 export const getLatestStats = async () => {
   const user = await getUserBySession();
   const students = await getAllStudents();
-  if (!user?.ciApiKey) return { status: 'empty', message: 'No user session found.' };
+
+  if (!user?.ciApiKey)
+    return { status: 'empty', message: 'No user session found.' };
 
   const now = new Date();
   const month = getMonth(now) + 1;
   const year = getYear(now);
 
   const data = await getBilling(month.toString(), year.toString());
-  if (!data || !data?.aggregates) return { status: 'empty', message: 'No billing data available.' };
+
+  if (!data || !data?.aggregates)
+    return { status: 'empty', message: 'No billing data available.' };
 
   const sessionCount = parseInt(data?.aggregates?.session_count);
   const eurosBillable = data?.aggregates?.euros_billable;
 
   let averageSessionTimeInMinutes = 0;
+
   if (sessionCount && data?.aggregates?.total_session_time) {
-    averageSessionTimeInMinutes = convertToMinutes(data?.aggregates?.total_session_time) / sessionCount;
+    averageSessionTimeInMinutes =
+      convertToMinutes(data?.aggregates?.total_session_time) / sessionCount;
   }
 
   const stats = [
@@ -56,18 +64,22 @@ export const getLatestStats = async () => {
     {
       title: 'Average Session Time',
       icon: FaClock,
-      content: averageSessionTimeInMinutes === 0 ? null : `${averageSessionTimeInMinutes.toFixed(2)} mins`,
+      content:
+        averageSessionTimeInMinutes === 0
+          ? null
+          : `${averageSessionTimeInMinutes.toFixed(2)} mins`,
       color: 'bg-purple-100',
       textColor: 'text-purple-500',
     },
-  ].filter(stat => stat.content !== null && stat.content !== undefined);  // Filter out stats with null or undefined content
+  ].filter((stat) => stat.content !== null && stat.content !== undefined); // Filter out stats with null or undefined content
 
   return { status: 'success', stats };
-}
+};
 
 const convertToMinutes = (time: string): number => {
   if (!time) return 0;
 
   const [hours, minutes, seconds] = time.split(':').map(Number);
-  return (hours * 60) + minutes + (seconds / 60);
+
+  return hours * 60 + minutes + seconds / 60;
 };

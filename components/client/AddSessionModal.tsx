@@ -1,4 +1,5 @@
-"use client";
+'use client';
+
 import {
   Button,
   Modal,
@@ -7,19 +8,20 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
-import { useEffect, useState } from "react";
-import { FaChalkboardTeacher } from "react-icons/fa";
+} from '@nextui-org/react';
+import { Project, SessionType } from '@prisma/client';
+import { Formik, FormikValues } from 'formik';
+import { useEffect, useState } from 'react';
+import React from 'react';
+import { FaChalkboardTeacher } from 'react-icons/fa';
 
-import { UnifiedStudent } from "@/lib/students";
-import { Project, SessionType } from "@prisma/client";
-import { Formik, FormikValues } from "formik";
-import { StepA } from "./sessions/StepA";
-import { StepB } from "./sessions/StepB";
-import { StepC } from "./sessions/StepC";
-import { StepD } from "./sessions/StepD";
-import React from "react";
-import { StepFinal } from "./sessions/StepFinal";
+import { UnifiedStudent } from '@/lib/students';
+
+import { StepA } from './sessions/StepA';
+import { StepB } from './sessions/StepB';
+import { StepC } from './sessions/StepC';
+import { StepD } from './sessions/StepD';
+import { StepFinal } from './sessions/StepFinal';
 
 interface StepComponent {
   Component: React.FC<any>;
@@ -34,15 +36,15 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
   const initialValues = {
     studentId,
     id: null,
-    date: new Date().toISOString().split("T")[0],
-    duration: "11",
+    date: new Date().toISOString().split('T')[0],
+    duration: '11',
     session: {},
     project: {},
     progress: {},
-    summary: "",
-    personalNotes: "",
-    submissionType: "First Time Submission",
-    follow_up: "No",
+    summary: '',
+    personalNotes: '',
+    submissionType: 'First Time Submission',
+    follow_up: 'No',
   };
 
   const stepComponents: StepComponent[] = [
@@ -65,9 +67,11 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
   useEffect(() => {
     async function fetchStudent() {
       const response = await fetch(`/api/students/${studentId}`);
+
       if (!response.ok) return;
 
       const student = await response.json();
+
       if (student && student.projects) {
         sortProjects(student.projects);
         setStudent(student);
@@ -79,8 +83,8 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
 
   const sortProjects = (projects: Project[]) => {
     projects.sort((a, b) => {
-      const numA = a.prefix ? parseInt(a.prefix.replace("pp", ""), 10) : NaN;
-      const numB = b.prefix ? parseInt(b.prefix.replace("pp", ""), 10) : NaN;
+      const numA = a.prefix ? parseInt(a.prefix.replace('pp', ''), 10) : NaN;
+      const numB = b.prefix ? parseInt(b.prefix.replace('pp', ''), 10) : NaN;
 
       if (isNaN(numA)) return 1;
       if (isNaN(numB)) return -1;
@@ -92,13 +96,14 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
   useEffect(() => {
     const fetchSessions = async () => {
       const sessions = await fetch(`/api/sessions/types`).then((res) =>
-        res.json()
+        res.json(),
       );
 
       if (!sessions) return;
       sessions.sort((a: SessionType, b: SessionType) => a.order - b.order);
       setSessions(sessions);
     };
+
     fetchSessions();
   }, []);
 
@@ -106,7 +111,7 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
 
   const onSubmit = (values: FormikValues) => {
     if (currentSection === totalSteps) {
-      console.log("Final part of the form submitted", values);
+      console.log('Final part of the form submitted', values);
       onOpenChange();
     } else {
       console.log(`Submitting Step ${currentSection}`, values);
@@ -118,6 +123,7 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
     if (!isOpen) {
       setCurrentSection(1);
     }
+
     onOpenChange();
   };
 
@@ -134,11 +140,10 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
         isDismissable={true}
         isOpen={isOpen}
         onOpenChange={handleModalChange}
-        size="3xl">
+        size="3xl"
+      >
         <ModalContent>
-          <Formik
-            initialValues={initialValues}
-            onSubmit={onSubmit}>
+          <Formik initialValues={initialValues} onSubmit={onSubmit}>
             {({ handleSubmit }) => (
               <form onSubmit={handleSubmit}>
                 <ModalHeader className="flex flex-col gap-1">
@@ -151,21 +156,18 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
                   {currentSection > 1 && (
                     <Button
                       color="default"
-                      onPress={() => setCurrentSection((prev) => prev - 1)}>
+                      onPress={() => setCurrentSection((prev) => prev - 1)}
+                    >
                       Back
                     </Button>
                   )}
                   {currentSection < totalSteps && (
-                    <Button
-                      type="submit"
-                      color="primary">
+                    <Button color="primary" type="submit">
                       Next
                     </Button>
                   )}
                   {currentSection === totalSteps && (
-                    <Button
-                      type="submit"
-                      color="success">
+                    <Button color="success" type="submit">
                       Submit
                     </Button>
                   )}

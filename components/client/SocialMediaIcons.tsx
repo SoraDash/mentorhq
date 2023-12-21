@@ -1,11 +1,11 @@
-"use client"
+'use client';
 
 import { Student, User } from '@prisma/client';
+import Link from 'next/link';
 import React from 'react';
 import { BiGlobe } from 'react-icons/bi';
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import { HiOutlineMailOpen } from 'react-icons/hi';
-import Link from 'next/link';
 
 const socialMediaConfig = [
   {
@@ -47,23 +47,27 @@ interface SocialMediaIconsProps {
   user: ExtendedUser | ExtendedStudent;
 }
 
-
-
 export const SocialMediaIcons: React.FC<SocialMediaIconsProps> = ({ user }) => {
   return (
     <div className="flex justify-between w-full space-x-2">
       {socialMediaConfig.map((social) => {
         if (user[social.key]) {
           return (
-            <Link key={social.key} className={`text-gray-700 hover:text-primary-purple`} aria-label={social.label}
-              target="_blank" rel="noopener noreferrer" href={user[social.key]}>
+            <Link
+              aria-label={social.label}
+              className={`text-gray-700 hover:text-primary-purple`}
+              href={user[social.key]}
+              key={social.key}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
               <social.IconComponent className="h-6 w-6" />
             </Link>
           );
         }
+
         return null;
       })}
     </div>
   );
 };
-

@@ -1,10 +1,11 @@
-"use server"
+'use server';
+
+import { revalidatePath } from 'next/cache';
 
 import { getUser } from '@/lib/auth/auth';
-import { revalidatePath } from 'next/cache';
 
 export const checkStatus = async () => {
   await getUser();
 
-  revalidatePath("/dashboard")
+  revalidatePath('/dashboard');
 };

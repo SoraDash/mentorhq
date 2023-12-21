@@ -1,5 +1,6 @@
-"use client";
+'use client';
 
+import { Button, Input } from '@nextui-org/react';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -10,7 +11,10 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
+import { useState } from 'react';
+import { FaChalkboardTeacher } from 'react-icons/fa';
+import { PiStudentBold } from 'react-icons/pi';
 
 import {
   Table,
@@ -19,11 +23,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Button, Input } from "@nextui-org/react";
-import { useState } from "react";
-import { FaChalkboardTeacher } from 'react-icons/fa';
-import { PiStudentBold } from "react-icons/pi";
+} from '@/components/ui/table';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -53,34 +53,34 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <div className='py-4'>
-        <div className='flex flex-col md:flex-row md:items-center md:justify-between'>
+      <div className="py-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           {/* Input */}
-          <div className='mb-2 md:mb-0 md:max-w-sm md:mr-4'>
+          <div className="mb-2 md:mb-0 md:max-w-sm md:mr-4">
             <Input
               isClearable
-              type='text'
-              variant='bordered'
-              label='Filter by students name'
-              value={
-                (table.getColumn("name")?.getFilterValue() as string) ?? ""
-              }
+              label="Filter by students name"
               onChange={(event) =>
-                table.getColumn("name")?.setFilterValue(event.target.value)
+                table.getColumn('name')?.setFilterValue(event.target.value)
               }
-              onClear={() => table.getColumn("name")?.setFilterValue("")}
+              onClear={() => table.getColumn('name')?.setFilterValue('')}
+              type="text"
+              value={
+                (table.getColumn('name')?.getFilterValue() as string) ?? ''
+              }
+              variant="bordered"
             />
           </div>
 
           {/* Buttons */}
-          <div className='flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2'>
-            <Button variant='flat' endContent={<PiStudentBold />}>
+          <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
+            <Button endContent={<PiStudentBold />} variant="flat">
               Add Student
             </Button>
             <Button
-              variant='flat'
-              spinnerPlacement='end'
               endContent={<FaChalkboardTeacher />}
+              spinnerPlacement="end"
+              variant="flat"
             >
               Assign Mentor
             </Button>
@@ -88,7 +88,7 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
 
-      <div className='rounded-md border'>
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -99,9 +99,9 @@ export function DataTable<TData, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
                     </TableHead>
                   );
                 })}
@@ -112,14 +112,14 @@ export function DataTable<TData, TValue>({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
+                  data-state={row.getIsSelected() && 'selected'}
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -128,8 +128,8 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell
+                  className="h-24 text-center"
                   colSpan={columns.length}
-                  className='h-24 text-center'
                 >
                   No results.
                 </TableCell>
@@ -137,20 +137,20 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
-        <div className='flex items-center justify-end space-x-2 py-4'>
+        <div className="flex items-center justify-end space-x-2 py-4">
           <Button
-            variant='ghost'
-            size='md'
-            onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
+            onClick={() => table.previousPage()}
+            size="md"
+            variant="ghost"
           >
             Previous
           </Button>
           <Button
-            variant='ghost'
-            size='md'
-            onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
+            onClick={() => table.nextPage()}
+            size="md"
+            variant="ghost"
           >
             Next
           </Button>

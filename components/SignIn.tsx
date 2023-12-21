@@ -1,4 +1,5 @@
-"use client";
+'use client';
+
 import {
   Button,
   Modal,
@@ -6,11 +7,12 @@ import {
   ModalContent,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
-import { useState } from "react";
-import { FaKey } from "react-icons/fa";
-import { Icons } from "./Icons";
-import UserAuthForm from "./UserAuthForm";
+} from '@nextui-org/react';
+import { useState } from 'react';
+import { FaKey } from 'react-icons/fa';
+
+import { Icons } from './Icons';
+import UserAuthForm from './UserAuthForm';
 
 export default function SignIn() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -22,37 +24,33 @@ export default function SignIn() {
 
   return (
     <>
-      <Button
-        onPress={onOpen}
-        color='primary'
-        endContent={<FaKey />}>
+      <Button color="primary" endContent={<FaKey />} onPress={onOpen}>
         Get Started
       </Button>
-      <Modal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {() => (
             <>
-              <ModalHeader className='flex flex-col gap-1'>
-                <Icons.textLogo className='mx-auto h-24 w-full' />
+              <ModalHeader className="flex flex-col gap-1">
+                <Icons.textLogo className="mx-auto h-24 w-full" />
               </ModalHeader>
-              <ModalBody className='text-center mb-5'>
-                <h1 className='text-2xl font-semibold tracking-tight'>
-                  {isSignUp ? "Create an Account" : "Welcome back"}
+              <ModalBody className="text-center mb-5">
+                <h1 className="text-2xl font-semibold tracking-tight">
+                  {isSignUp ? 'Create an Account' : 'Welcome back'}
                 </h1>
-                <p className='text-sm max-w-xs mx-auto'>
-                  By continuing, you are{" "}
-                  {isSignUp ? "creating" : "logging into"} a MentorHQ account
+                <p className="text-sm max-w-xs mx-auto">
+                  By continuing, you are{' '}
+                  {isSignUp ? 'creating' : 'logging into'} a MentorHQ account
                   and agree to our User Agreement and Privacy Policy.
                 </p>
                 <UserAuthForm />
-                <p className='px-8 text-center text-sm text-muted-foreground'>
-                  {isSignUp ? "Already have an account?" : "New to MentorHQ?"}
+                <p className="px-8 text-center text-sm text-muted-foreground">
+                  {isSignUp ? 'Already have an account?' : 'New to MentorHQ?'}
                   <span
+                    className="hover:text-brand text-sm underline underline-offset-4 cursor-pointer"
                     onClick={toggleMode}
-                    className='hover:text-brand text-sm underline underline-offset-4 cursor-pointer'>
-                    {isSignUp ? " Sign In" : " Sign Up"}
+                  >
+                    {isSignUp ? ' Sign In' : ' Sign Up'}
                   </span>
                 </p>
               </ModalBody>

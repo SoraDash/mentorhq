@@ -1,19 +1,21 @@
-"use client";
-import { onboardUser } from '@/actions/user.actions';
-import { useToast } from '@/components/ui/use-toast';
-import { getUser } from '@/lib/auth/auth';
-import { useSessionStepStore } from '@/store/useSessionStepStore';
+'use client';
+
 import { useRouter } from 'next/navigation';
 import React, { FormEvent, useEffect } from 'react';
 import { FaSave } from 'react-icons/fa';
 
+import { onboardUser } from '@/actions/user.actions';
+import { useToast } from '@/components/ui/use-toast';
+import { getUser } from '@/lib/auth/auth';
+import { useSessionStepStore } from '@/store/useSessionStepStore';
+
 const AddSessionForm: React.FC = () => {
   const { toast } = useToast();
   const router = useRouter();
-  const { currentStep, updateFormData, back, next, steps, isFirstStep } = useSessionStepStore();
-  const formData = useSessionStepStore(state => state.formData);
-  const isLastStep = useSessionStepStore(state => state.isLastStep);
-
+  const { back, currentStep, isFirstStep, next, steps, updateFormData } =
+    useSessionStepStore();
+  const formData = useSessionStepStore((state) => state.formData);
+  const isLastStep = useSessionStepStore((state) => state.isLastStep);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -22,46 +24,45 @@ const AddSessionForm: React.FC = () => {
 
         if (user) {
           const nameData = {
-            firstName: user.firstName || "",
-            lastName: user.lastName || "",
+            firstName: user.firstName || '',
+            lastName: user.lastName || '',
           };
           const miscData = {
-            ciEmail: user.email || "",
-            ciApiKey: user.ciApiKey || "",
+            ciEmail: user.email || '',
+            ciApiKey: user.ciApiKey || '',
             paidPerHour: user.paidPerHour || 0,
             sendWelcomeEmail: user.sendWelcomeEmail || false,
           };
           const socialData = {
-            github: user.github || "",
-            twitter: user.twitter || "",
-            linkedIn: user.linkedIn || "",
-            slack: user.slack || "",
-            skype: user.skype || "",
-            website: user.website || ""
+            github: user.github || '',
+            twitter: user.twitter || '',
+            linkedIn: user.linkedIn || '',
+            slack: user.slack || '',
+            skype: user.skype || '',
+            website: user.website || '',
           };
+
           updateFormData('name', nameData);
           updateFormData('misc', miscData);
           updateFormData('social', socialData);
         }
-
       } catch (error) {
         console.log(error);
       } finally {
-        console.log("finally");
+        console.log('finally');
       }
-    }
+    };
+
     fetchUserData();
-  }, [updateFormData]
-  );
-
-
+  }, [updateFormData]);
 
   const getMergedFormData = () => {
     const mergedData = {
       ...formData.name,
       ...formData.misc,
       ...formData.social,
-    }
+    };
+
     return mergedData;
   };
 
@@ -71,29 +72,31 @@ const AddSessionForm: React.FC = () => {
     e.preventDefault();
     if (!isLastStep) return next();
     onboardUser(mergedData, true)
-      .then(response => {
+      .then((response) => {
         if (response.success) {
           toast({
             title: "You've successfully completed onboarding.",
-            description: "We will redirect you shorlty",
-            variant: "default",
+            description: 'We will redirect you shorlty',
+            variant: 'default',
           });
         }
+
         setTimeout(() => router.refresh(), 300);
-        router.replace('/dashboard')
-        router.refresh()
+        router.replace('/dashboard');
+        router.refresh();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         toast({
-          title: "Error: Something went wrong",
-          description: "Please try again.",
-          variant: "destructive",
+          title: 'Error: Something went wrong',
+          description: 'Please try again.',
+          variant: 'destructive',
         });
-      })
+      });
   };
 
-  const CurrentFormComponent = steps[currentStep] || (() => <div>Error: Unknown step!</div>);
+  const CurrentFormComponent =
+    steps[currentStep] || (() => <div>Error: Unknown step!</div>);
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen scroll-pt-4">

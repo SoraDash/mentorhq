@@ -1,26 +1,27 @@
 // OptionItem.tsx
-import React from "react";
-import { Avatar } from "@nextui-org/react";
+import { Avatar } from '@nextui-org/react';
+import React from 'react';
 
 interface OptionItemProps {
-  label: string;
   emoji?: string;
+  label: string;
   prefix?: string;
 }
 
 export const OptionItem: React.FC<OptionItemProps> = ({
-  label,
   emoji,
+  label,
   prefix,
 }) => {
-  const avatarContent = emoji || (prefix ? prefix.toUpperCase() : "");
+  const avatarContent = emoji || (prefix ? prefix.toUpperCase() : '');
+
   return (
     <div className="flex gap-2 items-center">
       <Avatar
-        name={avatarContent}
-        color="secondary"
         alt={`Avatar for ${label}`}
         className="flex-shrink-0"
+        color="secondary"
+        name={avatarContent}
         size="sm"
       />
       <span className="text-small">{label}</span>

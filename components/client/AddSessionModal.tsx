@@ -40,7 +40,11 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
     duration: '11',
     session: {},
     project: {},
-    progress: {},
+    progress: {
+      label: 'Average',
+      value: 'AVERAGE',
+      emoji: '👍',
+    },
     summary: '',
     personalNotes: '',
     submissionType: {

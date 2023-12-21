@@ -7,7 +7,6 @@ import { generateProjectsForStudent, getCourseByProgrammeID } from '../course/co
 import { GoogleSheetStudent, PartialGoogleSheetStudent, UnifiedStudent } from './types';
 import { handleFieldPriority, transformToPrismaStudent } from './utils';
 
-
 type FetchConditions = {
   id: string;
   mentorId?: string;
@@ -70,6 +69,11 @@ export const updateOrCreateStudentFromGoogle = async (
     if (createdStudent.programmeID) {
       console.log("🔍 Looking up course code for generating projects...");
       const courseWithTemplates = await getCourseByProgrammeID(createdStudent.programmeID);
+
+      if (courseWithTemplates === null) {
+        console.log("❌ No course code found. Skipping project generation...");
+        return { action: 'unchanged', error: 'Course not found' };
+      }
       console.log("✅ Course code found. Generating projects...");
       await generateProjectsForStudent(courseWithTemplates, createdStudent.id);
       console.log("✅ Projects generated and assigned to the student.");
@@ -80,6 +84,38 @@ export const updateOrCreateStudentFromGoogle = async (
   } catch (error: any) {
     console.error("❌ Error in updateOrCreateStudent:", error);
     return { action: 'unchanged', error: error.message };
+  }
+};
+
+export const createStudent = async (student: Student) => {
+  const existingStudent = await prisma.student.findUnique({
+    where: {
+      email: student.email,
+    },
+  });
+
+  if (existingStudent) {
+    throw new Error("Student already exists");
+  }
+
+  if (student.programmeID) {
+    const course = await prisma.course.findUnique({
+      where: {
+        courseCode: student.programmeID,
+      },
+    });
+
+    const mentorId = await getUser();
+
+    return await prisma.student.create({
+      data: {
+        ...student,
+        courseId: course?.id,
+        mentorId: mentorId?.id,
+      },
+    });
+  } else {
+    throw new Error("Cannot create student: programmeID is not present");
   }
 };
 
@@ -135,7 +171,8 @@ export const getAllStudents = async (): Promise<UnifiedStudent[]> => {
 
   // If not, fetch students associated with the user.
   return prisma.student.findMany({
-    where: { mentorId: user.id }, include: {
+    where: { mentorId: user.id },
+    include: {
       projects: true,
     }
   }) || [];

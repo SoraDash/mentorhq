@@ -1,81 +1,67 @@
-import { format } from 'date-fns';
+'use client';
+
 import { FormikValues, useFormikContext } from 'formik';
-import {
-  BarChartIcon,
-  CalendarIcon,
-  ClockIcon,
-  CreditCardIcon,
-  FileIcon,
-  FolderIcon,
-  LaptopIcon,
-  MailboxIcon,
-  PlaneIcon,
-} from 'lucide-react';
-import React from 'react';
+import Lottie from 'lottie-react';
+import { useState } from 'react';
+import { FiCopy } from 'react-icons/fi';
 
-export const StepFinal = () => {
+import { useToast } from '@/components/ui/use-toast';
+import animationData from '@/public/checkmark-static.json';
+
+interface StepFinalProps {
+  name: string;
+}
+
+export const StepFinal = ({ name }: StepFinalProps) => {
   const { values } = useFormikContext<FormikValues>();
+  const { toast } = useToast();
 
-  console.log(values);
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast({
+      title: 'Copied to clipboard',
+      description: `${
+        text === name ? name : `${text} minutes`
+      } copied to clipboard`,
+      variant: 'success',
+      duration: 1500,
+    });
+  };
 
   return (
-    <div className="grid grid-cols-2 gap-4">
-      <p className="col-span-2">
-        <CreditCardIcon className="w-4 h-4 inline-block mr-2" />
-        <span className="font-semibold mr-1">Student ID:</span>
-        <span>{values.studentId}</span>
-      </p>
-      <p>
-        <CalendarIcon className="w-4 h-4 inline-block mr-2" />
-        <span className="font-semibold mr-1">Date:</span>
-        <span>{format(new Date(values.date), 'dd MMM yyyy')}</span>
-      </p>
-      <p>
-        <ClockIcon className="w-4 h-4 inline-block mr-2" />
-        <span className="font-semibold mr-1">Session:</span>
-        <span>{values.session.label}</span>
-      </p>
-      <p>
-        <ClockIcon className="w-4 h-4 inline-block mr-2" />
-        <span className="font-semibold mr-1">Duration:</span>
-        <span>{values.duration} minutes</span>
-      </p>
-      <p>
-        <FolderIcon className="w-4 h-4 inline-block mr-2" />
-        <span className="font-semibold mr-1">Project:</span>
-        <span>{values.project.label}</span>
-      </p>
-      <p>
-        <BarChartIcon className="w-4 h-4 inline-block mr-2" />
-        <span className="font-semibold mr-1">Progress:</span>
-        <span>
-          {values.progress.emoji} {values.progress.label}
-        </span>
-      </p>
-      <p>
-        <PlaneIcon className="w-4 h-4 inline-block mr-2" />
-        <span className="font-semibold mr-1">Submission Type:</span>
-        <span>{values.submissionType.value}</span>
-      </p>
-      <p>
-        <MailboxIcon className="w-4 h-4 inline-block mr-2" />
-        <span className="font-semibold mr-1">Follow-up:</span>
-        <span>{values.follow_up.value}</span>
-      </p>
-      {values.personalNotes && (
-        <p className="col-span-2">
-          <FileIcon className="w-4 h-4 inline-block mr-2" />
-          <span className="font-semibold mr-1">Personal Notes:</span>
-          <br />
-          <span>{values.personalNotes}</span>
-        </p>
-      )}
-      <p className="col-span-2">
-        <LaptopIcon className="w-4 h-4 inline-block mr-2" />
-        <span className="font-semibold mr-1">Summary:</span>
-        <br />
-        <span>{values.summary}</span>
-      </p>
+    <div className="flex flex-col items-center p-6">
+      <Lottie
+        animationData={animationData}
+        autoplay={true}
+        loop={false}
+        style={{ height: 150, width: 150 }}
+      />
+      <div className="text-center mt-4">
+        <div className="text-2xl font-semibold mb-2">Session Submitted</div>
+        <div className="mb-4">Here is the summary for your convenience</div>
+        <div className="flex items-center justify-center">
+          <div
+            className=" p-2 rounded-md mr-2"
+            onClick={() => handleCopy(name)}
+          >
+            <span>Student name: </span>
+            <span className="font-semibold">{name}</span>
+          </div>
+          <FiCopy className="cursor-pointer" onClick={() => handleCopy(name)} />
+        </div>
+        <div className="flex items-center justify-center mt-2">
+          <div className="p-2 rounded-md mr-2">
+            <span>
+              Session Time:{' '}
+              <span className="font-semibold">{values.duration} minutes</span>
+            </span>
+          </div>
+          <FiCopy
+            className="cursor-pointer"
+            onClick={() => handleCopy(values.duration.toString())}
+          />
+        </div>
+      </div>
     </div>
   );
 };

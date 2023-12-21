@@ -1,6 +1,6 @@
 import { Input } from '@nextui-org/react';
 import { FormikValues, useFormikContext } from 'formik';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export const StepA = () => {
   const { setFieldValue, values } = useFormikContext<FormikValues>();
@@ -24,7 +24,7 @@ export const StepA = () => {
       const totalSessionTime = duration > 15 ? duration + 4 : duration;
 
       setInfoMessage(
-        `Total session time: ${totalSessionTime} minutes (including 4 minutes for admin work)`,
+        `Total session time: <span className="font-semibold">${totalSessionTime}</span> minutes (including 4 minutes for admin work)`,
       );
       setFieldValue('duration', duration); // Update the value in Formik
 
@@ -61,7 +61,16 @@ export const StepA = () => {
         type="number"
         value={displayDuration}
       />
-      {infoMessage && <p className="text-sm text-gray-500">{infoMessage}</p>}
+      {infoMessage && (
+        <p className="text-sm text-gray-500">
+          <span className="font-semibold">Total session time: </span>
+          <span className="font-bold">
+            {parseInt(displayDuration, 10) + 4}
+          </span>{' '}
+          minutes{' '}
+          <span className="italic">(including 4 minutes for admin work)</span>
+        </p>
+      )}
       {confirmationMessage && (
         <p className="text-sm text-red-500 mt-3 font-semibold">
           {confirmationMessage}

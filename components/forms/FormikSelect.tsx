@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { Select, SelectItem, cn } from "@nextui-org/react";
-import { FormikValues, useField, useFormikContext } from "formik";
-import React, { useState } from "react";
+import { Select, SelectItem, cn } from '@nextui-org/react';
+import { FormikValues, useField, useFormikContext } from 'formik';
+import React, { useState } from 'react';
 
-import { OptionItem } from "./OptionItem";
+import { OptionItem } from './OptionItem';
 
 // Define interfaces for SessionType and Project
 interface SessionType {
@@ -45,7 +45,7 @@ export const FormikSelect: React.FC<FormikSelectProps> = ({
 }) => {
   const [field, meta, helpers] = useField(props.name);
   const { setTouched } = helpers;
-  const [description, setDescription] = useState<string>("");
+  const [description, setDescription] = useState<string>('');
   const { setFieldValue } = useFormikContext<FormikValues>();
 
   const defaultHandleSelectionChange = (value: string) => {
@@ -53,7 +53,7 @@ export const FormikSelect: React.FC<FormikSelectProps> = ({
 
     if (selectedOption) {
       setFieldValue(props.name, selectedOption);
-      setDescription(selectedOption.label || "");
+      setDescription(selectedOption.label || '');
     }
   };
 
@@ -61,7 +61,7 @@ export const FormikSelect: React.FC<FormikSelectProps> = ({
     <Select
       {...props}
       aria-label={label}
-      className={cn("space-y-5 w-full", className)}
+      className={cn('space-y-5 w-full', className)}
       description={description}
       errorMessage={meta.error}
       isInvalid={meta.touched && !!meta.error}
@@ -73,16 +73,15 @@ export const FormikSelect: React.FC<FormikSelectProps> = ({
           : defaultHandleSelectionChange(e.target.value)
       }
       onClose={() => setTouched(true)}
-      value={field.value}>
+      value={field.value}
+    >
       {options.map((option) => (
         <SelectItem
           key={option.value}
-          textValue={option.label || ""}
-          value={option.value}>
-          <OptionItem
-            emoji={option.emoji}
-            label={option.label || ""}
-          />
+          textValue={option.label || ''}
+          value={option.value}
+        >
+          <OptionItem emoji={option.emoji} label={option.label || ''} />
         </SelectItem>
       ))}
     </Select>

@@ -2,14 +2,14 @@
 const nextConfig = {
   experimental: {
     serverActions: true,
-    serverComponentsExternalPackages: ["@prisma/client", "ioredis"],
+    serverComponentsExternalPackages: ['@prisma/client', 'ioredis'],
   },
   images: {
     domains: [
-      "lh3.googleusercontent.com",
-      "avatars.githubusercontent.com",
-      "github.com",
-      "randomuser.me",
+      'lh3.googleusercontent.com',
+      'avatars.githubusercontent.com',
+      'github.com',
+      'randomuser.me',
     ],
   },
 };

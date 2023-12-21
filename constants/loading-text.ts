@@ -354,6 +354,7 @@ export const LOADING_TEXT = [
   'Wrangling the cables...',
   'Zeroing in on the target...',
 ];
+
 export const EMOJI = [
   '😀',
   '😃',

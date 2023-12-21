@@ -1,38 +1,35 @@
-import { FormikValues, useFormikContext } from "formik";
-import React from "react";
+import { FormikValues, useFormikContext } from 'formik';
+import React from 'react';
 
-import { FormikSelect } from "@/components/forms/FormikSelect";
-
-interface StepDProps {}
+import { FormikSelect } from '@/components/forms/FormikSelect';
 
 const submissionOptions = [
   {
-    value: "First Time Submission",
-    label: "First Time Submission",
-    emoji: "🆕",
+    value: 'First Time Submission',
+    label: 'First Time Submission',
+    emoji: '🆕',
   },
   {
-    value: "Project Resubmission",
-    label: "Project Resubmission",
-    emoji: "🔄",
+    value: 'Project Resubmission',
+    label: 'Project Resubmission',
+    emoji: '🔄',
   },
 ];
 const followUpOptions = [
   {
-    value: "Yes",
-    label: "Yes",
-    emoji: "👎",
+    value: 'Yes',
+    label: 'Yes',
+    emoji: '👎',
   },
   {
-    value: "No",
-    label: "No",
-    emoji: "👍",
+    value: 'No',
+    label: 'No',
+    emoji: '👍',
   },
 ];
 
-export const StepD: React.FC<StepDProps> = () => {
-  const { handleChange, setFieldValue, values } =
-    useFormikContext<FormikValues>();
+export const StepD = () => {
+  const { handleChange } = useFormikContext<FormikValues>();
 
   return (
     <div>

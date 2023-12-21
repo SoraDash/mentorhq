@@ -2,9 +2,7 @@ import { Input } from '@nextui-org/react';
 import { FormikValues, useFormikContext } from 'formik';
 import React from 'react';
 
-interface StepAProps {}
-
-export const StepA: React.FC<StepAProps> = () => {
+export const StepA = () => {
   const { handleChange, values } = useFormikContext<FormikValues>();
 
   return (

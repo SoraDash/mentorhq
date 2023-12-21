@@ -1,11 +1,11 @@
 import { FaCalendar, FaClock, FaEuroSign, FaUsers } from 'react-icons/fa';
 
 export interface StatItem {
-  title: string;
-  icon: keyof typeof ICONS;
-  content: string;
   color: string;
+  content: string;
+  icon: keyof typeof ICONS;
   textColor: string;
+  title: string;
 }
 
 export const ICONS = {

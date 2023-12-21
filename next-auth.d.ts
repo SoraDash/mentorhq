@@ -1,23 +1,22 @@
 import { Role } from '@prisma/client';
-import { DefaultUser } from "next-auth";
+import { DefaultUser } from 'next-auth';
 
 interface IUser extends DefaultUser {
-  id: string;
+  calendly_token?: string | null | undefined;
   firstName: string;
-  lastName: string;
+  hasKey?: boolean;
+  id: string;
   isOnboarded: boolean;
   isPremium: boolean;
-  calendly_token?: string | null | undefined;
-  hasKey?: boolean;
-  role: Role
+  lastName: string;
+  role: Role;
 }
-declare module "next-auth" {
-  interface User extends IUser { }
+declare module 'next-auth' {
+  interface User extends IUser {}
   interface Session {
     user?: User;
   }
 }
-declare module "next-auth/jwt" {
-  interface JWT extends IUser {
-  }
+declare module 'next-auth/jwt' {
+  interface JWT extends IUser {}
 }

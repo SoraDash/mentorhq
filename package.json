@@ -9,10 +9,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint ./ --ignore-path .gitignore",
-    "lint:fix": "npm run lint -- --fix",
+    "lint:fix": "yarn lint -- --fix",
     "format": "prettier --write \"{,!(node_modules)/**/}*.js\"",
-    "env": "node ./scripts/generateEnv.js",
-    "env:ts": "ts-node ./scripts/generateEnvTypes.ts",
+    "env": "ts-node ./scripts/generateEnvTypes.ts",
     "redis": "docker run -p 6379:6379 -it -d redis/redis-stack-server:latest",
     "studio": "yarn prisma studio",
     "seed": "ts-node -O '{\"module\": \"commonjs\"}' prisma/seed.ts"

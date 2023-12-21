@@ -1,10 +1,3 @@
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-} from '@nextui-org/react';
 import { format } from 'date-fns';
 import { FormikValues, useFormikContext } from 'formik';
 import {
@@ -20,9 +13,7 @@ import {
 } from 'lucide-react';
 import React from 'react';
 
-interface StepFinalProps {}
-
-export const StepFinal: React.FC<StepFinalProps> = () => {
+export const StepFinal = () => {
   const { values } = useFormikContext<FormikValues>();
 
   return (

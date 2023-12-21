@@ -1,16 +1,16 @@
-const fs = require("fs");
+import fs from 'fs';
 
 const contents = () => {
-  const env = getFileContents(".env");
-  const envStaging = getFileContents(".env.staging");
-  const envProd = getFileContents(".env.prod");
+  const env = getFileContents('.env');
+  const envStaging = getFileContents('.env.staging');
+  const envProd = getFileContents('.env.prod');
 
   return [...filterEnv(env), ...filterEnv(envProd), ...filterEnv(envStaging)];
 };
 
 const getFileContents = (filename: string) => {
   if (fs.existsSync(filename)) {
-    return fs.readFileSync(filename, { encoding: "utf-8" }).split("\n");
+    return fs.readFileSync(filename, { encoding: 'utf-8' }).split('\n');
   }
 
   return [];
@@ -18,27 +18,27 @@ const getFileContents = (filename: string) => {
 
 const filterEnv = (lines: string[]) => {
   return lines
-    .filter((line) => line.includes("="))
+    .filter((line) => line.includes('='))
     .map((line) => {
-      const [name] = line.split("=");
+      const [name] = line.split('=');
 
-      return { name, type: "string" };
+      return { name, type: 'string' };
     });
 };
 
 const getExistingEnvCount = () => {
-  if (fs.existsSync("env.d.ts")) {
-    const content = fs.readFileSync("env.d.ts", "utf8");
+  if (fs.existsSync('env.d.ts')) {
+    const content = fs.readFileSync('env.d.ts', 'utf8');
 
     const regex = /^(?:.*\n){2}([\s\S]*)/;
 
-    const matches: string[] = content.match(regex);
+    const matches: string[] = content.match(regex) || [];
 
     if (matches) {
       const lines = matches[1]
-        .split("\n")
+        .split('\n')
         .filter(
-          (line) => /^[A-Z]/.test(line.trim()) && !line.trim().startsWith("#"),
+          (line) => /^[A-Z]/.test(line.trim()) && !line.trim().startsWith('#'),
         );
 
       const varsCount = lines.length;
@@ -58,10 +58,10 @@ const generate = () => {
   const envVariables = contents();
 
   const typeDefs = envVariables
-    .filter(({ name }) => !name.startsWith("#"))
+    .filter(({ name }) => !name.startsWith('#'))
     .map(({ name, type }) => `${name}: ${type};`)
     .sort()
-    .join("\n    ");
+    .join('\n    ');
 
   const output = `declare namespace NodeJS {
   interface ProcessEnv {
@@ -70,9 +70,9 @@ const generate = () => {
 }
 `;
 
-  fs.writeFileSync("env.d.ts", output, "utf8");
+  fs.writeFileSync('env.d.ts', output, 'utf8');
 
-  const newCount = typeDefs.split("\n").length;
+  const newCount = typeDefs.split('\n').length;
   const difference = newCount - existingCount;
 
   if (difference > 0) {
@@ -82,10 +82,10 @@ const generate = () => {
       `Removed ${Math.abs(difference)} environment variable entries.`,
     );
   } else {
-    console.log("No changes to environment variable entries.");
+    console.log('No changes to environment variable entries.');
   }
 };
 
-console.log("Starting the generation process...");
+console.log('Starting the generation process...');
 generate();
-console.log("Generation process completed.");
+console.log('Generation process completed.');

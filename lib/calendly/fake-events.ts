@@ -1,6 +1,6 @@
-import { prisma } from '@/lib/db/prisma';
 import { faker } from '@faker-js/faker';
 import { Student } from '@prisma/client';
+import { prisma } from '../db/prisma';
 import { random, sample, times } from 'lodash';
 import { CalendlyEvent } from './types';
 

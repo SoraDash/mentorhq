@@ -1,3 +1,4 @@
+
 import { nextui } from '@nextui-org/react';
 
 /** @type {import('tailwindcss').Config} */
@@ -97,9 +98,8 @@ module.exports = {
               '700': '#c2144a',
               '800': '#a0143d',
               '900': '#851637',
-              '950': '#52051c',
               DEFAULT: '#ee327b',
-              forground: '#ffffff',
+              
             },
 
             secondary: {
@@ -113,9 +113,8 @@ module.exports = {
               '700': '#bb3a1a',
               '800': '#9b3319',
               '900': '#80301c',
-              '950': '#461509',
               DEFAULT: '#f37657',
-              forground: '#fff',
+              
             },
 
             success: {
@@ -129,9 +128,7 @@ module.exports = {
               '700': '#04784e',
               '800': '#065f3f',
               '900': '#064e34',
-              '950': '#022c1d',
               DEFAULT: '#34d399',
-              forground: '#101010',
             },
             warning: {
               '50': '#fffbeb',
@@ -144,9 +141,7 @@ module.exports = {
               '700': '#b45209',
               '800': '#923f0e',
               '900': '#78340f',
-              '950': '#451903',
               DEFAULT: '#fbbd23',
-              forground: '#101010',
             },
             danger: {
               '50': '#fff1f3',
@@ -159,9 +154,8 @@ module.exports = {
               '700': '#be122f',
               '800': '#9f122a',
               '900': '#881327',
-              '950': '#4c0511',
               DEFAULT: '#f43f5e',
-              forground: '#fff',
+              
             },
           },
           layout: {
@@ -194,7 +188,6 @@ module.exports = {
               '700': '#c51131',
               '800': '#a2122a',
               '900': '#871427',
-              '950': '#530410',
               DEFAULT: '#fde8ef',
               foreground: '#101010',
             },
@@ -209,9 +202,8 @@ module.exports = {
               '700': '#bb3a1a',
               '800': '#9b3319',
               '900': '#80301c',
-              '950': '#461509',
               DEFAULT: '#f37657',
-              forground: '#fff',
+              
             },
             success: {
               '50': '#ecfdf5',
@@ -224,9 +216,7 @@ module.exports = {
               '700': '#047856',
               '800': '#065f46',
               '900': '#064e3b',
-              '950': '#022c22',
               DEFAULT: '#36d399',
-              forground: '#101010',
             },
             warning: {
               '50': '#fffbeb',
@@ -239,9 +229,7 @@ module.exports = {
               '700': '#b45209',
               '800': '#923f0e',
               '900': '#78340f',
-              '950': '#451903',
               DEFAULT: '#fbbd23',
-              forground: '#101010',
             },
             danger: {
               '50': '#fef2f2',
@@ -254,9 +242,8 @@ module.exports = {
               '700': '#b91c1c',
               '800': '#991b1b',
               '900': '#7f1d1d',
-              '950': '#450a0a',
               DEFAULT: '#f87272',
-              forground: '#fff',
+              
             },
           },
           layout: {

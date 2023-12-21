@@ -43,8 +43,16 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
     progress: {},
     summary: '',
     personalNotes: '',
-    submissionType: 'First Time Submission',
-    follow_up: 'No',
+    submissionType: {
+      value: 'First Time Submission',
+      label: 'First Time Submission',
+      emoji: '🆕',
+    },
+    follow_up: {
+      value: 'No',
+      label: 'No',
+      emoji: '👍',
+    },
   };
 
   const stepComponents: StepComponent[] = [

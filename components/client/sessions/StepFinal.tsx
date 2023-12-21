@@ -1,29 +1,30 @@
 import {
-  Card,
-  CardHeader,
-  CardFooter,
-  CardBody,
   Button,
-} from "@nextui-org/react";
-import { FormikValues, useFormikContext } from "formik";
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+} from '@nextui-org/react';
+import { format } from 'date-fns';
+import { FormikValues, useFormikContext } from 'formik';
 import {
-  CreditCardIcon,
+  BarChartIcon,
   CalendarIcon,
   ClockIcon,
-  FolderIcon,
-  BarChartIcon,
-  LaptopIcon,
-  PlaneIcon,
-  MailboxIcon,
+  CreditCardIcon,
   FileIcon,
-} from "lucide-react";
-import React from "react";
-import { format } from "date-fns";
+  FolderIcon,
+  LaptopIcon,
+  MailboxIcon,
+  PlaneIcon,
+} from 'lucide-react';
+import React from 'react';
 
 interface StepFinalProps {}
 
 export const StepFinal: React.FC<StepFinalProps> = () => {
   const { values } = useFormikContext<FormikValues>();
+
   return (
     <div className="grid grid-cols-2 gap-4">
       <p className="col-span-2">
@@ -34,7 +35,7 @@ export const StepFinal: React.FC<StepFinalProps> = () => {
       <p>
         <CalendarIcon className="w-4 h-4 inline-block mr-2" />
         <span className="font-semibold mr-1">Date:</span>
-        <span>{format(new Date(values.date), "dd MMM yyyy")}</span>
+        <span>{format(new Date(values.date), 'dd MMM yyyy')}</span>
       </p>
       <p>
         <ClockIcon className="w-4 h-4 inline-block mr-2" />

@@ -1,9 +1,5 @@
-
 const SessionsPage = async () => {
-  return (
-    <div>
-      Sessions
-    </div>
-  );
-}
+  return <div>Sessions</div>;
+};
+
 export default SessionsPage;

@@ -1,9 +1,20 @@
+import { z } from 'zod';
+
 import { CustomFormData } from '@/types/FormDataTypes';
-import { z } from "zod";
 
 export const UserValidation = z.object({
-  firstName: z.string().min(3, { message: "Minimum 3 characters for name" }).max(30).default('').optional(),
-  lastName: z.string().min(3, { message: "Minimum 3 characters for name" }).max(30).default('').optional(),
+  firstName: z
+    .string()
+    .min(3, { message: 'Minimum 3 characters for name' })
+    .max(30)
+    .default('')
+    .optional(),
+  lastName: z
+    .string()
+    .min(3, { message: 'Minimum 3 characters for name' })
+    .max(30)
+    .default('')
+    .optional(),
   paidPerHour: z.number().min(0).max(100).default(0).optional(),
   github: z.string().default('').optional(),
   slack: z.string().default('').optional(),

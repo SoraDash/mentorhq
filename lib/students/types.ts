@@ -1,18 +1,19 @@
 import { Project, Session, Student, User } from '@prisma/client';
 
 export type GoogleSheetStudent = {
-  name: string;
-  email: string;
-  status: string;
   courseCode: string;
-  programmeID: string;
-  mentor: string;
+  deadlines: Deadline[];
+  email: string;
+  github: string;
   lmsAccess: string;
+  mentor: string;
+  name: string;
+  programmeID: string;
   skype: string;
   slack: string;
-  github: string;
-  deadlines: Deadline[];
+  status: string;
 };
+
 export type Deadline =
   | { '1': string }
   | { '2': string }
@@ -20,24 +21,22 @@ export type Deadline =
   | { '4': string }
   | { '5': string };
 
-
 export type PartialGoogleSheetStudent = Partial<GoogleSheetStudent>;
 
-
 export type UnifiedStudent = Student & {
-  sessions?: Session[];
-  projects?: Project[];
   _count?: {
-    mentor: number;
     course: number;
+    mentor: number;
     projects: number;
     sessions: number;
   };
+  projects?: Project[];
+  sessions?: Session[];
 };
+
 export type UnifiedUser = User & {
-  mentoredStudents?: UnifiedStudent[];
   _count?: {
     mentoredStudents: number;
-
   };
-}
+  mentoredStudents?: UnifiedStudent[];
+};

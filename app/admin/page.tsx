@@ -1,8 +1,4 @@
-
 const DashboardPage = async () => {
-
-
-
   return (
     <div>
       <section className="bg-coolGray-50 py-4" key={Math.random()}>
@@ -12,7 +8,6 @@ const DashboardPage = async () => {
           </div>
         </div>
       </section>
-
     </div>
   );
 };

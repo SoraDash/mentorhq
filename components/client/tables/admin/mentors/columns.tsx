@@ -1,9 +1,5 @@
-"use client";
+'use client';
 
-import { RoleDropdown } from "@/components/client/RoleDropdown";
-import SensitiveInfo from "@/components/client/SensetiveInfo";
-import { BooleanIcon } from "@/components/server/BooleanIcon";
-import { UserWithCount } from "@/lib/db/types";
 import {
   Avatar,
   Button,
@@ -11,105 +7,112 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@nextui-org/react";
-import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import Link from "next/link";
-import { FaHammer } from "react-icons/fa";
-import { PiUserCircleBold, PiUserCircleGearFill } from "react-icons/pi";
-import { SyncGithubBio } from "./SyncGithubBio";
+} from '@nextui-org/react';
+import { ColumnDef } from '@tanstack/react-table';
+import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
+import Link from 'next/link';
+import { FaHammer } from 'react-icons/fa';
+import { PiUserCircleBold, PiUserCircleGearFill } from 'react-icons/pi';
+
+import { RoleDropdown } from '@/components/client/RoleDropdown';
+import SensitiveInfo from '@/components/client/SensetiveInfo';
+import { BooleanIcon } from '@/components/server/BooleanIcon';
+import { UserWithCount } from '@/lib/db/types';
+
+import { SyncGithubBio } from './SyncGithubBio';
 
 export const mentorColumns: ColumnDef<UserWithCount>[] = [
   {
-    accessorKey: "name",
+    accessorKey: 'name',
     header: ({ column }) => {
       return (
         <Button
-          variant='flat'
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          variant="flat"
+        >
           Name
-          <ArrowUpDown className='ml-2 h-4 w-4' />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
       return (
-        <div className='relative inline-flex items-center'>
+        <div className="relative inline-flex items-center">
           <Avatar
+            as="button"
+            className="transition-transform"
+            color={row.original.isPremium ? 'danger' : 'default'}
             isBordered={row.original.isPremium}
-            color={row.original.isPremium ? "danger" : "default"}
-            as='button'
-            className='transition-transform'
+            name={row.original?.name as string}
+            showFallback
             src={
               (row.original.github as string) || (row.original.image as string)
             }
-            name={row.original?.name as string}
-            showFallback
           />
-          <span className='ml-2'>{row.original.name}</span>
+          <span className="ml-2">{row.original.name}</span>
         </div>
       );
     },
   },
   {
-    accessorKey: "isOnboarded",
-    header: "Onboarding Completed",
+    accessorKey: 'isOnboarded',
+    header: 'Onboarding Completed',
     cell: ({ row }) => {
       return (
         <>
           <BooleanIcon
+            className="items-center text-center w-6 h-6"
             condition={row.original.isOnboarded}
-            className='items-center text-center w-6 h-6'
           />
         </>
       );
     },
   },
   {
-    accessorKey: "isPremium",
-    header: "Premium Member",
+    accessorKey: 'isPremium',
+    header: 'Premium Member',
     cell: ({ row }) => {
       return (
         <>
           <BooleanIcon
+            className="items-center text-center w-6 h-6"
             condition={row.original.isOnboarded}
-            className='items-center text-center w-6 h-6'
           />
         </>
       );
     },
   },
   {
-    accessorKey: "calendly_token",
-    header: "Calendly Enabled",
+    accessorKey: 'calendly_token',
+    header: 'Calendly Enabled',
     cell: ({ row }) => {
       return (
         <>
           <BooleanIcon
+            className="items-center text-center w-6 h-6"
             condition={!!row.original?.calendly_token}
-            className='items-center text-center w-6 h-6'
           />
         </>
       );
     },
   },
   {
-    accessorKey: "ciApiKey",
-    header: "CI API Key set",
+    accessorKey: 'ciApiKey',
+    header: 'CI API Key set',
     cell: ({ row }) => {
       return (
         <>
           <BooleanIcon
+            className="items-center text-center w-6 h-6"
             condition={!!row.original?.ciApiKey}
-            className='items-center text-center w-6 h-6'
           />
         </>
       );
     },
   },
   {
-    accessorKey: "._count.studentSession",
-    header: "Total Student Sessions",
+    accessorKey: '._count.studentSession',
+    header: 'Total Student Sessions',
     cell: ({ row }) => {
       return (
         <>
@@ -121,8 +124,8 @@ export const mentorColumns: ColumnDef<UserWithCount>[] = [
     },
   },
   {
-    accessorKey: "_count.students",
-    header: "Total Students",
+    accessorKey: '_count.students',
+    header: 'Total Students',
     cell: ({ row }) => {
       return (
         <>{row.original._count?.students ? row.original._count?.students : 0}</>
@@ -130,77 +133,75 @@ export const mentorColumns: ColumnDef<UserWithCount>[] = [
     },
   },
   {
-    accessorKey: "paidPerHour",
-    header: "Paid Per Hour",
+    accessorKey: 'paidPerHour',
+    header: 'Paid Per Hour',
     cell: ({ row }) => {
       return (
         <>
           {row.original.paidPerHour ? (
             <SensitiveInfo value={row.original.paidPerHour.toString()} />
           ) : (
-            <span className='text-gray-400'>Not set</span>
+            <span className="text-gray-400">Not set</span>
           )}
         </>
       );
     },
   },
   {
-    accessorKey: "role",
-    header: "Role",
+    accessorKey: 'role',
+    header: 'Role',
     cell: ({ row }) => {
       return (
         <>
           <RoleDropdown
-            userId={row.original.id}
             currentRole={row.original.role}
+            userId={row.original.id}
           />
         </>
       );
     },
   },
   {
-    id: "actions",
+    id: 'actions',
     enableHiding: true,
-    header: "Actions",
+    header: 'Actions',
     cell: ({ row }) => {
       const mentor = row.original;
+
       return (
-        <Dropdown
-          backdrop='blur'
-          showArrow>
+        <Dropdown backdrop="blur" showArrow>
           <DropdownTrigger>
-            <Button
-              variant='light'
-              className='h-8 w-8 p-0'>
-              <span className='sr-only'>Open menu</span>
-              <MoreHorizontal className='h-4 w-4' />
+            <Button className="h-8 w-8 p-0" variant="light">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownTrigger>
-          <DropdownMenu aria-label='Dropdown menu with icons'>
+          <DropdownMenu aria-label="Dropdown menu with icons">
             <DropdownItem
-              key='profile'
-              startContent={<PiUserCircleBold className='mr-2' />}>
+              key="profile"
+              startContent={<PiUserCircleBold className="mr-2" />}
+            >
               <Link
+                className="cursor-pointer"
                 href={`/admin/mentor/${mentor.id}`}
-                className='cursor-pointer'>
+              >
                 View Profile
               </Link>
             </DropdownItem>
             <DropdownItem
-              key='edit'
-              startContent={<PiUserCircleGearFill className='mr-2' />}>
+              key="edit"
+              startContent={<PiUserCircleGearFill className="mr-2" />}
+            >
               Edit Mentor
             </DropdownItem>
             <DropdownItem
-              key='ban'
-              startContent={<FaHammer className='mr-2' />}>
+              key="ban"
+              startContent={<FaHammer className="mr-2" />}
+            >
               Ban Mentor
             </DropdownItem>
-            <DropdownItem key='sync'>
-              <SyncGithubBio
-                id={mentor.id}
-                minimal
-              />
+            <DropdownItem key="sync">
+              <SyncGithubBio id={mentor.id} minimal />
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>

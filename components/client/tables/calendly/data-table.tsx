@@ -1,5 +1,6 @@
-"use client";
+'use client';
 
+import { Button } from '@nextui-org/react';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -10,10 +11,15 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
+import { addHours, isAfter, parseISO } from 'date-fns';
+import { CalendarSearch } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import { RiRocketFill } from 'react-icons/ri';
 
-import { refreshCalendlyEventsForUser } from "@/actions/calendly.actions";
-import { Input } from "@/components/ui/input";
+import { refreshCalendlyEventsForUser } from '@/actions/calendly.actions';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -21,16 +27,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { useToast } from "@/components/ui/use-toast";
-import { syncStudentsWithDatabase } from "@/lib/students";
-import { Button } from "@nextui-org/react";
-import { addHours, isAfter, parseISO } from "date-fns";
-import { CalendarSearch } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { RiRocketFill } from "react-icons/ri";
-import { LoadingModal } from "../../LoadingModal";
+} from '@/components/ui/table';
+import { useToast } from '@/components/ui/use-toast';
+import { syncStudentsWithDatabase } from '@/lib/students';
+
+import { LoadingModal } from '../../LoadingModal';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -64,7 +65,8 @@ export function DataTable<TData, TValue>({
 
   async function handleSync() {
     setIsSyncing(true);
-    setCurrentAction("sync");
+    setCurrentAction('sync');
+
     try {
       const { added, removed, updated } = await syncStudentsWithDatabase();
 
@@ -72,33 +74,36 @@ export function DataTable<TData, TValue>({
       if (added.length > 0) {
         toast({
           title: `Success: Added ${added.length} student(s)!`,
-          variant: "default",
+          variant: 'default',
         });
       }
+
       if (removed.length > 0) {
         toast({
           title: `Notice: Unassigned ${removed.length} student(s)!`,
-          variant: "default",
+          variant: 'default',
         });
       }
+
       if (updated.length > 0) {
         toast({
           title: `Success: Updated ${updated.length} student(s)!`,
-          variant: "default",
+          variant: 'default',
         });
       }
+
       if (added.length === 0 && removed.length === 0 && updated.length === 0) {
         toast({
           title: "Everything's up-to-date!",
-          description: "No changes were made during the sync.",
-          variant: "default",
+          description: 'No changes were made during the sync.',
+          variant: 'default',
         });
       }
     } catch (error: any) {
       toast({
-        title: "Error: Something went wrong!",
+        title: 'Error: Something went wrong!',
         description: `Failed to sync students: ${error.message}`,
-        variant: "destructive",
+        variant: 'destructive',
       });
     } finally {
       setIsSyncing(false);
@@ -110,7 +115,8 @@ export function DataTable<TData, TValue>({
 
   async function refreshCalendly() {
     setIsSyncing(true);
-    setCurrentAction("calendly");
+    setCurrentAction('calendly');
+
     try {
       await refreshCalendlyEventsForUser();
     } finally {
@@ -123,6 +129,7 @@ export function DataTable<TData, TValue>({
   const shouldRenderRow = (sessionStartTime: string) => {
     const sessionDate = new Date(parseISO(sessionStartTime));
     const endTime = addHours(sessionDate, 2);
+
     return !isAfter(new Date(), endTime);
   };
 
@@ -131,6 +138,7 @@ export function DataTable<TData, TValue>({
   const filteredRows = useMemo(() => {
     return table.getRowModel().rows.filter((row) => {
       const startTime = (row.original as any).start_time;
+
       return shouldRenderRow(startTime);
     });
   }, [table]);
@@ -152,52 +160,54 @@ export function DataTable<TData, TValue>({
           {/* Input */}
           <div className="mb-2 md:mb-0 md:max-w-sm md:mr-4">
             <Input
-              placeholder="Filter by name..."
-              value={
-                (table.getColumn("student_name")?.getFilterValue() as string) ??
-                ""
-              }
               onChange={(event) =>
                 table
-                  .getColumn("student_name")
+                  .getColumn('student_name')
                   ?.setFilterValue(event.target.value)
+              }
+              placeholder="Filter by name..."
+              value={
+                (table.getColumn('student_name')?.getFilterValue() as string) ??
+                ''
               }
             />
           </div>
 
           <div className="flex justify-end space-x-2">
             <Button
-              variant="flat"
-              color={!isSyncing ? "primary" : "danger"}
+              color={!isSyncing ? 'primary' : 'danger'}
               disabled={isSyncing}
+              endContent={<CalendarSearch />}
               isLoading={isSyncing}
-              spinnerPlacement="end"
               onClick={refreshCalendly}
-              endContent={<CalendarSearch />}>
+              spinnerPlacement="end"
+              variant="flat"
+            >
               Refresh Calendly
             </Button>
             <Button
-              variant="flat"
-              color={!isSyncing ? "primary" : "danger"}
-              onClick={handleSync}
+              color={!isSyncing ? 'primary' : 'danger'}
               disabled={isSyncing}
               isLoading={isSyncing}
-              spinnerPlacement="end">
+              onClick={handleSync}
+              spinnerPlacement="end"
+              variant="flat"
+            >
               {isSyncing ? (
                 <>
                   <LoadingModal
                     close={() => !isSyncing}
-                    isSyncing={isSyncing}
                     headerText={
-                      currentAction === "sync"
-                        ? "Fetching your students from CI Spreadsheet..."
-                        : "Refreshing Calendly..."
+                      currentAction === 'sync'
+                        ? 'Fetching your students from CI Spreadsheet...'
+                        : 'Refreshing Calendly...'
                     }
+                    isSyncing={isSyncing}
                   />
                 </>
               ) : (
                 <>
-                  {" "}
+                  {' '}
                   Sync Students <RiRocketFill className="ml-2" />
                 </>
               )}
@@ -218,7 +228,7 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -230,13 +240,14 @@ export function DataTable<TData, TValue>({
             {filteredRows.length ? (
               filteredRows.map((row) => (
                 <TableRow
+                  data-state={row.getIsSelected() && 'selected'}
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}>
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -245,8 +256,9 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell
+                  className="h-24 text-center"
                   colSpan={columns.length}
-                  className="h-24 text-center">
+                >
                   No results.
                 </TableCell>
               </TableRow>
@@ -255,17 +267,19 @@ export function DataTable<TData, TValue>({
         </Table>
         <div className="flex items-center justify-end space-x-2 py-4 mr-4">
           <Button
-            variant="flat"
-            size="sm"
+            disabled={!table.getCanPreviousPage()}
             onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}>
+            size="sm"
+            variant="flat"
+          >
             Previous
           </Button>
           <Button
-            variant="flat"
-            size="sm"
+            disabled={!table.getCanNextPage()}
             onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}>
+            size="sm"
+            variant="flat"
+          >
             Next
           </Button>
         </div>

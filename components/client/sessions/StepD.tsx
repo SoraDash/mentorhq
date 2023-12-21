@@ -1,51 +1,53 @@
-import { FormikSelect } from "@/components/forms/FormikSelect";
-import { FormikValues, useFormikContext } from "formik";
-import React from "react";
+import { FormikValues, useFormikContext } from 'formik';
+import React from 'react';
+
+import { FormikSelect } from '@/components/forms/FormikSelect';
 
 interface StepDProps {}
 
 const submissionOptions = [
   {
-    value: "First Time Submission",
-    label: "First Time Submission",
-    emoji: "🆕",
+    value: 'First Time Submission',
+    label: 'First Time Submission',
+    emoji: '🆕',
   },
   {
-    value: "Project Resubmission",
-    label: "Project Resubmission",
-    emoji: "🔄",
+    value: 'Project Resubmission',
+    label: 'Project Resubmission',
+    emoji: '🔄',
   },
 ];
 const followUpOptions = [
   {
-    value: "Yes",
-    label: "Yes",
-    emoji: "👎",
+    value: 'Yes',
+    label: 'Yes',
+    emoji: '👎',
   },
   {
-    value: "No",
-    label: "No",
-    emoji: "👍",
+    value: 'No',
+    label: 'No',
+    emoji: '👍',
   },
 ];
 
 export const StepD: React.FC<StepDProps> = () => {
-  const { values, handleChange } = useFormikContext<FormikValues>();
+  const { handleChange, values } = useFormikContext<FormikValues>();
+
   return (
     <div>
       <FormikSelect
-        name="submissionType"
-        label="Select type of submission"
-        options={submissionOptions}
-        onChange={handleChange}
         isRequired
+        label="Select type of submission"
+        name="submissionType"
+        onChange={handleChange}
+        options={submissionOptions}
       />
       <FormikSelect
-        name="follow_up"
-        label="Do you want Student Care to follow up with the student?"
-        options={followUpOptions}
-        onChange={handleChange}
         isRequired
+        label="Do you want Student Care to follow up with the student?"
+        name="follow_up"
+        onChange={handleChange}
+        options={followUpOptions}
       />
     </div>
   );

@@ -1,13 +1,15 @@
-"use client";
-import { Select, SelectItem, cn } from "@nextui-org/react";
-import { FormikValues, useField, useFormikContext } from "formik";
-import React, { useState } from "react";
-import { OptionItem } from "./OptionItem";
+'use client';
+
+import { Select, SelectItem, cn } from '@nextui-org/react';
+import { FormikValues, useField, useFormikContext } from 'formik';
+import React, { useState } from 'react';
+
+import { OptionItem } from './OptionItem';
 
 // Define interfaces for SessionType and Project
 interface SessionType {
-  name: string;
   icon: string;
+  name: string;
 }
 
 interface Project {
@@ -16,34 +18,34 @@ interface Project {
 }
 
 interface Option {
-  value: string;
-  label?: string;
   description?: string;
-  image?: string;
   emoji?: string;
-  sessionType?: SessionType;
+  image?: string;
+  label?: string;
   project?: Project;
+  sessionType?: SessionType;
+  value: string;
 }
 interface FormikSelectProps {
-  name: string;
-  label: string;
-  isRequired?: boolean;
-  placeholder?: string;
   className?: string;
-  options: Option[];
+  isRequired?: boolean;
+  label: string;
+  name: string;
   onChange?: (value: string) => void;
+  options: Option[];
+  placeholder?: string;
 }
 
 export const FormikSelect: React.FC<FormikSelectProps> = ({
-  label,
-  options,
   className,
+  label,
   onChange,
+  options,
   ...props
 }) => {
   const [field, meta, helpers] = useField(props.name);
   const { setTouched } = helpers;
-  const [description, setDescription] = useState<string>("");
+  const [description, setDescription] = useState<string>('');
   const { setFieldValue } = useFormikContext<FormikValues>();
 
   const defaultHandleSelectionChange = (value: string) => {
@@ -51,7 +53,7 @@ export const FormikSelect: React.FC<FormikSelectProps> = ({
 
     if (selectedOption) {
       setFieldValue(props.name, selectedOption);
-      setDescription(selectedOption.label || "");
+      setDescription(selectedOption.label || '');
     }
   };
 
@@ -59,27 +61,23 @@ export const FormikSelect: React.FC<FormikSelectProps> = ({
     <Select
       {...props}
       aria-label={label}
-      label={label}
-      isInvalid={meta.touched && !!meta.error}
+      className={cn('w-full space-y-5', className)}
       description={description}
-      value={field.value}
-      isRequired={props.isRequired}
       errorMessage={meta.error}
-      className={cn("w-full space-y-5", className)}
+      isInvalid={meta.touched && !!meta.error}
+      isRequired={props.isRequired}
+      label={label}
       onChange={(e) =>
         onChange
           ? onChange(e.target.value)
           : defaultHandleSelectionChange(e.target.value)
       }
-      onClose={() => setTouched(true)}>
+      onClose={() => setTouched(true)}
+      value={field.value}
+    >
       {options.map((option) => (
-        <SelectItem
-          key={option.value}
-          textValue={option.label || ""}>
-          <OptionItem
-            label={option.label || ""}
-            emoji={option.emoji}
-          />
+        <SelectItem key={option.value} textValue={option.label || ''}>
+          <OptionItem emoji={option.emoji} label={option.label || ''} />
         </SelectItem>
       ))}
     </Select>

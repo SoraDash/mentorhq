@@ -1,16 +1,16 @@
-import { Card, CardBody, CardHeader } from "@nextui-org/react";
-import { IconType } from "react-icons/lib";
+import { Card, CardBody, CardHeader } from '@nextui-org/react';
+import { IconType } from 'react-icons/lib';
 
 interface EmptyStateProps {
+  description: string;
   icon: IconType;
   title: string;
-  description: string;
 }
 
 export default function EmptyState({
+  description,
   icon: Icon,
   title,
-  description,
 }: EmptyStateProps) {
   return (
     <main className="flex flex-col items-center justify-center mt-40 px-4 text-center">

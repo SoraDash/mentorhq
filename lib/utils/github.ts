@@ -1,7 +1,10 @@
-"use server"
-import { prisma } from "@/lib/db/prisma";
+'use server';
 
-export const fetchReadmeFromGitHub = async (username: string): Promise<string | null> => {
+import { prisma } from '@/lib/db/prisma';
+
+export const fetchReadmeFromGitHub = async (
+  username: string,
+): Promise<string | null> => {
   try {
     const url = `https://raw.githubusercontent.com/${username}/${username}/master/README.md`;
     const response = await fetch(url);
@@ -11,9 +14,11 @@ export const fetchReadmeFromGitHub = async (username: string): Promise<string | 
     }
 
     const data = await response.text();
+
     return data;
   } catch (error) {
-    console.error("Failed to fetch README", error);
+    console.error('Failed to fetch README', error);
+
     return null;
   }
 };
@@ -22,6 +27,7 @@ export const getBio = async (id: string, refresh: boolean = false) => {
   if (!id) return null;
 
   let user = await prisma.user.findUnique({ where: { id } });
+
   if (!user || !user.github) return null; // Return null if user or user.github is not available
 
   let bioUpdated = false;
@@ -45,6 +51,6 @@ export const getBio = async (id: string, refresh: boolean = false) => {
   return {
     user,
     bioUpdated,
-    bioSame
+    bioSame,
   };
 };

@@ -1,4 +1,3 @@
-import { CalendlyEvent } from "@/lib/calendly/types";
 import {
   addDays,
   addMinutes,
@@ -8,7 +7,9 @@ import {
   isPast,
   isToday,
   parseISO,
-} from "date-fns";
+} from 'date-fns';
+
+import { CalendlyEvent } from '@/lib/calendly/types';
 
 interface MeetingStatusProps {
   event: CalendlyEvent;
@@ -17,37 +18,41 @@ interface MeetingStatusProps {
 export const MeetingStatus = ({ event }: MeetingStatusProps) => {
   const isTodayAndInPast = (session: any) => {
     const sessionDate = parseISO(session);
-    if (eventInPast(session) === "Session In Progress") {
+
+    if (eventInPast(session) === 'Session In Progress') {
       return {
-        class: "text-green-600 font-semibold",
-        bg: "dot-label bg-green-600",
+        class: 'text-green-600 font-semibold',
+        bg: 'dot-label bg-green-600',
       };
     }
+
     if (isPast(sessionDate)) {
       return {
-        class: "text-green-600 font-semibold",
-        bg: "dot bg-green-600",
+        class: 'text-green-600 font-semibold',
+        bg: 'dot bg-green-600',
       };
     }
 
     if (isToday(sessionDate)) {
       return {
-        class: "text-green-600 font-semibold",
-        bg: "dot-label bg-green-600",
+        class: 'text-green-600 font-semibold',
+        bg: 'dot-label bg-green-600',
       };
     }
+
     // parse the sessionDate to compare with next 5 days
     const sessionFiveDays = addDays(new Date(), 5);
+
     if (isAfter(sessionDate, sessionFiveDays)) {
       return {
-        class: "text-red-500",
-        bg: "dot bg-red-500",
+        class: 'text-red-500',
+        bg: 'dot bg-red-500',
       };
     }
 
     return {
-      class: "text-yellow-500",
-      bg: "dot bg-yellow-500",
+      class: 'text-yellow-500',
+      bg: 'dot bg-yellow-500',
     };
   };
 
@@ -58,38 +63,39 @@ export const MeetingStatus = ({ event }: MeetingStatusProps) => {
 
     // Session in progress
     if (currentDate >= sessionDate && currentDate <= sessionEndTime) {
-      return "Session In Progress";
+      return 'Session In Progress';
     }
 
     // Session is scheduled for later today
     if (isToday(sessionDate) && currentDate < sessionDate) {
       const timeToStart = formatDistanceStrict(sessionDate, currentDate);
+
       return `Today (in ${timeToStart})`;
     }
 
     // Session complete
     if (currentDate > sessionEndTime) {
-      return "Session Complete";
+      return 'Session Complete';
     }
 
     // Future session (not today)
     if (!isToday(sessionDate)) {
       if (differenceInDays(sessionDate, currentDate) === 0) {
-        return "Tomorrow";
+        return 'Tomorrow';
       }
 
       return `In ${differenceInDays(sessionDate, currentDate)} days`;
     }
   };
 
-  if (event.status !== "active") return null;
+  if (event.status !== 'active') return null;
 
   const renderStatus = () => {
     const sessionDate = parseISO(event.start_time);
     const isEventToday = isToday(sessionDate);
     const status = eventInPast(event.start_time);
     const statusClasses = isTodayAndInPast(event.start_time);
-    const dotClass = isEventToday ? "pulsing-dot" : "dot";
+    const dotClass = isEventToday ? 'pulsing-dot' : 'dot';
 
     return (
       <div className={`flex items-center ${statusClasses.class}`}>

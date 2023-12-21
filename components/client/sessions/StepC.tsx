@@ -1,33 +1,33 @@
-import { Textarea } from "@nextui-org/react";
-import { useFormikContext, FormikValues } from "formik";
-import React from "react";
+import { Textarea } from '@nextui-org/react';
+import { FormikValues, useFormikContext } from 'formik';
+import React from 'react';
 
 interface StepCProps {}
 
 export const StepC: React.FC<StepCProps> = () => {
-  const { values, handleChange } = useFormikContext<FormikValues>();
+  const { handleChange, values } = useFormikContext<FormikValues>();
 
   return (
     <div>
       <Textarea
         isRequired
-        name="summary"
-        maxRows={4}
         label="Summary"
         labelPlacement="outside"
+        maxRows={4}
+        name="summary"
+        onChange={handleChange}
         placeholder="Summary of the session"
         value={values.summary}
-        onChange={handleChange}
       />
       <Textarea
-        name="personalNotes"
-        maxRows={4}
+        defaultValue={values.personalNotes}
         label="Personal Notes"
         labelPlacement="outside"
-        placeholder="Personal Notes (Not given to CI)"
-        defaultValue={values.personalNotes}
-        value={values.personalNotes}
+        maxRows={4}
+        name="personalNotes"
         onChange={handleChange}
+        placeholder="Personal Notes (Not given to CI)"
+        value={values.personalNotes}
       />
     </div>
   );

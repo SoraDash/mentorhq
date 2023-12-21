@@ -1,30 +1,31 @@
-import { Input } from "@nextui-org/react";
-import { FormikValues, useFormikContext } from "formik";
-import React from "react";
+import { Input } from '@nextui-org/react';
+import { FormikValues, useFormikContext } from 'formik';
+import React from 'react';
 
 interface StepAProps {}
 
 export const StepA: React.FC<StepAProps> = () => {
-  const { values, handleChange } = useFormikContext<FormikValues>();
+  const { handleChange, values } = useFormikContext<FormikValues>();
+
   return (
     <div>
       <Input
-        type="date"
-        label="Session Date"
+        className="my-5"
         id="date"
         isRequired
-        className="my-5"
-        value={values.date} // Corrected value binding
+        label="Session Date"
         onChange={handleChange}
+        type="date"
+        value={values.date} // Corrected value binding
       />
       <Input
-        type="number"
-        label="Duration"
+        className="mb-5"
         id="duration"
         isRequired
-        className="mb-5"
-        value={values.duration} // Corrected value binding
+        label="Duration"
         onChange={handleChange}
+        type="number"
+        value={values.duration} // Corrected value binding
       />
     </div>
   );

@@ -1,19 +1,21 @@
-'use client'
+'use client';
 
-import { cn } from '@/lib/utils'
-import { Button } from '@nextui-org/react'
-import { signIn, useSession } from 'next-auth/react'
-import * as React from 'react'
-import { FC, useEffect } from 'react'
-import { FaGithub } from 'react-icons/fa'
-import { Icons } from './Icons'
-import { useToast } from './ui/use-toast'
+import { Button } from '@nextui-org/react';
+import { signIn, useSession } from 'next-auth/react';
+import * as React from 'react';
+import { FC, useEffect } from 'react';
+import { FaGithub } from 'react-icons/fa';
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
+import { cn } from '@/lib/utils';
+
+import { Icons } from './Icons';
+import { useToast } from './ui/use-toast';
+
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const UserAuthForm: FC<UserAuthFormProps> = ({ className, ...props }) => {
-  const { toast } = useToast()
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -23,60 +25,64 @@ const UserAuthForm: FC<UserAuthFormProps> = ({ className, ...props }) => {
     }
   }, [session]);
 
-
   const loginWithGoogle = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
-      await signIn('google')
+      await signIn('google');
     } catch (error) {
       setIsLoading(false);
       toast({
         title: 'Error',
         description: 'There was an error logging in with Google',
         variant: 'destructive',
-      })
+      });
     }
-  }
+  };
   const loginWithGithub = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
-      await signIn('github')
+      await signIn('github');
     } catch (error) {
       setIsLoading(false);
       toast({
         title: 'Error',
         description: 'There was an error logging in with Github',
         variant: 'destructive',
-      })
+      });
     }
-  }
+  };
 
   return (
-    <div className={ cn('flex flex-col space-y-5 justify-center', className) } { ...props }>
+    <div
+      className={cn('flex flex-col space-y-5 justify-center', className)}
+      {...props}
+    >
       <Button
-        isLoading={ isLoading }
-        type='button'
-        size='sm'
-        className='w-full'
-        onClick={ loginWithGoogle }
-        disabled={ isLoading }>
-        { isLoading ? null : <Icons.google className='h-4 w-4 mr-2' /> }
-        { isLoading ? 'Please wait...' : 'Google' }
+        className="w-full"
+        disabled={isLoading}
+        isLoading={isLoading}
+        onClick={loginWithGoogle}
+        size="sm"
+        type="button"
+      >
+        {isLoading ? null : <Icons.google className="h-4 w-4 mr-2" />}
+        {isLoading ? 'Please wait...' : 'Google'}
       </Button>
       <Button
-        isLoading={ isLoading }
-        type='button'
-        size='sm'
-        className='w-full'
-        onClick={ loginWithGithub }
-        disabled={ isLoading }>
-        { isLoading ? null : <FaGithub className='h-4 w-4 mr-2' /> }
-        { isLoading ? 'Please wait...' : 'Github' }
+        className="w-full"
+        disabled={isLoading}
+        isLoading={isLoading}
+        onClick={loginWithGithub}
+        size="sm"
+        type="button"
+      >
+        {isLoading ? null : <FaGithub className="h-4 w-4 mr-2" />}
+        {isLoading ? 'Please wait...' : 'Github'}
       </Button>
     </div>
-  )
-}
+  );
+};
 
-export default UserAuthForm
+export default UserAuthForm;

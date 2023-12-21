@@ -63,6 +63,7 @@ export const StepB: React.FC<StepBProps> = ({ projects, sortedSessions }) => {
       />
 
       <FormikSelect
+        defaultValue={progressOptions[1]}
         label="Progress"
         name="progress"
         options={progressOptions}

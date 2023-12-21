@@ -1,4 +1,5 @@
 "use client";
+
 import { courses } from "@/prisma/data";
 import {
   Button,
@@ -18,9 +19,12 @@ import { useState } from "react";
 import { FaSkype } from "react-icons/fa";
 import { PiStudentBold } from "react-icons/pi";
 import { FormikSelect } from "../FormikSelect";
+import { createStudent } from "@/lib/students";
+import { useToast } from "../ui/use-toast";
 
 export default function AddStudentModal() {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const {toast} = useToast();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const router = useRouter();
 
   const initialValues = {
@@ -71,9 +75,24 @@ export default function AddStudentModal() {
               onSubmit={async (values, actions) => {
                 actions.setSubmitting(true);
                 console.log({ values, actions });
-                // await createStudent(values);
-                actions.setSubmitting(false);
-                router.refresh();
+                try {
+                  await createStudent(values);
+                  toast({
+                    title: 'Success',
+                    description: 'Student created',
+                    variant: 'success',
+                  })
+                } catch (error: string | any) {
+                  toast({
+                    title: 'Error',
+                    description: error.message,
+                    variant: 'destructive',
+                  })
+                } finally {
+                  actions.setSubmitting(false);
+                  onClose();
+                  router.refresh();
+                }
               }}>
               {(formikProps) => {
                 const { values, handleChange, isSubmitting } = formikProps;

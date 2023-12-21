@@ -31,7 +31,7 @@ const followUpOptions = [
 ];
 
 export const StepD: React.FC<StepDProps> = () => {
-  const { values, handleChange, setFieldValue } =
+  const { handleChange, setFieldValue, values } =
     useFormikContext<FormikValues>();
 
   return (

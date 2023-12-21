@@ -132,7 +132,11 @@ export const calendlyColumns: ColumnDef<CalendlyEvent>[] = [
     header: 'New Session',
     cell: ({ row }) => {
       return row.original.studentID ? (
-        <AddSessionModal studentId={row.original.studentID} />
+        <AddSessionModal
+          studentEmail={row.original.student_email}
+          studentId={row.original.studentID}
+          studentName={row.original.student_name}
+        />
       ) : (
         <AddStudentModal />
       );

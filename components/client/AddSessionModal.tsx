@@ -11,8 +11,7 @@ import {
 } from '@nextui-org/react';
 import { Project, SessionType } from '@prisma/client';
 import { Formik, FormikValues } from 'formik';
-import { useEffect, useState } from 'react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaChalkboardTeacher } from 'react-icons/fa';
 
 import { UnifiedStudent } from '@/lib/students';
@@ -22,13 +21,24 @@ import { StepB } from './sessions/StepB';
 import { StepC } from './sessions/StepC';
 import { StepD } from './sessions/StepD';
 import { StepFinal } from './sessions/StepFinal';
+import { StepReview } from './sessions/StepReview';
 
 interface StepComponent {
   Component: React.FC<any>;
+  header: string;
   props: any;
 }
+interface AddSessionModalProps {
+  studentEmail: string;
+  studentId: string;
+  studentName: string;
+}
 
-export default function AddSessionModal({ studentId }: { studentId: string }) {
+export default function AddSessionModal({
+  studentEmail,
+  studentId,
+  studentName,
+}: AddSessionModalProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [currentSection, setCurrentSection] = useState(1);
   const [sessions, setSessions] = useState<SessionType[]>([]); // TODO: Replace with SessionType[
@@ -37,16 +47,16 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
     studentId,
     id: null,
     date: new Date().toISOString().split('T')[0],
-    duration: '11',
+    duration: '15',
+    summary: '',
+    personalNotes: '',
     session: {},
     project: {},
     progress: {
       label: 'Average',
       value: 'AVERAGE',
-      emoji: '👍',
+      emoji: '😊',
     },
-    summary: '',
-    personalNotes: '',
     submissionType: {
       value: 'First Time Submission',
       label: 'First Time Submission',
@@ -60,17 +70,41 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
   };
 
   const stepComponents: StepComponent[] = [
-    { Component: StepA, props: {} },
+    {
+      Component: StepA,
+      header: `Let's record a session for ${studentName}`,
+      props: {},
+    },
     {
       Component: StepB,
+      header: `What type of session was this with ${studentName}`,
       props: {
         sortedSessions: sessions || [],
         projects: student?.projects || [],
       },
     },
-    { Component: StepC, props: {} },
-    { Component: StepD, props: {} },
-    { Component: StepFinal, props: {} },
+    {
+      Component: StepC,
+      props: {},
+      header: `Summary of session`,
+    },
+    {
+      Component: StepD,
+      props: {},
+      header: 'Type of submission and CI follow up',
+    },
+    {
+      Component: StepReview,
+      header: `Are you satisfied with the session with ${studentName}?`,
+      props: {},
+    },
+    {
+      Component: StepFinal,
+      header: `We have submitted the session for ${studentName}!`,
+      props: {
+        name: studentName,
+      },
+    },
   ];
   const totalSteps = stepComponents.length;
   const CurrentStepComponent = stepComponents[currentSection - 1].Component;
@@ -122,8 +156,16 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
   if (!student) return null;
 
   const onSubmit = (values: FormikValues) => {
+    // Adjust the duration if necessary
+    const duration = parseInt(values.duration, 10);
+
+    if (duration > 15) {
+      values.duration = duration + 4;
+    }
+
     if (currentSection === totalSteps) {
       console.log('Final part of the form submitted', values);
+      // Here, values.duration will have the adjusted duration if needed
       onOpenChange();
     } else {
       console.log(`Submitting Step ${currentSection}`, values);
@@ -159,7 +201,7 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
             {({ handleSubmit }) => (
               <form onSubmit={handleSubmit}>
                 <ModalHeader className="flex flex-col gap-1">
-                  Let&apos;s record a session
+                  {stepComponents[currentSection - 1].header}
                 </ModalHeader>
                 <ModalBody>
                   <CurrentStepComponent {...currentStepProps} />
@@ -173,14 +215,20 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
                       Back
                     </Button>
                   )}
-                  {currentSection < totalSteps && (
-                    <Button color="primary" type="submit">
-                      Next
+                  {currentSection < totalSteps &&
+                    currentSection !== totalSteps - 1 && (
+                      <Button color="primary" type="submit">
+                        Next
+                      </Button>
+                    )}
+                  {currentSection === totalSteps - 1 && (
+                    <Button color="success" type="submit">
+                      Submit it 🚀
                     </Button>
                   )}
                   {currentSection === totalSteps && (
-                    <Button color="success" type="submit">
-                      Submit
+                    <Button color="primary" type="submit">
+                      Finish
                     </Button>
                   )}
                 </ModalFooter>

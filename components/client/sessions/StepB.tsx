@@ -13,17 +13,17 @@ const progressOptions = [
   {
     label: 'Poor',
     value: 'POOR',
-    emoji: '👎',
+    emoji: '😔',
   },
   {
     label: 'Average',
     value: 'AVERAGE',
-    emoji: '👍',
+    emoji: '😊',
   },
   {
     label: 'Excellent',
     value: 'EXCELLENT',
-    emoji: '🙌',
+    emoji: '🤩',
   },
 ];
 
@@ -52,13 +52,13 @@ export const StepB: React.FC<StepBProps> = ({ projects, sortedSessions }) => {
       <FormikSelect
         label="Session Type"
         name="session"
-        options={sessionOptions} // Directly use sessionOptions without remapping
+        options={sessionOptions}
         placeholder="Select Session Type"
       />
       <FormikSelect
         label="Project"
         name="project"
-        options={projectOptions} // Directly use projectOptions without remapping
+        options={projectOptions}
         placeholder="Select Project"
       />
 

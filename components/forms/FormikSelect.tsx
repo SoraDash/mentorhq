@@ -47,7 +47,6 @@ export const FormikSelect: React.FC<FormikSelectProps> = ({
 }) => {
   const [field, meta, helpers] = useField(props.name);
   const { setTouched } = helpers;
-  const [description, setDescription] = useState<string>('');
   const { setFieldValue } = useFormikContext<FormikValues>();
 
   const defaultHandleSelectionChange = (value: string) => {
@@ -55,7 +54,6 @@ export const FormikSelect: React.FC<FormikSelectProps> = ({
 
     if (selectedOption) {
       setFieldValue(props.name, selectedOption);
-      setDescription(selectedOption.label || '');
     }
   };
 

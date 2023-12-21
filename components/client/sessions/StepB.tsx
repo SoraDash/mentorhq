@@ -28,8 +28,7 @@ const progressOptions = [
 ];
 
 export const StepB: React.FC<StepBProps> = ({ projects, sortedSessions }) => {
-  const { handleChange, setFieldValue, values } =
-    useFormikContext<FormikValues>();
+  const { setFieldValue, values } = useFormikContext<FormikValues>();
 
   if (!values.progress) {
     setFieldValue('progress', progressOptions[1]);

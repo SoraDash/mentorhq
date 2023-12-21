@@ -14,14 +14,13 @@ import { Formik, FormikValues } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { FaChalkboardTeacher } from 'react-icons/fa';
 
-import { UnifiedStudent } from '@/lib/students';
-
 import { StepA } from './sessions/StepA';
 import { StepB } from './sessions/StepB';
 import { StepC } from './sessions/StepC';
 import { StepD } from './sessions/StepD';
 import { StepFinal } from './sessions/StepFinal';
 import { StepReview } from './sessions/StepReview';
+import { UnifiedStudent } from '../../lib/students/types';
 
 interface StepComponent {
   Component: React.FC<any>;

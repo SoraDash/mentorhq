@@ -39,5 +39,10 @@
     "node_modules",
     "components/ui/**/*",
     "lib/calendly/fake-events.ts"
-  ]
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
 }

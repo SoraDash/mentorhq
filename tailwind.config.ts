@@ -1,4 +1,3 @@
-
 import { nextui } from '@nextui-org/react';
 
 /** @type {import('tailwindcss').Config} */
@@ -99,7 +98,6 @@ module.exports = {
               '800': '#a0143d',
               '900': '#851637',
               DEFAULT: '#ee327b',
-              
             },
 
             secondary: {
@@ -114,7 +112,6 @@ module.exports = {
               '800': '#9b3319',
               '900': '#80301c',
               DEFAULT: '#f37657',
-              
             },
 
             success: {
@@ -155,7 +152,6 @@ module.exports = {
               '800': '#9f122a',
               '900': '#881327',
               DEFAULT: '#f43f5e',
-              
             },
           },
           layout: {
@@ -203,7 +199,6 @@ module.exports = {
               '800': '#9b3319',
               '900': '#80301c',
               DEFAULT: '#f37657',
-              
             },
             success: {
               '50': '#ecfdf5',
@@ -243,7 +238,6 @@ module.exports = {
               '800': '#991b1b',
               '900': '#7f1d1d',
               DEFAULT: '#f87272',
-              
             },
           },
           layout: {

@@ -28,6 +28,7 @@ interface Option {
 }
 interface FormikSelectProps {
   className?: string;
+  defaultValue?: Option;
   isRequired?: boolean;
   label: string;
   name: string;
@@ -38,6 +39,7 @@ interface FormikSelectProps {
 
 export const FormikSelect: React.FC<FormikSelectProps> = ({
   className,
+  defaultValue,
   label,
   onChange,
   options,
@@ -60,6 +62,7 @@ export const FormikSelect: React.FC<FormikSelectProps> = ({
       {...props}
       aria-label={label}
       className={cn('space-y-5 w-full', className)}
+      defaultSelectedKeys={defaultValue ? [defaultValue.value] : []}
       errorMessage={meta.error}
       isInvalid={meta.touched && !!meta.error}
       isRequired={props.isRequired}

@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev:seed": "npm run env:ts && npx prisma generate && npx prisma db push && npm run seed",
-    "dev:reset": "npm run env:ts && npx prisma migrate reset && npx prisma generate && npx prisma db push && npm run seed && yarn dev",
+    "dev:seed": "npm run env && npx prisma generate && npx prisma db push && npm run seed",
+    "dev:reset": "npm run env && npx prisma migrate reset && npx prisma generate && npx prisma db push && npm run seed && yarn dev",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

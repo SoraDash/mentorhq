@@ -37,7 +37,7 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
     studentId,
     id: null,
     date: new Date().toISOString().split('T')[0],
-    duration: '11',
+    duration: '15',
     session: {},
     project: {},
     progress: {
@@ -122,8 +122,16 @@ export default function AddSessionModal({ studentId }: { studentId: string }) {
   if (!student) return null;
 
   const onSubmit = (values: FormikValues) => {
+    // Adjust the duration if necessary
+    const duration = parseInt(values.duration, 10);
+
+    if (duration > 15) {
+      values.duration = duration + 4;
+    }
+
     if (currentSection === totalSteps) {
       console.log('Final part of the form submitted', values);
+      // Here, values.duration will have the adjusted duration if needed
       onOpenChange();
     } else {
       console.log(`Submitting Step ${currentSection}`, values);

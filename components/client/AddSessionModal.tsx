@@ -14,7 +14,7 @@ import { Formik, FormikValues } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { FaChalkboardTeacher } from 'react-icons/fa';
 
-import { UnifiedStudent } from '@/lib/students';
+import { generateFeedbackURL } from '@/lib/generate-url';
 
 import { StepA } from './sessions/StepA';
 import { StepB } from './sessions/StepB';
@@ -22,6 +22,7 @@ import { StepC } from './sessions/StepC';
 import { StepD } from './sessions/StepD';
 import { StepFinal } from './sessions/StepFinal';
 import { StepReview } from './sessions/StepReview';
+import { UnifiedStudent } from '../../lib/students/types';
 
 interface StepComponent {
   Component: React.FC<any>;
@@ -35,7 +36,6 @@ interface AddSessionModalProps {
 }
 
 export default function AddSessionModal({
-  studentEmail,
   studentId,
   studentName,
 }: AddSessionModalProps) {
@@ -155,7 +155,7 @@ export default function AddSessionModal({
 
   if (!student) return null;
 
-  const onSubmit = (values: FormikValues) => {
+  const onSubmit = async (values: FormikValues) => {
     // Adjust the duration if necessary
     const duration = parseInt(values.duration, 10);
 
@@ -163,13 +163,25 @@ export default function AddSessionModal({
       values.duration = duration + 4;
     }
 
-    if (currentSection === totalSteps) {
+    if (currentSection === totalSteps - 1) {
+      // Changed to next-to-last step
+      console.log('values on submit', values);
+
+      const feedbackURL = await generateFeedbackURL({
+        studentEmail: student?.email,
+        values,
+      });
+
+      console.log('Feedback URL:', feedbackURL); // Log the generated URL
+      // window.open(feedbackURL, '_blank');
+
+      setCurrentSection((prev) => prev + 1); // Proceed to the final step
+    } else if (currentSection === totalSteps) {
       console.log('Final part of the form submitted', values);
-      // Here, values.duration will have the adjusted duration if needed
-      onOpenChange();
+      onOpenChange(); // Close the modal or handle final step
     } else {
       console.log(`Submitting Step ${currentSection}`, values);
-      setCurrentSection((prev) => prev + 1);
+      setCurrentSection((prev) => prev + 1); // Proceed to the next step
     }
   };
 

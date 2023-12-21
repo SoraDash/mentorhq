@@ -63,7 +63,6 @@ export const FormikSelect: React.FC<FormikSelectProps> = ({
       aria-label={label}
       className={cn('space-y-5 w-full', className)}
       defaultSelectedKeys={defaultValue ? [defaultValue.value] : []}
-      description={description}
       errorMessage={meta.error}
       isInvalid={meta.touched && !!meta.error}
       isRequired={props.isRequired}

@@ -34,6 +34,7 @@ export const StepD = () => {
   return (
     <div>
       <FormikSelect
+        defaultValue={submissionOptions[0]}
         isRequired
         label="Select type of submission"
         name="submissionType"

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const SocialValidation = z.object({
   github: z.string().optional(),
@@ -7,6 +7,4 @@ export const SocialValidation = z.object({
   website: z.string().optional(),
   skype: z.string().optional(),
   twitter: z.string().optional(),
-})
-
-
+});

@@ -1,33 +1,38 @@
-import { MentorProfileSidebar } from "@/components/MentorProfileSidebar";
-import { Profile } from "@/components/Profile";
-import { getMentorById } from "@/lib/admin/mentors";
-import { getUser } from "@/lib/auth/auth";
-import React from "react";
+import React from 'react';
+
+import { MentorProfileSidebar } from '@/components/MentorProfileSidebar';
+import { Profile } from '@/components/Profile';
+import { getMentorById } from '@/lib/admin/mentors';
+import { getUser } from '@/lib/auth/auth';
 
 const UserProfilePage: React.FC = async () => {
   const user = await getUser();
+
   if (!user) {
     return <div>No User found</div>;
   }
+
   const mentor = await getMentorById(user.id);
+
   if (!mentor) {
     return <div>No Mentor found</div>;
   }
+
   return (
     <>
-      <div className='container mx-auto py-8'>
-        <div className='grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-12 gap-6 px-4'>
-          <div className='col-span-4 sm:col-span-3'>
+      <div className="container mx-auto py-8">
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-12 gap-6 px-4">
+          <div className="col-span-4 sm:col-span-3">
             <MentorProfileSidebar
               profile={{
                 ...mentor,
                 isPremium: mentor.isPremium || false,
-                image: mentor.image || "",
-                github: mentor.github || "",
+                image: mentor.image || '',
+                github: mentor.github || '',
               }}
             />
           </div>
-          <div className='col-span-4 sm:col-span-9'>
+          <div className="col-span-4 sm:col-span-9">
             <Profile profile={mentor} />
           </div>
         </div>

@@ -1,11 +1,23 @@
 {
-  "extends": ["eslint:recommended", "next/core-web-vitals"],
-  "rules": {
-    "no-unused-vars": "warn"
-  },
+  "extends": [
+    "eslint:recommended",
+    "next/core-web-vitals",
+    "gbrachetta"
+  ],
   "ignorePatterns": [
     "components/ui/**/*",
     "node_modules/**/*",
     "lib/calendly/fake-events.ts"
-  ]
+  ],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "prettier/prettier": [
+      1,
+      {
+        "singleQuote": true
+      }
+    ],
+    "sort-exports/sort-exports": "off",
+    "sort-keys-fix/sort-keys-fix": "off"
+  }
 }

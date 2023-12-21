@@ -16,9 +16,9 @@ export interface InviteesCounter {
 }
 
 export interface Location {
-  join_url: string
-  status: 'pushed'
-  type: string
+  join_url: string;
+  status: 'pushed';
+  type: string;
 }
 
 export interface Question {
@@ -29,33 +29,34 @@ export interface Question {
 
 export interface CalendlyEvent {
   calendar_event: CalendarEvent;
+  cancel_url: string;
   created_at: string;
   end_time: string;
-  event_guests: any[]; // if you know more specific structure of guest, replace any with that structure
+  event_guests: any[];
+  // if you know more specific structure of guest, replace any with that structure
   event_memberships: EventMembership[];
   event_type: string;
   invitees_counter: InviteesCounter;
   location: Location;
-  name: string
+  name: string;
+  questions: Question[];
+  reschedule_url: string;
   start_time: string;
-  status: "active" | "canceled"
+  status: 'active' | 'canceled';
+  studentID: string;
+  student_email: string;
+  student_name: string;
   updated_at: string;
   uri: string;
-  student_name: string;
-  student_email: string;
-  cancel_url: string;
-  reschedule_url: string;
-  questions: Question[];
-  studentID: string;
 }
 
 export interface CalendlyToken {
-  owner: string;
-  scope: string;
+  access_token: string;
   created_at: number;
   expires_in: number;
-  token_type: string;
-  access_token: string;
   organization: string;
+  owner: string;
   refresh_token: string;
+  scope: string;
+  token_type: string;
 }

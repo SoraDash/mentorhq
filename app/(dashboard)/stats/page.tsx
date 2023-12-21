@@ -1,28 +1,30 @@
-"use client";
-import { Button } from "@nextui-org/react";
-import React from "react";
-import toast from "react-hot-toast";
-import { useToast } from "@/components/ui/use-toast";
+'use client';
+
+import { Button } from '@nextui-org/react';
+import React from 'react';
+import toast from 'react-hot-toast';
+
+import { useToast } from '@/components/ui/use-toast';
 
 interface StatsPageProps {}
 
 const StatsPage: React.FC<StatsPageProps> = () => {
   const { toast: anotherToast } = useToast();
   const showToastSuccess = () => {
-    toast.success("Success message");
+    toast.success('Success message');
     anotherToast({
-      title: "Success",
-      description: "Success message",
-      variant: "success",
+      title: 'Success',
+      description: 'Success message',
+      variant: 'success',
     });
   };
 
   const showToastError = () => {
-    toast.error("Error message");
+    toast.error('Error message');
     anotherToast({
-      title: "Error",
-      description: "Error message",
-      variant: "destructive",
+      title: 'Error',
+      description: 'Error message',
+      variant: 'destructive',
     });
   };
 
@@ -31,16 +33,17 @@ const StatsPage: React.FC<StatsPageProps> = () => {
       // Simulate a promise that resolves after 5 seconds
       setTimeout(() => {
         const random = Math.random();
+
         if (random < 0.5) {
-          resolve("Promise resolved successfully!");
+          resolve('Promise resolved successfully!');
         } else {
-          reject("Promise failed!");
+          reject('Promise failed!');
         }
       }, 5000);
     });
 
     toast.promise(promise, {
-      loading: "Loading...",
+      loading: 'Loading...',
       success: (data) => `Success: ${data}`,
       error: (error) => `Error: ${error}`,
     });
@@ -49,22 +52,13 @@ const StatsPage: React.FC<StatsPageProps> = () => {
   return (
     <>
       <div>
-        <Button
-          type="button"
-          color="success"
-          onClick={showToastSuccess}>
+        <Button color="success" onClick={showToastSuccess} type="button">
           Test Success
         </Button>
-        <Button
-          type="button"
-          color="danger"
-          onClick={showToastError}>
+        <Button color="danger" onClick={showToastError} type="button">
           Test Error
         </Button>
-        <Button
-          type="button"
-          color="secondary"
-          onClick={showToastWithPromise}>
+        <Button color="secondary" onClick={showToastWithPromise} type="button">
           Test Promise
         </Button>
       </div>

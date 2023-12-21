@@ -1,6 +1,5 @@
-"use client";
+'use client';
 
-import { courses } from "@/prisma/data";
 import {
   Button,
   Input,
@@ -10,34 +9,37 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
-import { ContactMethod, Student } from "@prisma/client";
-import { Form, Formik } from "formik";
-import { capitalize } from "lodash-es";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { FaSkype } from "react-icons/fa";
-import { PiStudentBold } from "react-icons/pi";
-import { createStudent } from "@/lib/students";
-import { useToast } from "../ui/use-toast";
-import { FormikSelect } from "../forms/FormikSelect";
+} from '@nextui-org/react';
+import { ContactMethod, Student } from '@prisma/client';
+import { Form, Formik } from 'formik';
+import { capitalize } from 'lodash-es';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { FaSkype } from 'react-icons/fa';
+import { PiStudentBold } from 'react-icons/pi';
+
+import { createStudent } from '@/lib/students';
+import { courses } from '@/prisma/data';
+
+import { FormikSelect } from '../forms/FormikSelect';
+import { useToast } from '../ui/use-toast';
 
 export default function AddStudentModal() {
   const { toast } = useToast();
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const { isOpen, onClose, onOpen, onOpenChange } = useDisclosure();
   const router = useRouter();
 
   const initialValues = {
-    name: "",
-    email: "",
-    status: "Unknown",
-    courseCode: "",
-    programmeID: "",
-    skype: "",
-    slack: "",
-    github: "",
-    linkedIn: "",
-    contactMethod: "SLACK",
+    name: '',
+    email: '',
+    status: 'Unknown',
+    courseCode: '',
+    programmeID: '',
+    skype: '',
+    slack: '',
+    github: '',
+    linkedIn: '',
+    contactMethod: 'SLACK',
   } as Student;
 
   const programmeIdOptions = courses.map((course) => ({
@@ -54,20 +56,19 @@ export default function AddStudentModal() {
     image: `/brands/${item.toLowerCase()}.svg`,
   }));
   const [currentSection, setCurrentSection] = useState(1);
+
   return (
     <>
-      <Button
-        onPress={onOpen}
-        startContent={<PiStudentBold />}
-        color="primary">
+      <Button color="primary" onPress={onOpen} startContent={<PiStudentBold />}>
         Add Student
       </Button>
       <Modal
+        backdrop="blur"
+        isDismissable={false}
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        isDismissable={false}
-        backdrop="blur"
-        size="3xl">
+        size="3xl"
+      >
         <ModalContent>
           {() => (
             <Formik
@@ -75,27 +76,29 @@ export default function AddStudentModal() {
               onSubmit={async (values, actions) => {
                 actions.setSubmitting(true);
                 console.log({ values, actions });
+
                 try {
                   await createStudent(values);
                   toast({
-                    title: "Success",
-                    description: "Student created",
-                    variant: "success",
+                    title: 'Success',
+                    description: 'Student created',
+                    variant: 'success',
                   });
                 } catch (error: string | any) {
                   toast({
-                    title: "Error",
+                    title: 'Error',
                     description: error.message,
-                    variant: "destructive",
+                    variant: 'destructive',
                   });
                 } finally {
                   actions.setSubmitting(false);
                   onClose();
                   router.refresh();
                 }
-              }}>
+              }}
+            >
               {(formikProps) => {
-                const { values, handleChange, isSubmitting } = formikProps;
+                const { handleChange, isSubmitting, values } = formikProps;
 
                 return (
                   <Form className="space-y-3">
@@ -106,22 +109,22 @@ export default function AddStudentModal() {
                       {currentSection === 1 && (
                         <>
                           <Input
-                            type="text"
-                            label="Student Full Name"
+                            className="my-5"
                             id="name"
                             isRequired
-                            className="my-5"
-                            value={values.name}
+                            label="Student Full Name"
                             onChange={handleChange}
+                            type="text"
+                            value={values.name}
                           />
                           <Input
-                            type="email"
-                            label="Student Email"
+                            className="mb-5"
                             id="email"
                             isRequired
-                            className="mb-5"
-                            value={values.email}
+                            label="Student Email"
                             onChange={handleChange}
+                            type="email"
+                            value={values.email}
                           />
                         </>
                       )}
@@ -129,26 +132,26 @@ export default function AddStudentModal() {
                       {currentSection === 2 && (
                         <>
                           <Input
-                            type="text"
-                            label="Course Code"
+                            className="mb-5"
                             id="courseCode"
                             isRequired
-                            className="mb-5"
-                            value={values.courseCode || ""}
+                            label="Course Code"
                             onChange={handleChange}
+                            type="text"
+                            value={values.courseCode || ''}
                           />
                           <FormikSelect
-                            name="programmeID"
-                            label="Programme ID"
-                            options={programmeIdOptions}
                             isRequired
+                            label="Programme ID"
+                            name="programmeID"
+                            options={programmeIdOptions}
                           />
                           <FormikSelect
-                            name="contactMethod"
-                            label="Prefered Contact Method"
-                            options={courseOptions}
                             className="mb-5"
                             isRequired
+                            label="Prefered Contact Method"
+                            name="contactMethod"
+                            options={courseOptions}
                           />
                         </>
                       )}
@@ -157,17 +160,17 @@ export default function AddStudentModal() {
                         <>
                           {/* Add your social fields here */}
                           <Input
-                            type="text"
-                            label="Skype Username"
                             id="skype"
+                            label="Skype Username"
+                            onChange={handleChange}
                             startContent={<FaSkype />}
-                            value={values.skype || ""}
-                            onChange={handleChange}
+                            type="text"
+                            value={values.skype || ''}
                           />
                           <Input
-                            type="text"
-                            label="Slack Handle"
                             id="slack"
+                            label="Slack Handle"
+                            onChange={handleChange}
                             startContent={
                               <div className="pointer-events-none flex items-center">
                                 <span className="text-default-400 text-small">
@@ -175,13 +178,13 @@ export default function AddStudentModal() {
                                 </span>
                               </div>
                             }
-                            value={values.slack || ""}
-                            onChange={handleChange}
+                            type="text"
+                            value={values.slack || ''}
                           />
                           <Input
-                            type="text"
-                            label="GitHub Username"
                             id="github"
+                            label="GitHub Username"
+                            onChange={handleChange}
                             startContent={
                               <div className="pointer-events-none flex items-center">
                                 <span className="text-default-400 text-small">
@@ -189,13 +192,13 @@ export default function AddStudentModal() {
                                 </span>
                               </div>
                             }
-                            value={values.github || ""}
-                            onChange={handleChange}
+                            type="text"
+                            value={values.github || ''}
                           />
                           <Input
-                            type="text"
-                            label="LinkedIn Username"
                             id="linkedIn"
+                            label="LinkedIn Username"
+                            onChange={handleChange}
                             startContent={
                               <div className="pointer-events-none flex items-center">
                                 <span className="text-default-400 text-small">
@@ -203,8 +206,8 @@ export default function AddStudentModal() {
                                 </span>
                               </div>
                             }
-                            value={values.linkedIn || ""}
-                            onChange={handleChange}
+                            type="text"
+                            value={values.linkedIn || ''}
                           />
                         </>
                       )}
@@ -213,22 +216,25 @@ export default function AddStudentModal() {
                       {currentSection > 1 && (
                         <Button
                           color="default"
-                          onPress={() => setCurrentSection((prev) => prev - 1)}>
+                          onPress={() => setCurrentSection((prev) => prev - 1)}
+                        >
                           Back
                         </Button>
                       )}
                       {currentSection < 3 && (
                         <Button
                           color="primary"
-                          onPress={() => setCurrentSection((prev) => prev + 1)}>
+                          onPress={() => setCurrentSection((prev) => prev + 1)}
+                        >
                           Next
                         </Button>
                       )}
                       {currentSection === 3 && (
                         <Button
-                          type="submit"
                           color="success"
-                          disabled={isSubmitting}>
+                          disabled={isSubmitting}
+                          type="submit"
+                        >
                           Submit
                         </Button>
                       )}

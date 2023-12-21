@@ -1,12 +1,15 @@
-"use client";
-import { onboardUser } from "@/actions/user.actions";
-import { useToast } from "@/components/ui/use-toast";
-import { getUser } from "@/lib/auth/auth";
-import { useStepStore } from "@/store/useStepStore";
-import { useRouter } from "next/navigation";
-import React, { FormEvent, useEffect, useState } from "react";
-import { FaSave } from "react-icons/fa";
-import { LoadingModal } from "../LoadingModal";
+'use client';
+
+import { useRouter } from 'next/navigation';
+import React, { FormEvent, useEffect, useState } from 'react';
+import { FaSave } from 'react-icons/fa';
+
+import { onboardUser } from '@/actions/user.actions';
+import { useToast } from '@/components/ui/use-toast';
+import { getUser } from '@/lib/auth/auth';
+import { useStepStore } from '@/store/useStepStore';
+
+import { LoadingModal } from '../LoadingModal';
 
 const OnboardingForm: React.FC = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -18,7 +21,7 @@ const OnboardingForm: React.FC = () => {
   const { toast } = useToast();
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
-  const { currentStep, updateFormData, back, next, steps, isFirstStep } =
+  const { back, currentStep, isFirstStep, next, steps, updateFormData } =
     useStepStore();
   const formData = useStepStore((state) => state.formData);
   const isLastStep = useStepStore((state) => state.isLastStep);
@@ -31,34 +34,36 @@ const OnboardingForm: React.FC = () => {
 
         if (user) {
           const nameData = {
-            firstName: user.firstName || "",
-            lastName: user.lastName || "",
+            firstName: user.firstName || '',
+            lastName: user.lastName || '',
           };
           const miscData = {
-            ciEmail: user.email || "",
-            ciApiKey: user.ciApiKey || "",
+            ciEmail: user.email || '',
+            ciApiKey: user.ciApiKey || '',
             paidPerHour: user.paidPerHour || 0,
             sendWelcomeEmail: user.sendWelcomeEmail || false,
           };
           const socialData = {
-            github: user.github || "",
-            twitter: user.twitter || "",
-            linkedIn: user.linkedIn || "",
-            slack: user.slack || "",
-            skype: user.skype || "",
-            website: user.website || "",
+            github: user.github || '',
+            twitter: user.twitter || '',
+            linkedIn: user.linkedIn || '',
+            slack: user.slack || '',
+            skype: user.skype || '',
+            website: user.website || '',
           };
-          updateFormData("name", nameData);
-          updateFormData("misc", miscData);
-          updateFormData("social", socialData);
+
+          updateFormData('name', nameData);
+          updateFormData('misc', miscData);
+          updateFormData('social', socialData);
         }
       } catch (error) {
         console.log(error);
       } finally {
         setIsLoaded(false);
-        console.log("finally");
+        console.log('finally');
       }
     };
+
     fetchUserData();
   }, [updateFormData]);
 
@@ -68,6 +73,7 @@ const OnboardingForm: React.FC = () => {
       ...formData.misc,
       ...formData.social,
     };
+
     return mergedData;
   };
 
@@ -81,20 +87,21 @@ const OnboardingForm: React.FC = () => {
         if (response.success) {
           toast({
             title: "You've successfully completed onboarding.",
-            description: "We will redirect you shorlty",
-            variant: "success",
+            description: 'We will redirect you shorlty',
+            variant: 'success',
           });
         }
+
         setTimeout(() => router.refresh(), 300);
-        router.replace("/dashboard");
+        router.replace('/dashboard');
         router.refresh();
       })
       .catch((error) => {
         console.log(error);
         toast({
-          title: "Error: Something went wrong",
-          description: "Please try again.",
-          variant: "destructive",
+          title: 'Error: Something went wrong',
+          description: 'Please try again.',
+          variant: 'destructive',
         });
       });
   };
@@ -107,25 +114,23 @@ const OnboardingForm: React.FC = () => {
   if (isLoaded)
     return (
       <>
-        <LoadingModal
-          close={() => !isLoaded}
-          isSyncing={isLoaded}
-        />
+        <LoadingModal close={() => !isLoaded} isSyncing={isLoaded} />
         {}
       </>
     );
 
   return (
-    <div className='flex flex-col justify-center items-center min-h-screen scroll-pt-4'>
-      <div className='w-3/4  bg-white dark:bg-gray-700 shadow-lg p-8 rounded-lg'>
+    <div className="flex flex-col justify-center items-center min-h-screen scroll-pt-4">
+      <div className="w-3/4  bg-white dark:bg-gray-700 shadow-lg p-8 rounded-lg">
         <CurrentFormComponent />
 
-        <div className='flex justify-center mt-8 space-x-4'>
+        <div className="flex justify-center mt-8 space-x-4">
           {/* Show Back button if it's not the first step */}
           {!isFirstStep && (
             <button
-              className='px-4 py-2 bg-blue-600 text-white rounded mr-2'
-              onClick={back}>
+              className="px-4 py-2 bg-blue-600 text-white rounded mr-2"
+              onClick={back}
+            >
               Prev
             </button>
           )}
@@ -133,8 +138,9 @@ const OnboardingForm: React.FC = () => {
           {/* Show Next button if it's not the last step */}
           {!isLastStep && (
             <button
-              className='px-4 py-2 bg-blue-600 text-white rounded'
-              onClick={next}>
+              className="px-4 py-2 bg-blue-600 text-white rounded"
+              onClick={next}
+            >
               Next
             </button>
           )}
@@ -142,10 +148,11 @@ const OnboardingForm: React.FC = () => {
           {/* Show Submit button only on the last step */}
           {isLastStep && (
             <button
-              className='px-4 py-2 bg-green-600 text-white rounded inline-flex justify-between items-center'
-              onClick={handleSubmit}>
+              className="px-4 py-2 bg-green-600 text-white rounded inline-flex justify-between items-center"
+              onClick={handleSubmit}
+            >
               Save Profile
-              <FaSave className='m-2' />
+              <FaSave className="m-2" />
             </button>
           )}
         </div>

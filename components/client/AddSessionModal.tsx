@@ -173,6 +173,7 @@ export default function AddSessionModal({
       });
 
       console.log('Feedback URL:', feedbackURL); // Log the generated URL
+      // window.open(feedbackURL, '_blank');
 
       setCurrentSection((prev) => prev + 1); // Proceed to the final step
     } else if (currentSection === totalSteps) {

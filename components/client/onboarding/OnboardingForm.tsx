@@ -9,6 +9,12 @@ import { FaSave } from "react-icons/fa";
 import { LoadingModal } from "../LoadingModal";
 
 const OnboardingForm: React.FC = () => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const { toast } = useToast();
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -96,6 +102,8 @@ const OnboardingForm: React.FC = () => {
   const CurrentFormComponent =
     steps[currentStep] || (() => <div>Error: Unknown step!</div>);
 
+  if (!isMounted) return null;
+
   if (isLoaded)
     return (
       <>
@@ -106,6 +114,7 @@ const OnboardingForm: React.FC = () => {
         {}
       </>
     );
+
   return (
     <div className='flex flex-col justify-center items-center min-h-screen scroll-pt-4'>
       <div className='w-3/4  bg-white dark:bg-gray-700 shadow-lg p-8 rounded-lg'>

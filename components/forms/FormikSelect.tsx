@@ -81,7 +81,11 @@ export const FormikSelect: React.FC<FormikSelectProps> = ({
           textValue={option.label || ''}
           value={option.value}
         >
-          <OptionItem emoji={option.emoji} label={option.label || ''} />
+          <OptionItem
+            emoji={option.emoji}
+            image={option.image}
+            label={option.label || ''}
+          />
         </SelectItem>
       ))}
     </Select>

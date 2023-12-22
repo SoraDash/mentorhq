@@ -4,12 +4,14 @@ import React from 'react';
 
 interface OptionItemProps {
   emoji?: string;
+  image?: string;
   label: string;
   prefix?: string;
 }
 
 export const OptionItem: React.FC<OptionItemProps> = ({
   emoji,
+  image,
   label,
   prefix,
 }) => {
@@ -23,6 +25,7 @@ export const OptionItem: React.FC<OptionItemProps> = ({
         color="secondary"
         name={avatarContent}
         size="sm"
+        src={image ? image : undefined}
       />
       <span className="text-small">{label}</span>
     </div>

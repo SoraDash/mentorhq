@@ -11,7 +11,7 @@ import {
   useDisclosure,
 } from '@nextui-org/react';
 import { ContactMethod, Student } from '@prisma/client';
-import { Form, Formik } from 'formik';
+import { Form, Formik, FormikValues } from 'formik';
 import { capitalize } from 'lodash-es';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -34,17 +34,21 @@ export default function AddStudentModal() {
     email: '',
     status: 'Unknown',
     courseCode: '',
-    programmeID: '',
+    programmeID: {},
     skype: '',
     slack: '',
     github: '',
     linkedIn: '',
-    contactMethod: 'SLACK',
-  } as Student;
+    contactMethod: {
+      value: 'SLACK',
+      label: 'Slack',
+      image: '/brands/slack.svg',
+    },
+  };
 
   const programmeIdOptions = courses.map((course) => ({
     value: course.courseCode,
-    label: course.name,
+    label: `${course.name} (${course.courseCode} - ${course.prefix}${course.projectCount})`,
     description: course.description,
     prefix: course.prefix,
     projectCount: course.projectCount,
@@ -73,12 +77,18 @@ export default function AddStudentModal() {
           {() => (
             <Formik
               initialValues={initialValues}
-              onSubmit={async (values, actions) => {
+              onSubmit={async (values: FormikValues, actions) => {
                 actions.setSubmitting(true);
                 console.log({ values, actions });
 
                 try {
-                  await createStudent(values);
+                  const student = {
+                    ...values,
+                    programmeID: values.programmeID.value,
+                    contactMethod: values.contactMethod.value,
+                  } as Student;
+
+                  await createStudent(student);
                   toast({
                     title: 'Success',
                     description: 'Student created',
@@ -148,6 +158,7 @@ export default function AddStudentModal() {
                           />
                           <FormikSelect
                             className="mb-5"
+                            defaultValue={courseOptions[0]}
                             isRequired
                             label="Prefered Contact Method"
                             name="contactMethod"

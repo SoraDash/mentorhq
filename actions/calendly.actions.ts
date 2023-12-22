@@ -111,8 +111,6 @@ export const getCalendlyAuthURL = async (redirectPath: string = '') => {
 };
 
 export const getCalendlyEvents = async (bypassCache = false) => {
-  console.log(`🦄 Bypassing cache for Calendly events`);
-
   try {
     const user = (await getUser()) as ExtendedUser;
     const userEmail = user?.email; // Assuming user object has an email property
@@ -133,6 +131,8 @@ export const getCalendlyEvents = async (bypassCache = false) => {
         return cachedEvents;
       }
     }
+
+    console.log(`🦄 Bypassing cache for Calendly events`);
 
     // Fetch and process data from Calendly API
     return await fetchAndCacheCalendlyEvents(owner, userEmail, checkedUser!);

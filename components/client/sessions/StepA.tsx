@@ -29,9 +29,9 @@ export const StepA = () => {
       setFieldValue('duration', duration); // Update the value in Formik
 
       // Check if total session time exceeds 45 minutes
-      if (totalSessionTime > 45) {
+      if (totalSessionTime > 50) {
         setConfirmationMessage(
-          `Total session time is over 45 minutes. Are you sure?`,
+          `Total session time is over 50 minutes. Are you sure?`,
         );
       } else {
         setConfirmationMessage('');

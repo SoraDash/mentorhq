@@ -1,23 +1,65 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function PATCH(request: NextRequest) {
-  console.log('Received PATCH request:', request); // Debugging log
+import { getUser } from '@/lib/auth/auth';
+import { prisma } from '@/lib/db/prisma';
 
+export async function PATCH(request: NextRequest) {
   try {
     const data = await request.json();
+    const user = await getUser();
 
-    // Mocking a response
-    const mockResponse = {
-      id: 'mocked-uuid-1234',
-      ...data,
+    const sessionData = {
+      date: data.date,
+      duration: parseInt(data.duration),
+      summary: data.summary,
+      notes: data.personalNotes,
+      type: data.session?.label,
+      progress: data.progress?.value,
+      submissionType: data.submissionType?.value,
+      follow_up: data.follow_up?.value,
+      student: {
+        connect: { id: data.studentId },
+      },
+      // Only add project if it's provided and has a value
+      ...(data.project &&
+        data.project.value && {
+          project: {
+            connect: { id: data.project.value },
+          },
+        }),
+      // Only add user if it's available
+      ...(user &&
+        user.id && {
+          user: {
+            connect: { id: user.id },
+          },
+        }),
     };
 
-    console.log('Mock PATCH Response:', mockResponse); // Debugging log
+    let sessionResponse;
 
-    return NextResponse.json(mockResponse, { status: data.id ? 200 : 201 }); // 201 for created, 200 for updated
+    if (data.id) {
+      // Update existing StudentSession
+      sessionResponse = await prisma.studentSession.update({
+        where: { id: data.id },
+        data: sessionData,
+      });
+    } else {
+      // Create new StudentSession
+      sessionResponse = await prisma.studentSession.create({
+        data: sessionData,
+      });
+    }
+
+    console.log('Session response:', sessionResponse);
+
+    return NextResponse.json(sessionResponse);
   } catch (error) {
-    console.error('Error in PATCH route:', error); // Error log
+    console.error('Error in PATCH route:', error);
 
-    return NextResponse.json('Error processing PATCH request', { status: 500 });
+    return NextResponse.json(
+      { message: 'Error processing PATCH request' },
+      { status: 500 },
+    );
   }
 }

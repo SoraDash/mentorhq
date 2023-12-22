@@ -10,8 +10,10 @@ import {
   useDisclosure,
 } from '@nextui-org/react';
 import { Project, SessionType } from '@prisma/client';
-import { Formik, FormikValues } from 'formik';
+import axios from 'axios';
+import { Formik, FormikHelpers, FormikValues } from 'formik';
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { FaChalkboardTeacher } from 'react-icons/fa';
 
 import { generateFeedbackURL } from '@/lib/generate-url';
@@ -41,8 +43,9 @@ export default function AddSessionModal({
 }: AddSessionModalProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [currentSection, setCurrentSection] = useState(1);
-  const [sessions, setSessions] = useState<SessionType[]>([]); // TODO: Replace with SessionType[
+  const [sessions, setSessions] = useState<SessionType[]>([]);
   const [student, setStudent] = useState<UnifiedStudent | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const initialValues = {
     studentId,
     id: null,
@@ -100,7 +103,7 @@ export default function AddSessionModal({
     },
     {
       Component: StepFinal,
-      header: `We have submitted the session for ${studentName}!`,
+      header: `Session Submitted for ${studentName}!`,
       props: {
         name: studentName,
       },
@@ -153,41 +156,85 @@ export default function AddSessionModal({
     fetchSessions();
   }, []);
 
-  if (!student) return null;
+  if (!student) {
+    return null;
+  }
 
-  const onSubmit = async (values: FormikValues) => {
-    // Adjust the duration if necessary
-    const duration = parseInt(values.duration, 10);
+  const onSubmit = async (values: FormikValues, { setFieldValue }: any) => {
+    let duration = parseInt(values.duration, 10);
 
     if (duration > 15) {
-      values.duration = duration + 4;
+      duration = duration + 4;
+      setFieldValue('duration', duration.toString());
     }
 
+    values = { ...values, duration: duration.toString() };
+
     if (currentSection === totalSteps - 1) {
-      // Changed to next-to-last step
       console.log('values on submit', values);
 
-      const feedbackURL = await generateFeedbackURL({
-        studentEmail: student?.email,
-        values,
-      });
+      try {
+        const feedbackURL = await generateFeedbackURL({
+          studentEmail: student?.email,
+          values,
+        });
 
-      console.log('Feedback URL:', feedbackURL); // Log the generated URL
-      // window.open(feedbackURL, '_blank');
+        console.log('Feedback URL:', feedbackURL);
+        window.open(feedbackURL, '_blank');
 
-      setCurrentSection((prev) => prev + 1); // Proceed to the final step
+        setCurrentSection((prev) => prev + 1);
+      } catch (error) {
+        console.error('Error generating feedback URL:', error);
+      }
     } else if (currentSection === totalSteps) {
       console.log('Final part of the form submitted', values);
-      onOpenChange(); // Close the modal or handle final step
+      onOpenChange();
     } else {
       console.log(`Submitting Step ${currentSection}`, values);
-      setCurrentSection((prev) => prev + 1); // Proceed to the next step
+
+      try {
+        const patchData = async () => {
+          const response = await axios.patch('/api/sessions', values);
+          const session = response.data;
+
+          if (!sessionId) {
+            setSessionId(session.id);
+            setFieldValue('id', session.id);
+          }
+
+          setCurrentSection((prev) => prev + 1); // Proceed to the next step
+
+          return session;
+        };
+
+        toast.promise(patchData(), {
+          loading: 'Saving...',
+          success: 'Session saved!',
+          error: 'Oops! Problem with saving the session.',
+        });
+      } catch (error) {
+        console.error('Error submitting form:', error);
+      }
     }
   };
 
-  const handleModalChange = (isOpen: boolean) => {
-    if (!isOpen) {
-      setCurrentSection(1);
+  const handleModalChange = async () => {
+    const deleteSession = async () => {
+      await axios.delete(`/api/sessions/${sessionId}`);
+      console.log(`Session with ID ${sessionId} has been deleted`);
+    };
+
+    if (sessionId) {
+      toast
+        .promise(deleteSession(), {
+          loading: 'Vanishing session...',
+          success: 'Poof! Gone! Session vanished into thin air!',
+          error: 'Whoops! This session is playing hard to delete.',
+        })
+        .finally(() => {
+          setSessionId(null);
+          setCurrentSection(1);
+        });
     }
 
     onOpenChange();
@@ -212,7 +259,7 @@ export default function AddSessionModal({
           <Formik initialValues={initialValues} onSubmit={onSubmit}>
             {({ handleSubmit }) => (
               <form onSubmit={handleSubmit}>
-                <ModalHeader className="flex flex-col gap-1">
+                <ModalHeader className="flex flex-col gap-1 text-center">
                   {stepComponents[currentSection - 1].header}
                 </ModalHeader>
                 <ModalBody>
@@ -234,7 +281,10 @@ export default function AddSessionModal({
                       </Button>
                     )}
                   {currentSection === totalSteps - 1 && (
-                    <Button color="success" type="submit">
+                    <Button
+                      className="bg-green-500 text-white rounded py-2 px-4"
+                      type="submit"
+                    >
                       Submit it 🚀
                     </Button>
                   )}

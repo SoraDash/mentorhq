@@ -1,26 +1,36 @@
+// In /api/sessions/[sessionId].ts
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function DELETE(request: NextRequest) {
-  console.log('Received DELETE request:', request); // Debugging log
+import { prisma } from '@/lib/db/prisma';
 
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { sessionId: string } },
+) {
   try {
-    const { id } = await request.json();
+    const { sessionId } = params;
 
-    console.log('Mock DELETE Request for ID:', id); // Debugging log
-
-    // Mocking a delete response
-    const mockResponse = {
-      message: `Session with id ${id} deleted successfully`,
-    };
-
-    console.log('Mock DELETE Response:', mockResponse); // Debugging log
-
-    return NextResponse.json(mockResponse, { status: 200 });
-  } catch (error) {
-    console.error('Error in DELETE route:', error); // Error log
-
-    return NextResponse.json('Error processing DELETE request', {
-      status: 500,
+    // Deleting the session using Prisma
+    await prisma.studentSession.delete({
+      where: {
+        id: sessionId,
+      },
     });
+
+    const responseMessage = `Session with id ${sessionId} deleted successfully`;
+
+    console.log(responseMessage);
+
+    return NextResponse.json({ message: responseMessage }, { status: 200 });
+  } catch (error) {
+    console.error('Error in DELETE route:', error);
+
+    // You might want to check for specific error types, like record not found
+    return NextResponse.json(
+      { message: 'Error processing DELETE request' },
+      {
+        status: 500,
+      },
+    );
   }
 }

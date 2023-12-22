@@ -11,7 +11,7 @@ import {
 } from '@nextui-org/react';
 import { Project, SessionType } from '@prisma/client';
 import axios from 'axios';
-import { Formik, FormikHelpers, FormikValues } from 'formik';
+import { Formik, FormikValues } from 'formik';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { FaChalkboardTeacher } from 'react-icons/fa';

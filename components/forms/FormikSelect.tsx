@@ -2,7 +2,7 @@
 
 import { Select, SelectItem, cn } from '@nextui-org/react';
 import { FormikValues, useField, useFormikContext } from 'formik';
-import React, { useState } from 'react';
+import React from 'react';
 
 import { OptionItem } from './OptionItem';
 
@@ -81,7 +81,11 @@ export const FormikSelect: React.FC<FormikSelectProps> = ({
           textValue={option.label || ''}
           value={option.value}
         >
-          <OptionItem emoji={option.emoji} label={option.label || ''} />
+          <OptionItem
+            emoji={option.emoji}
+            image={option.image}
+            label={option.label || ''}
+          />
         </SelectItem>
       ))}
     </Select>

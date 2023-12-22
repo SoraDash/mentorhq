@@ -139,17 +139,26 @@ export const createStudent = async (student: Student) => {
       where: {
         courseCode: student.programmeID,
       },
+      include: {
+        projects: true,
+      },
     });
 
     const mentorId = await getUser();
 
-    return await prisma.student.create({
+    const createdStudent = await prisma.student.create({
       data: {
         ...student,
         courseId: course?.id,
         mentorId: mentorId?.id,
       },
     });
+
+    if (course) {
+      await generateProjectsForStudent(course, createdStudent.id);
+    }
+
+    return createdStudent;
   } else {
     throw new Error('Cannot create student: programmeID is not present');
   }

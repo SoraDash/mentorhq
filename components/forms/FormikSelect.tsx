@@ -2,7 +2,7 @@
 
 import { Select, SelectItem, cn } from '@nextui-org/react';
 import { FormikValues, useField, useFormikContext } from 'formik';
-import React, { useState } from 'react';
+import React from 'react';
 
 import { OptionItem } from './OptionItem';
 

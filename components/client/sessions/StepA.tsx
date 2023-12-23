@@ -11,24 +11,6 @@ import { Button } from '@/components/ui/button';
 
 import 'react-day-picker/dist/style.css';
 
-const css = `
-  .my-selected:not([disabled]) {
-    font-weight: bold;
-    border: 2px solid currentColor;
-    border-color: darkcyan;
-    color: darkcyan;
-  }
-  .my-selected:hover:not([disabled]) {
-    border-color: darkcyan;
-    color: darkcyan;
-  }
-  .my-today {
-    font-weight: bold;
-    font-size: 120%;
-    color: dodgerblue;
-  }
-`;
-
 export const StepA = () => {
   const { setFieldValue, values } = useFormikContext<FormikValues>();
   const [displayDuration, setDisplayDuration] = useState(
@@ -118,7 +100,6 @@ export const StepA = () => {
 
   return (
     <div>
-      <style>{css}</style>
       <div>
         <div className="flex items-center" ref={popperRef}>
           <Input

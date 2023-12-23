@@ -2,6 +2,7 @@ import { Input } from '@nextui-org/react';
 import { format, isValid, parse } from 'date-fns';
 import FocusTrap from 'focus-trap-react';
 import { FormikValues, useFormikContext } from 'formik';
+import { AnimatePresence, motion } from 'framer-motion';
 import { ChangeEventHandler, useRef, useState } from 'react';
 import { DayPicker, SelectSingleEventHandler } from 'react-day-picker';
 import { usePopper } from 'react-popper';
@@ -153,34 +154,39 @@ export const StepA = () => {
               fallbackFocus: buttonRef.current || undefined,
             }}
           >
-            <div
-              className="dialog-sheet dark:bg-neutral-900 bg-white border-2 rounded-md"
-              style={{
-                ...popper.styles.popper,
-                zIndex: 100,
-                transform: 'translate3d(240px, 2px, 0px)',
-                position: 'absolute',
-              }}
-              tabIndex={-1}
-              {...popper.attributes.popper}
-              aria-label="DayPicker calendar"
-              ref={setPopperElement}
-              role="dialog"
-            >
-              <DayPicker
-                defaultMonth={selected}
-                initialFocus={isPopperOpen}
-                mode="single"
-                modifiersClassNames={{
-                  selected: 'my-selected',
-                  today: 'my-today',
+            <AnimatePresence>
+              <motion.div
+                className="dialog-sheet dark:bg-neutral-900 bg-white border-2 rounded-md"
+                style={{
+                  ...popper.styles.popper,
+                  zIndex: 100,
+                  transform: 'translate3d(240px, 2px, 0px)',
+                  position: 'absolute',
                 }}
-                numberOfMonths={1}
-                onSelect={handleDaySelect}
-                selected={selected}
-                weekStartsOn={1}
-              />
-            </div>
+                tabIndex={-1}
+                {...popper.attributes.popper}
+                animate={{ x: 250, opacity: 1 }}
+                aria-label="DayPicker calendar"
+                exit={{ x: -300, opacity: 0 }}
+                initial={{ x: -300, opacity: 0 }}
+                ref={setPopperElement}
+                role="dialog"
+              >
+                <DayPicker
+                  defaultMonth={selected}
+                  initialFocus={isPopperOpen}
+                  mode="single"
+                  modifiersClassNames={{
+                    selected: 'my-selected',
+                    today: 'my-today',
+                  }}
+                  numberOfMonths={1}
+                  onSelect={handleDaySelect}
+                  selected={selected}
+                  weekStartsOn={1}
+                />
+              </motion.div>
+            </AnimatePresence>
           </FocusTrap>
         )}
       </div>

@@ -52,13 +52,88 @@ body,
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 346.8 77.2% 49.8%;
+
+    .rdp {
+      --rdp-cell-size: 40px;
+      /* Size of the day cells. */
+      --rdp-caption-font-size: 18px;
+      /* Font size for the caption labels. */
+      --rdp-accent-color: #0000ff;
+      /* Accent color for the background of selected days. */
+      --rdp-background-color: #7e3b05;
+      /* Background color for the hovered/focused elements. */
+      --rdp-accent-color-dark: #3003e1;
+      /* Accent color for the background of selected days (to use in dark-mode). */
+      --rdp-background-color-dark: #180270;
+      /* Background color for the hovered/focused elements (to use in dark-mode). */
+      --rdp-outline: 2px solid var(--rdp-accent-color);
+      /* Outline border for focused elements */
+      --rdp-outline-selected: 3px solid var(--rdp-accent-color);
+      /* Outline border for focused _and_ selected elements */
+      --rdp-selected-color: #e40404;
+      /* Color of selected day text */
+    }
+
+    .my-selected:not([disabled]) {
+      border-color: #00ced1 !important;
+      color: #00ced1 !important;
+    }
+
+    .my-selected:hover:not([disabled]) {
+      border-color: #00ced1 !important;
+      color: #00ced1 !important;
+    }
   }
+}
+
+.my-selected:not([disabled]) {
+  font-weight: bold !important;
+  border: 2px solid currentColor !important;
+  border-color: #008b8b !important;
+  color: #008b8b !important;
+}
+
+.my-selected:hover:not([disabled]) {
+  border-color: #008b8b !important;
+  color: #008b8b !important;
+}
+
+.my-today {
+  font-weight: bold !important;
+  font-size: 120% !important;
+  color: #1e90ff !important;
+}
+
+.rdp {
+  --rdp-cell-size: 40px;
+  /* Size of the day cells. */
+  --rdp-caption-font-size: 18px;
+  /* Font size for the caption labels. */
+  --rdp-accent-color: #0000ff;
+  /* Accent color for the background of selected days. */
+  --rdp-background-color: #e7edff;
+  /* Background color for the hovered/focused elements. */
+  --rdp-accent-color-dark: #3003e1;
+  /* Accent color for the background of selected days (to use in dark-mode). */
+  --rdp-background-color-dark: #180270;
+  /* Background color for the hovered/focused elements (to use in dark-mode). */
+  --rdp-outline: 2px solid var(--rdp-accent-color);
+  /* Outline border for focused elements */
+  --rdp-outline-selected: 3px solid var(--rdp-accent-color);
+  /* Outline border for focused _and_ selected elements */
+  --rdp-selected-color: #fff;
+  /* Color of selected day text */
+}
+
+.test {
+  border-radius: 0% !important;
 }
 
 @layer base {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -66,6 +141,7 @@ body,
   .form {
     @apply bg-white p-8 w-11/12 md:w-1/2 lg:w-2/5 shadow-sm;
   }
+
   .form h2 {
     @apply text-xl font-bold mb-4;
   }
@@ -74,22 +150,28 @@ body,
   .inputGroup {
     @apply flex flex-col gap-1 mb-8;
   }
+
   .inputGroup div {
     @apply relative;
   }
+
   .inputGroup div span {
     @apply absolute right-0 -bottom-5 text-red-400 text-xs;
   }
+
   .inputGroup h3 {
     @apply text-purple-500;
   }
+
   .inputGroup legend {
     @apply mt-2 text-gray-700;
   }
+
   .inputGroup input {
     @apply w-full bg-gray-100 border border-gray-300 p-2 rounded;
     @apply focus:border-blue-500 focus:bg-white placeholder-gray-400;
   }
+
   .inputInvalid {
     @apply border border-red-400 !important;
   }
@@ -98,20 +180,25 @@ body,
   .navigationControls {
     @apply w-full justify-between mt-4 flex flex-row-reverse;
   }
+
   .submitButton {
     @apply py-3 px-5 bg-blue-700 text-blue-100 rounded text-sm font-bold;
   }
+
   .submitButton:disabled,
   .nextButton:disabled {
     @apply opacity-40 cursor-not-allowed;
   }
+
   .backButton,
   .nextButton {
     @apply flex flex-row items-center text-xs font-bold;
   }
+
   .backButton {
     @apply bg-gray-100 text-gray-400 rounded py-2 px-3;
   }
+
   .nextButton {
     @apply bg-blue-100 rounded py-2 px-3 text-blue-600 flex-row-reverse;
   }
@@ -120,13 +207,16 @@ body,
   .reference {
     @apply w-full flex items-center justify-center gap-1 py-4;
   }
+
   .markerBlue,
   .markerGray {
     @apply rounded-full w-2 h-2;
   }
+
   .markerBlue {
     @apply bg-blue-600;
   }
+
   .markerGray {
     @apply bg-gray-300;
   }
@@ -139,11 +229,13 @@ body,
     .imgLight {
       display: none;
     }
+
     .imgDark {
       display: unset;
     }
   }
 }
+
 @layer components {
   .dot {
     @apply inline-block h-3 w-3 rounded-full;
@@ -160,6 +252,7 @@ body,
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.5;
   }

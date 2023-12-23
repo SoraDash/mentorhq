@@ -89,7 +89,7 @@ export const StepA = () => {
 
   const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setInputValue(e.currentTarget.value);
-    const date = parse(e.currentTarget.value, 'dd-MM-y', new Date());
+    const date = parse(e.currentTarget.value, 'y-MM-dd', new Date());
 
     if (isValid(date)) {
       setSelected(date);
@@ -108,6 +108,7 @@ export const StepA = () => {
 
     if (date) {
       setInputValue(format(date, 'dd-MM-y'));
+      setFieldValue('date', format(date, 'y-MM-dd'));
       closePopper();
     } else {
       setInputValue('');
@@ -131,7 +132,6 @@ export const StepA = () => {
             placeholder={format(new Date(), 'dd-MM-y')}
             type="text"
             value={inputValue}
-            // value={format(+inputValue, 'dd-MM-y')}
           />
           <Button
             aria-label="Pick a date"

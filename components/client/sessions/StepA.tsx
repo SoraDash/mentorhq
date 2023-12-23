@@ -158,7 +158,8 @@ export const StepA = () => {
               style={{
                 ...popper.styles.popper,
                 zIndex: 100,
-                transform: 'translate3d(700px, 195px, 0px)',
+                transform: 'translate3d(240px, 2px, 0px)',
+                position: 'absolute',
               }}
               tabIndex={-1}
               {...popper.attributes.popper}

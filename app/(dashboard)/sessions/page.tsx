@@ -5,7 +5,7 @@ const SessionsPage = async () => {
     <div>
       <AddSessionModal
         studentEmail="test@me.com"
-        studentId="00dbb83f-3274-43ba-8a3f-dece1aff5e6e"
+        studentId="4a8a30bf-7842-4e57-b735-e5ea17218540"
         studentName="Guillermo"
       />
     </div>

@@ -1,15 +1,11 @@
 import { Input } from '@nextui-org/react';
 import { format, isValid, parse } from 'date-fns';
-import FocusTrap from 'focus-trap-react';
 import { FormikValues, useFormikContext } from 'formik';
-import { AnimatePresence, motion } from 'framer-motion';
 import { ChangeEventHandler, useRef, useState } from 'react';
-import { DayPicker, SelectSingleEventHandler } from 'react-day-picker';
-import { usePopper } from 'react-popper';
 
 import { Button } from '@/components/ui/button';
 
-import 'react-day-picker/dist/style.css';
+import { DatePicker } from '../DatePicker';
 
 export const StepA = () => {
   const { setFieldValue, values } = useFormikContext<FormikValues>();
@@ -56,14 +52,6 @@ export const StepA = () => {
 
   const popperRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(
-    null,
-  );
-
-  const popper = usePopper(popperRef.current, popperElement, {
-    placement: 'right-start',
-    strategy: 'fixed',
-  });
 
   const closePopper = () => {
     setIsPopperOpen(false);
@@ -84,18 +72,6 @@ export const StepA = () => {
 
   const handleButtonClick = () => {
     setIsPopperOpen(true);
-  };
-
-  const handleDaySelect: SelectSingleEventHandler = (date) => {
-    setSelected(date);
-
-    if (date) {
-      setInputValue(format(date, 'dd-MM-y'));
-      setFieldValue('date', format(date, 'y-MM-dd'));
-      closePopper();
-    } else {
-      setInputValue('');
-    }
   };
 
   return (
@@ -126,49 +102,16 @@ export const StepA = () => {
           </Button>
         </div>
         {isPopperOpen && (
-          <FocusTrap
-            active
-            focusTrapOptions={{
-              initialFocus: false,
-              allowOutsideClick: true,
-              clickOutsideDeactivates: true,
-              fallbackFocus: buttonRef.current || undefined,
-            }}
-          >
-            <AnimatePresence>
-              <motion.div
-                className="dialog-sheet dark:bg-neutral-900 bg-white border-2 rounded-md"
-                style={{
-                  ...popper.styles.popper,
-                  zIndex: 100,
-                  transform: 'translate3d(240px, 2px, 0px)',
-                  position: 'absolute',
-                }}
-                tabIndex={-1}
-                {...popper.attributes.popper}
-                animate={{ x: 250, opacity: 1 }}
-                aria-label="DayPicker calendar"
-                exit={{ x: -300, opacity: 0 }}
-                initial={{ x: -300, opacity: 0 }}
-                ref={setPopperElement}
-                role="dialog"
-              >
-                <DayPicker
-                  defaultMonth={selected}
-                  initialFocus={isPopperOpen}
-                  mode="single"
-                  modifiersClassNames={{
-                    selected: 'my-selected',
-                    today: 'my-today',
-                  }}
-                  numberOfMonths={1}
-                  onSelect={handleDaySelect}
-                  selected={selected}
-                  weekStartsOn={1}
-                />
-              </motion.div>
-            </AnimatePresence>
-          </FocusTrap>
+          <DatePicker
+            buttonRef={buttonRef}
+            closePopper={closePopper}
+            isPopperOpen={isPopperOpen}
+            popperRef={popperRef}
+            selected={selected}
+            setFieldValue={setFieldValue}
+            setInputValue={setInputValue}
+            setSelected={setSelected}
+          />
         )}
       </div>
 

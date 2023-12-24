@@ -14,7 +14,8 @@
     "env": "ts-node ./scripts/generateEnvTypes.ts",
     "redis": "docker run -p 6379:6379 -it -d redis/redis-stack-server:latest",
     "studio": "yarn prisma studio",
-    "seed": "ts-node -O '{\"module\": \"commonjs\"}' prisma/seed.ts"
+    "seed": "ts-node -O '{\"module\": \"commonjs\"}' prisma/seed.ts",
+    "seed:projects": "ts-node -O '{\"module\": \"commonjs\"}' prisma/projects.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",

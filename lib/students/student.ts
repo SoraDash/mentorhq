@@ -233,15 +233,26 @@ export const getStudent = async (id: string) => {
 
   if (!user) return null;
 
-  const fetchConditions: FetchConditions = { id: id };
-
   const userIsAdmin = await isAdmin();
 
-  if (userIsAdmin) {
+  const fetchConditions: FetchConditions = { id: id };
+
+  if (!userIsAdmin) {
     fetchConditions.mentorId = user.id;
   }
 
-  return fetchStudentByCondition(fetchConditions);
+  const student = await prisma.student.findUnique({
+    where: fetchConditions,
+    include: {
+      projects: {
+        include: {
+          studentSessions: true,
+        },
+      },
+    },
+  });
+
+  return student;
 };
 
 export const getAllStudentsAdmin = async () => {

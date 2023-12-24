@@ -2,7 +2,6 @@
 
 import { FormikValues, useFormikContext } from 'formik';
 import Lottie from 'lottie-react';
-import { useState } from 'react';
 import { FiCopy } from 'react-icons/fi';
 
 import { useToast } from '@/components/ui/use-toast';
@@ -37,11 +36,13 @@ export const StepFinal = ({ name }: StepFinalProps) => {
         style={{ height: 150, width: 150 }}
       />
       <div className="text-center mt-4">
-        <div className="text-2xl font-semibold mb-2">Session Submitted</div>
-        <div className="mb-4">Here is the summary for your convenience</div>
+        <div className="mb-4">
+          Here&apos;s the <span className="font-semibold">pasta-bility</span> to
+          copy the name and time! 🍝🕰️
+        </div>
         <div className="flex items-center justify-center">
           <div
-            className=" p-2 rounded-md mr-2"
+            className=" p-2 rounded-md mr-2 cursor-pointer"
             onClick={() => handleCopy(name)}
           >
             <span>Student name: </span>
@@ -50,7 +51,7 @@ export const StepFinal = ({ name }: StepFinalProps) => {
           <FiCopy className="cursor-pointer" onClick={() => handleCopy(name)} />
         </div>
         <div className="flex items-center justify-center mt-2">
-          <div className="p-2 rounded-md mr-2">
+          <div className="p-2 rounded-md mr-2 cursor-pointer">
             <span>
               Session Time:{' '}
               <span className="font-semibold">{values.duration} minutes</span>

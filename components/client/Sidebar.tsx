@@ -26,7 +26,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
       <div className="flex-1 px-3 py-2">
         <Link className="flex items-center pl-3 mb-14" href="/dashboard">
           <div className="relative w-full h-20">
-            <Image alt="logo" fill src="/logos/logo_text_color.png" />
+            <Image alt="logo" fill priority src="/logos/logo_text_color.png" />
           </div>
         </Link>
         <div className="space-y-1">

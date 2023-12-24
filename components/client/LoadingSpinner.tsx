@@ -36,6 +36,7 @@ export default function LoadingSpinner({ isInModal = false }) {
         <Image
           alt="Logo Spinner"
           height={240}
+          priority
           src="/logos/logo_text_color.png"
           width={240}
         />

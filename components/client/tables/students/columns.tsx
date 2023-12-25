@@ -10,6 +10,7 @@ import { BooleanIcon } from '@/components/server/BooleanIcon';
 import { cleanProgrammeID } from '@/lib/course/courseUtils';
 import { UnifiedStudent } from '@/lib/students';
 
+import AddSessionModal from '../../AddSessionModal';
 import ContactMethodDropdown from '../../ContactMethodDropdown';
 
 export const studentColumns: ColumnDef<UnifiedStudent>[] = [
@@ -80,6 +81,20 @@ export const studentColumns: ColumnDef<UnifiedStudent>[] = [
         <Link className="cursor-pointer" href={`/student/${student.id}`}>
           <BiLinkExternal className="h-4 w-4" />
         </Link>
+      );
+    },
+  },
+  {
+    header: 'Session',
+    cell: ({ row }) => {
+      const student = row.original;
+
+      return (
+        <AddSessionModal
+          studentEmail={student.email}
+          studentId={student.id}
+          studentName={student.name}
+        />
       );
     },
   },

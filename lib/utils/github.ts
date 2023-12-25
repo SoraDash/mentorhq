@@ -26,30 +26,30 @@ export const fetchReadmeFromGitHub = async (
 export const getBio = async (id: string, refresh: boolean = false) => {
   if (!id) return null;
 
-  let user = await prisma.user.findUnique({ where: { id } });
+  let student = await prisma.student.findUnique({ where: { id } });
 
-  if (!user || !user.github) return null; // Return null if user or user.github is not available
+  if (!student || !student.github) return null; // Return null if user or user.github is not available
 
   let bioUpdated = false;
   let bioSame = false;
 
   // If the user has no bio or if a refresh is forced
-  if (!user.bio || refresh) {
-    const bio = await fetchReadmeFromGitHub(user.github);
+  if (!student.bio || refresh) {
+    const bio = await fetchReadmeFromGitHub(student.github);
 
-    if (bio && user.bio !== bio) {
-      user = await prisma.user.update({
+    if (bio && student.bio !== bio) {
+      student = await prisma.student.update({
         where: { id },
         data: { bio },
       });
       bioUpdated = true;
-    } else if (bio && user.bio === bio) {
+    } else if (bio && student.bio === bio) {
       bioSame = true;
     }
   }
 
   return {
-    user,
+    user: student,
     bioUpdated,
     bioSame,
   };

@@ -32,14 +32,18 @@ interface StepComponent {
   props: any;
 }
 interface AddSessionModalProps {
+  size?: 'sm' | 'lg';
   studentEmail: string;
   studentId: string;
   studentName: string;
+  title?: string;
 }
 
 export default function AddSessionModal({
+  size = 'sm',
   studentId,
   studentName,
+  title,
 }: AddSessionModalProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [currentSection, setCurrentSection] = useState(1);
@@ -243,11 +247,16 @@ export default function AddSessionModal({
   return (
     <>
       <Button
-        color="primary"
+        color={size === 'lg' ? 'success' : 'primary'}
         onPress={onOpen}
-        startContent={<FaChalkboardTeacher />}
-        variant="light"
-      />
+        startContent={size === 'sm' && <FaChalkboardTeacher />}
+        variant="solid"
+      >
+        {size === 'lg' && <FaChalkboardTeacher className="w-6 h-6" />}
+
+        {size === 'lg' && <p className="text-medium">{title}</p>}
+      </Button>
+
       <Modal
         backdrop="blur"
         isDismissable={true}

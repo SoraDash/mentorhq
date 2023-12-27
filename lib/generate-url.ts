@@ -9,7 +9,7 @@ interface FeedbackURL {
   values: FormikValues;
 }
 
-const convertDuration = (minutesStr: string) => {
+export const convertDuration = (minutesStr: string) => {
   const minutes = parseInt(minutesStr, 10);
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;

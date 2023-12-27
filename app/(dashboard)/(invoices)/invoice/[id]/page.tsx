@@ -1,14 +1,16 @@
+import LoadingSpinner from '@/components/client/LoadingSpinner';
 import { columns } from '@/components/client/tables/(invoices)/invoice/columns';
 import { DataTable } from '@/components/client/tables/(invoices)/invoice/data-table';
 import { calculateTotal } from '@/lib/invoice/calculations';
 import { getInvoiceById } from '@/lib/invoice/invoices';
 
 import ActionButton from '../../_components/ActionButton';
-import AmountDue from '../../_components/AmountDue';
 import BillingMeta from '../../_components/BillingMeta';
 import InvoiceActions from '../../_components/InvoiceActions';
 import InvoiceDetails from '../../_components/InvoiceDetails';
+import InvoiceFooter from '../../_components/InvoiceFooter';
 import Header from '../../_components/InvoiceHeader';
+import InvoiceSummary from '../../_components/InvoiceSummary';
 import SentToInfo from '../../_components/SendInfoTo';
 
 type Props = {
@@ -22,23 +24,23 @@ const SingleInvoicePage = async ({ params }: Props) => {
   const invoiceLines = invoiceData?.invoiceLines ?? [];
   const totalAmountDue = calculateTotal(invoiceLines);
 
+  if (!invoiceData || !invoiceLines || !totalAmountDue)
+    return <LoadingSpinner />;
+
   return (
     <div className="container mx-auto p-4 bg-gray-100 rounded-lg shadow">
       <Header />
       <div className="flex items-center justify-between my-4">
         <div className="flex items-center">
-          {invoiceData?.status && <ActionButton status={invoiceData.status} />}
+          <ActionButton status={invoiceData.status} />
         </div>
-        {invoiceData?.status && (
-          <InvoiceActions id={invoiceData.id} status={invoiceData?.status} />
-        )}
+
+        <InvoiceActions id={invoiceData.id} status={invoiceData?.status} />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-        {invoiceData && (
-          <div className="p-4">
-            <InvoiceDetails invoice={invoiceData} />
-          </div>
-        )}
+        <div className="p-4">
+          <InvoiceDetails invoice={invoiceData} />
+        </div>
         {invoiceData?.BillingContact && (
           <div className="p-4">
             <BillingMeta metaData={invoiceData.BillingContact} />
@@ -51,7 +53,11 @@ const SingleInvoicePage = async ({ params }: Props) => {
         )}
       </div>
       <DataTable columns={columns} data={invoiceLines} />
-      <AmountDue total={totalAmountDue} />
+      <InvoiceSummary
+        invoiceLines={invoiceLines}
+        totalAmountDue={totalAmountDue}
+      />
+      <InvoiceFooter status={invoiceData?.isPaid} />
     </div>
   );
 };

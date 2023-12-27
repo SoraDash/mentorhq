@@ -1,4 +1,3 @@
-import React from 'react';
 import { BillingInfo } from '@prisma/client';
 
 interface SentToInfoProps {

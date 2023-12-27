@@ -1,11 +1,15 @@
 import { columns } from '@/components/client/tables/(invoices)/invoice/columns';
 import { DataTable } from '@/components/client/tables/(invoices)/invoice/data-table';
-import { calculateTotal } from '@/lib/invoice/calculate-total';
+import { calculateTotal } from '@/lib/invoice/calculations';
 import { getInvoiceById } from '@/lib/invoice/invoices';
 
 import ActionButton from '../../_components/ActionButton';
 import AmountDue from '../../_components/AmountDue';
+import BillingMeta from '../../_components/BillingMeta';
+import InvoiceActions from '../../_components/InvoiceActions';
+import InvoiceDetails from '../../_components/InvoiceDetails';
 import Header from '../../_components/InvoiceHeader';
+import SentToInfo from '../../_components/SendInfoTo';
 
 type Props = {
   params: {
@@ -19,10 +23,33 @@ const SingleInvoicePage = async ({ params }: Props) => {
   const totalAmountDue = calculateTotal(invoiceLines);
 
   return (
-    <div>
-      SingleInvoicePage {params.id}
+    <div className="container mx-auto p-4 bg-gray-100 rounded-lg shadow">
       <Header />
-      {invoiceData?.status && <ActionButton status={invoiceData?.status} />}
+      <div className="flex items-center justify-between my-4">
+        <div className="flex items-center">
+          {invoiceData?.status && <ActionButton status={invoiceData.status} />}
+        </div>
+        {invoiceData?.status && (
+          <InvoiceActions id={invoiceData.id} status={invoiceData?.status} />
+        )}
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        {invoiceData && (
+          <div className="p-4">
+            <InvoiceDetails invoice={invoiceData} />
+          </div>
+        )}
+        {invoiceData?.BillingContact && (
+          <div className="p-4">
+            <BillingMeta metaData={invoiceData.BillingContact} />
+          </div>
+        )}
+        {invoiceData?.user?.billingInfo && (
+          <div className="p-4">
+            <SentToInfo sentToInfo={invoiceData.user.billingInfo} />
+          </div>
+        )}
+      </div>
       <DataTable columns={columns} data={invoiceLines} />
       <AmountDue total={totalAmountDue} />
     </div>

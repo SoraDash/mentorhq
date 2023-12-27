@@ -72,8 +72,10 @@ model Invoice {
   studentSessionId String?
   BillingContact   BillingContact? @relation(fields: [billingContactId], references: [id])
   billingContactId String?
-  userId           String // Add a field to link the invoice to a User
+  userId           String
   user             User            @relation(fields: [userId], references: [id])
+  isPaid           Boolean         @default(false)
+  alwaysOnFifth    Boolean         @default(false)
 }
 
 model Notification {
@@ -284,6 +286,5 @@ enum InvoiceStatus {
   DRAFT
   PENDING
   PAID
-  UNPAID
   OVERDUE
 }

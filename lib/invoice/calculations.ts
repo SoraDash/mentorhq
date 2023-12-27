@@ -8,3 +8,21 @@ export const calculateTotal = (invoiceLines: InvoiceLine[]): number => {
     return acc + amount;
   }, 0);
 };
+
+export const calculateDueDate = (createDate: Date, alwaysOnFifth: boolean) => {
+  if (alwaysOnFifth) {
+    const dueDate = new Date(
+      createDate.getFullYear(),
+      createDate.getMonth() + 1,
+      5,
+    );
+
+    return dueDate;
+  }
+
+  const dueDate = new Date(createDate);
+
+  dueDate.setDate(dueDate.getDate() + 30);
+
+  return dueDate;
+};

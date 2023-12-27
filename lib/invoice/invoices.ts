@@ -1,6 +1,11 @@
 'use server';
 
-import { Invoice, InvoiceLine } from '@prisma/client';
+import {
+  BillingContact,
+  BillingInfo,
+  Invoice,
+  InvoiceLine,
+} from '@prisma/client';
 
 import { prisma } from '@/lib/db/prisma';
 
@@ -19,15 +24,28 @@ export const getAllInvoices = async () => {
   });
 };
 
-// Fetches a single invoice by its ID
 export const getInvoiceById = async (
   invoiceId: string,
-): Promise<(Invoice & { invoiceLines: InvoiceLine[] }) | null> => {
+): Promise<
+  | (Invoice & {
+      BillingContact: BillingContact | null;
+      invoiceLines: InvoiceLine[];
+      user: {
+        billingInfo: BillingInfo | null;
+      };
+    })
+  | null
+> => {
   return await prisma.invoice.findUnique({
     where: { id: invoiceId },
     include: {
-      BillingContact: true, // Include related BillingContact
-      invoiceLines: true, // Include related InvoiceLines
+      BillingContact: true,
+      invoiceLines: true,
+      user: {
+        include: {
+          billingInfo: true,
+        },
+      },
     },
   });
 };

@@ -6,9 +6,7 @@ import toast from 'react-hot-toast';
 
 import { useToast } from '@/components/ui/use-toast';
 
-interface StatsPageProps {}
-
-const StatsPage: React.FC<StatsPageProps> = () => {
+const StatsPage = () => {
   const { toast: anotherToast } = useToast();
   const showToastSuccess = () => {
     toast.success('Success message');

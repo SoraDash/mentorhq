@@ -22,7 +22,7 @@ export const getAllInvoices = async () => {
 // Fetches a single invoice by its ID
 export const getInvoiceById = async (
   invoiceId: string,
-): Promise<Invoice | null> => {
+): Promise<(Invoice & { invoiceLines: InvoiceLine[] }) | null> => {
   return await prisma.invoice.findUnique({
     where: { id: invoiceId },
     include: {

@@ -8,14 +8,18 @@ datasource db {
 }
 
 model BillingContact {
-  id       String    @id @default(uuid())
-  name     String
-  address  String
-  email    String
-  phone    String?
-  user     User      @relation(fields: [userId], references: [id])
-  userId   String
-  invoices Invoice[]
+  id        String    @id @default(uuid())
+  name      String
+  address_1 String?
+  address_2 String?
+  postcode  String?
+  email     String
+  phone     String?
+  city      String?
+  country   String?
+  user      User      @relation(fields: [userId], references: [id])
+  userId    String
+  invoices  Invoice[]
 }
 
 model BillingInfo {

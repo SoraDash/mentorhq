@@ -5,6 +5,7 @@ import { Student } from '@prisma/client';
 import React from 'react';
 import { FaUserEdit } from 'react-icons/fa';
 
+import AddSessionModal from './client/AddSessionModal';
 import { IconButton } from './client/IconButton';
 import { SocialMediaIcons } from './client/SocialMediaIcons';
 import { SyncGithubBio } from './client/tables/admin/mentors/SyncGithubBio';
@@ -27,6 +28,13 @@ export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ profile }) => {
         <h1 className="text-xl font-bold">{profile.name}</h1>
         <div className="mt-6 flex flex-wrap gap-4 justify-center">
           <div className="mt-6 grid grid-cols-1 gap-3">
+            <AddSessionModal
+              size="lg"
+              studentEmail={profile.email}
+              studentId={profile.id}
+              studentName={profile.name}
+              title="Add Session"
+            />
             <IconButton
               color="bg-secondary text-secondary-foreground"
               icon={FaUserEdit}

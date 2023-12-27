@@ -1,16 +1,20 @@
-// billing.ts
 'use server';
 
-import { Invoice, InvoiceLine, PrismaClient } from '@prisma/client';
+import { Invoice, InvoiceLine } from '@prisma/client';
 
 import { prisma } from '@/lib/db/prisma';
 
 // Fetches all invoices
-export const getAllInvoices = async (): Promise<Invoice[]> => {
+export const getAllInvoices = async () => {
   return await prisma.invoice.findMany({
     include: {
-      BillingContact: true, // Include related BillingContact
-      invoiceLines: true, // Include related InvoiceLines
+      BillingContact: true,
+      invoiceLines: true,
+      user: {
+        include: {
+          billingInfo: true,
+        },
+      },
     },
   });
 };
@@ -49,5 +53,3 @@ export const getInvoicesByUserId = async (
     },
   });
 };
-
-// Add additional CRUD operations as required for your application

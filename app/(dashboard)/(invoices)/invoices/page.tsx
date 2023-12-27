@@ -1,4 +1,3 @@
-// components/InvoiceTable.tsx
 import React from 'react';
 
 import { columns } from '@/components/client/tables/(invoices)/invoices/columns';

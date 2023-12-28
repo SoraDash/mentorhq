@@ -55,9 +55,10 @@ const SingleInvoicePage = async ({ params }: Props) => {
       <DataTable columns={columns} data={invoiceLines} />
       <InvoiceSummary
         invoiceLines={invoiceLines}
+        showStats={true}
         totalAmountDue={totalAmountDue}
       />
-      <InvoiceFooter status={invoiceData?.isPaid} />
+      <InvoiceFooter code={invoiceData.code} status={invoiceData?.isPaid} />
     </div>
   );
 };

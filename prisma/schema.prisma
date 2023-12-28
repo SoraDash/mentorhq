@@ -58,7 +58,7 @@ model InvoiceLine {
 model Invoice {
   id               String          @id @default(uuid())
   invoice_id       String
-  code             String?
+  code             String
   invoiceDate      DateTime?
   dueDate          DateTime?
   month            Int?

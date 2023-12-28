@@ -1,5 +1,8 @@
 import Image from 'next/image';
 
+import LoadingSpinner from '@/components/client/LoadingSpinner';
+import { getInvoiceById } from '@/lib/invoice/invoices';
+
 import CodeForm from './_components/CodeForm';
 
 type ViewInvoiceProps = {
@@ -8,11 +11,18 @@ type ViewInvoiceProps = {
   };
   searchParams: {
     code: string;
+    error?: string;
   };
 };
 
-const ViewInvoicePublicPage = (props: ViewInvoiceProps) => {
+const ViewInvoicePublicPage = async (props: ViewInvoiceProps) => {
+  const { id } = props.params;
   const code = props.searchParams.code;
+  const invoiceData = await getInvoiceById(id);
+  const correctCode = invoiceData?.code;
+  const isError = props.searchParams.error === 'invalid_code';
+
+  if (!invoiceData || !correctCode) return <LoadingSpinner />;
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -21,13 +31,22 @@ const ViewInvoicePublicPage = (props: ViewInvoiceProps) => {
           <Image
             alt="Logo"
             className="w-20 mx-auto mb-5"
-            src="https://img.icons8.com/fluent/344/year-of-tiger.png"
+            height={120}
+            src="/logos/logo_only_color.png"
+            width={120}
           />
         </header>
-        {code !== '982-259-100' ? (
-          <CodeForm code={code} />
+        {code === correctCode ? (
+          <div>
+            You are looking at invoice {props.params.id} with code {correctCode}
+          </div>
         ) : (
-          <div>You are looking at invoice {props.params.id} with code</div>
+          <CodeForm code={code} correctCode={correctCode} />
+        )}
+        {isError && (
+          <div className="text-red-500">
+            Invalid code entered. Please try again.
+          </div>
         )}
       </div>
     </div>

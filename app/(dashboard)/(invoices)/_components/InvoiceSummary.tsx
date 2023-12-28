@@ -10,13 +10,15 @@ import {
 
 interface SummaryProps {
   invoiceLines: InvoiceLine[];
+  showStats?: boolean;
   totalAmountDue: number;
 }
 
-const InvoiceSummary: React.FC<SummaryProps> = async ({
+const InvoiceSummary = async ({
   invoiceLines,
+  showStats = false,
   totalAmountDue,
-}) => {
+}: SummaryProps) => {
   const stats = await getLatestStats();
 
   const totalMinutes = invoiceLines.reduce(
@@ -39,15 +41,6 @@ const InvoiceSummary: React.FC<SummaryProps> = async ({
   const totalSessionTimeStat = stats?.stats?.find(
     (stat) => stat.title === 'Total Session Time',
   );
-
-  // Calculate the discrepancies
-  const amountDiscrepancy =
-    amountBillableStat && formattedAmountDue !== amountBillableStat.content
-      ? amountFormatter.format(
-          totalAmountDue -
-            parseFloat(amountBillableStat.content.replace(/[€,]/g, '')),
-        )
-      : null;
 
   const timeDiscrepancy = totalSessionTimeStat
     ? calculateTimeDifference(formattedTime, totalSessionTimeStat.content)
@@ -112,7 +105,7 @@ const InvoiceSummary: React.FC<SummaryProps> = async ({
               </span>
             </div>
           )}
-          {timeDiscrepancy && (
+          {timeDiscrepancy && showStats && (
             <div className="flex justify-between my-2 text-red-500">
               <span>Time Discrepancy</span>
               <span className="text-xl font-bold">

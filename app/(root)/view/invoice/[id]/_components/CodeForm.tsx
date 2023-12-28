@@ -6,9 +6,10 @@ import React, { useCallback, useState } from 'react';
 
 type Props = {
   code: string;
+  correctCode: string;
 };
 
-const CodeForm = ({ code }: Props) => {
+const CodeForm = ({ code, correctCode }: Props) => {
   const [codeValue, setCodeValue] = useState(code);
   const router = useRouter();
   const pathname = usePathname();
@@ -30,9 +31,22 @@ const CodeForm = ({ code }: Props) => {
   };
 
   const handleClick = () => {
-    const queryString = createQueryString('code', codeValue);
+    // Create a new instance of URLSearchParams for a clean query string
+    const params = new URLSearchParams();
 
-    router.push(pathname + '?' + queryString);
+    // Set the 'code' parameter
+    params.set('code', codeValue);
+
+    // Conditionally set the 'error' parameter if the code is incorrect
+    if (codeValue !== correctCode) {
+      params.set('error', 'invalid_code');
+    }
+
+    // Construct the new query string
+    const newQueryString = params.toString();
+
+    // Navigate to the same page with the new query string
+    router.push(`${pathname}?${newQueryString}`);
   };
 
   return (
@@ -54,6 +68,7 @@ const CodeForm = ({ code }: Props) => {
         >
           View Invoice
         </Button>
+        use {correctCode}
       </div>
     </form>
   );

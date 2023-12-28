@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-import { courses, sessions } from './data';
+import { courses, sessions } from '../data';
 
 const prisma = new PrismaClient();
 

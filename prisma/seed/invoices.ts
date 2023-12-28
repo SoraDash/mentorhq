@@ -1,8 +1,23 @@
+import { randomInt } from 'crypto';
+
 import { faker } from '@faker-js/faker';
 import { InvoiceStatus, PrismaClient } from '@prisma/client';
 import _ from 'lodash';
 
 const prisma = new PrismaClient();
+
+const generateRandomNumber = (min: number, max: number) => {
+  return randomInt(min, max + 1);
+};
+
+// Function to generate a code in the format 123-456-789
+const generateInvoiceCode = () => {
+  const part1 = generateRandomNumber(0, 999).toString().padStart(3, '0');
+  const part2 = generateRandomNumber(0, 999).toString().padStart(3, '0');
+  const part3 = generateRandomNumber(0, 999).toString().padStart(3, '0');
+
+  return `${part1}-${part2}-${part3}`;
+};
 
 async function main(): Promise<void> {
   const firstUser = await prisma.user.findFirst();
@@ -51,7 +66,7 @@ async function main(): Promise<void> {
 
     const invoiceData = {
       invoice_id: invoiceId,
-      code: faker.finance.accountNumber(),
+      code: generateInvoiceCode(),
       invoiceDate: faker.date.recent({ days: 30 }),
       dueDate: faker.date.soon({ days: 30 }),
       month: new Date().getMonth() + 1,
@@ -60,7 +75,6 @@ async function main(): Promise<void> {
         'DRAFT',
         'PENDING',
         'PAID',
-        'UNPAID',
         'OVERDUE',
       ]) as InvoiceStatus,
       userId: firstUser.id,

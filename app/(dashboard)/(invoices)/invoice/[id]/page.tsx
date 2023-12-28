@@ -14,7 +14,7 @@ const SingleInvoicePage = async ({ params }: Props) => {
 
   if (!invoiceData) return <LoadingSpinner />;
 
-  return <InvoicePage invoiceData={invoiceData} publicView={true} />;
+  return <InvoicePage invoiceData={invoiceData} publicView={false} />;
 };
 
 export default SingleInvoicePage;

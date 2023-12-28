@@ -18,25 +18,34 @@ const ViewInvoicePublicPage = async (props: ViewInvoiceProps) => {
   const { id } = props.params;
   const code = props.searchParams.code;
   const invoiceData = await getInvoiceById(id);
-  const correctCode = invoiceData?.code;
   const isError = props.searchParams.error === 'invalid_code';
 
-  if (!invoiceData || !correctCode) return <LoadingSpinner />;
+  // Determine the error type based on the situation
+  let errorType;
 
-  return (
-    <>
-      {code === correctCode ? (
-        <InvoicePage invoiceData={invoiceData} publicView={true} />
-      ) : (
-        <CodeForm code={code} correctCode={correctCode} />
-      )}
-      {isError && (
-        <div className="text-red-500">
-          Invalid code entered. Please try again.
-        </div>
-      )}
-    </>
-  );
+  if (!invoiceData) {
+    errorType = 'Invoice not found.';
+  } else if (isError || code !== invoiceData.code) {
+    errorType = 'Invalid code entered. Please try again.';
+  }
+
+  // If there is an error type defined, show the CodeForm with the error message
+  if (errorType) {
+    return (
+      <CodeForm
+        code={code}
+        correctCode={invoiceData?.code || ''}
+        error={errorType}
+      />
+    );
+  }
+
+  // If there's no error and the code matches, render the InvoicePage
+  if (invoiceData && code === invoiceData.code) {
+    return <InvoicePage invoiceData={invoiceData} publicView={true} />;
+  }
+
+  return <LoadingSpinner />;
 };
 
 export default ViewInvoicePublicPage;

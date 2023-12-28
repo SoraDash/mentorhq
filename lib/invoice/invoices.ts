@@ -71,3 +71,26 @@ export const getInvoicesByUserId = async (
     },
   });
 };
+
+export const updateInvoiceTotals = async (invoiceId: string) => {
+  const invoiceLines = await prisma.invoiceLine.findMany({
+    where: { invoiceId },
+  });
+
+  const totalAmount = invoiceLines.reduce((sum, line) => {
+    const amount = line.amount != null ? line.amount : 0;
+
+    return sum + amount;
+  }, 0);
+
+  const totalTime = invoiceLines.reduce((sum, line) => {
+    const duration = line.duration != null ? line.duration : 0;
+
+    return sum + duration;
+  }, 0);
+
+  return await prisma.invoice.update({
+    where: { id: invoiceId },
+    data: { totalAmount, totalTime },
+  });
+};

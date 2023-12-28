@@ -76,6 +76,8 @@ model Invoice {
   user             User            @relation(fields: [userId], references: [id])
   isPaid           Boolean         @default(false)
   alwaysOnFifth    Boolean         @default(false)
+  totalAmount      Float?
+  totalTime        Int?
 }
 
 model Notification {

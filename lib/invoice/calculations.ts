@@ -1,5 +1,6 @@
 import { InvoiceLine } from '@prisma/client';
 
+import { getLatestStats } from '../billing/stats';
 import { convertDuration } from '../generate-url';
 
 // A helper function to calculate the total amount due
@@ -30,11 +31,21 @@ export const calculateDueDate = (createDate: Date, alwaysOnFifth: boolean) => {
 };
 
 export const calculateTimeDifference = (time1: string, time2: string) => {
-  // Convert HH:MM:SS into total minutes for both times
+  if (!time1 || !time2) {
+    console.warn('Invalid input for time calculation', { time1, time2 });
+
+    return '00:00:00';
+  }
+
   const minutes1 = timeToMinutes(time1);
   const minutes2 = timeToMinutes(time2);
 
-  // Calculate the absolute difference in minutes
+  if (isNaN(minutes1) || isNaN(minutes2)) {
+    console.warn('Invalid time conversion', { minutes1, minutes2 });
+
+    return '00:00:00';
+  }
+
   const difference = Math.abs(minutes1 - minutes2);
 
   // Convert the difference back into HH:MM:SS
@@ -51,4 +62,83 @@ export const convertToTotalMinutes = (time: string) => {
   const [hours, minutes] = time.split(':').map(Number);
 
   return hours * 60 + minutes;
+};
+
+export const formatCurrency = (
+  amount: number,
+  locale: string = 'en-US',
+  currency: string = 'EUR',
+) => {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currency,
+  }).format(amount);
+};
+
+export const processInvoiceSummary = async (
+  invoiceLines: InvoiceLine[],
+  totalAmountDue: number,
+) => {
+  const stats = await getLatestStats();
+
+  if (!stats || !stats.stats) {
+    console.error('No session found or email missing from session.');
+
+    return null;
+  }
+
+  const totalMinutes = calculateTotalMinutesFromLines(invoiceLines);
+  const formattedTime = convertDuration(totalMinutes.toString());
+  const formattedAmountDue = formatCurrency(totalAmountDue);
+
+  console.log('Formatted Time', formattedTime);
+
+  const amountBillableStat = stats?.stats?.find(
+    (stat) => stat.title === 'Amount (billable)',
+  );
+  const totalSessionTimeStat = stats?.stats?.find(
+    (stat) => stat.title === 'Total Session Time',
+  );
+
+  const financialDiscrepancyValue = amountBillableStat
+    ? totalAmountDue -
+      parseFloat(amountBillableStat.content.replace(/[€,]/g, ''))
+    : null;
+  const formattedFinancialDiscrepancy = financialDiscrepancyValue
+    ? formatCurrency(financialDiscrepancyValue)
+    : '';
+
+  const timeDiscrepancy = totalSessionTimeStat
+    ? calculateTimeDifference(formattedTime, totalSessionTimeStat.content)
+    : null;
+
+  const expectedSessionTime = totalSessionTimeStat
+    ? convertToTotalMinutes(totalSessionTimeStat.content)
+    : 0;
+
+  const formattedExpectedSessionTime = convertDuration(
+    expectedSessionTime.toString(),
+  );
+
+  const sessionTimeDiscrepancy = calculateTimeDifference(
+    totalMinutes.toString(),
+    formattedExpectedSessionTime.toString(),
+  );
+
+  return {
+    formattedAmountDue,
+    formattedTime,
+    timeDiscrepancy,
+    sessionTimeDiscrepancy,
+    amountBillableStat,
+    formattedFinancialDiscrepancy,
+    totalMinutes,
+    totalSessionTimeStat,
+  };
+};
+
+export const calculateTotalMinutesFromLines = (
+  invoiceLines: InvoiceLine[],
+): number => {
+  return invoiceLines.reduce((acc, line) => acc + (line.duration || 0), 0);
 };

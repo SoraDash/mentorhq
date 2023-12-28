@@ -10,7 +10,29 @@ const generateRandomNumber = (min: number, max: number) => {
   return randomInt(min, max + 1);
 };
 
-// Function to generate a code in the format 123-456-789
+export const updateInvoiceTotals = async (invoiceId: string) => {
+  const invoiceLines = await prisma.invoiceLine.findMany({
+    where: { invoiceId },
+  });
+
+  const totalAmount = invoiceLines.reduce((sum, line) => {
+    const amount = line.amount != null ? line.amount : 0;
+
+    return sum + amount;
+  }, 0);
+
+  const totalTime = invoiceLines.reduce((sum, line) => {
+    const duration = line.duration != null ? line.duration : 0;
+
+    return sum + duration;
+  }, 0);
+
+  return await prisma.invoice.update({
+    where: { id: invoiceId },
+    data: { totalAmount, totalTime },
+  });
+};
+
 const generateInvoiceCode = () => {
   const part1 = generateRandomNumber(0, 999).toString().padStart(3, '0');
   const part2 = generateRandomNumber(0, 999).toString().padStart(3, '0');
@@ -59,7 +81,7 @@ async function main(): Promise<void> {
   const linesPerInvoice = 10; // Number of line items per invoice
 
   for (let i = 0; i < numberOfInvoices; i++) {
-    lastInvoiceNumber++; // Increment the invoice number
+    lastInvoiceNumber++;
     const invoiceId = `${invoicePrefix}-${lastInvoiceNumber
       .toString()
       .padStart(3, '0')}`;
@@ -94,14 +116,31 @@ async function main(): Promise<void> {
           invoiceId: newInvoice.id,
         };
 
-        await prisma.invoiceLine.create({
+        const newLineItem = await prisma.invoiceLine.create({
           data: lineItemData,
         });
+
+        console.log(
+          `   ➡️ Added line item: ${
+            newLineItem.service
+          } - ${newLineItem?.amount?.toFixed(2)}€ for ${
+            newLineItem.duration
+          } minutes`,
+        );
       }
 
+      const updatedInvoice = await updateInvoiceTotals(newInvoice.id);
+
       console.log(
-        `✅ Created invoice ${invoiceId} with ${linesPerInvoice} line items.`,
+        `   💰 Total amount for invoice ${invoiceId}: ${updatedInvoice?.totalAmount?.toFixed(
+          2,
+        )}€`,
       );
+      console.log(
+        `   ⏱ Total time for invoice ${invoiceId}: ${updatedInvoice?.totalTime} minutes`,
+      );
+
+      console.log(`📄 Created invoice ${invoiceId}`);
     } catch (error: any) {
       console.error(`❌ Failed to seed invoice: ${error.message}`);
     }

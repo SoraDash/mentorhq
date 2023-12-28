@@ -69,9 +69,7 @@ const InvoicePage = (props: Props) => {
         publicView={props.publicView}
         totalAmountDue={totalAmountDue}
       />
-      {!props.publicView && (
-        <InvoiceFooter status={props.invoiceData?.isPaid} />
-      )}
+      {!props.publicView && <InvoiceFooter invoice={props.invoiceData} />}
     </div>
   );
 };

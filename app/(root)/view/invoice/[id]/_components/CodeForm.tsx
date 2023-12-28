@@ -8,9 +8,10 @@ import { useState } from 'react';
 type Props = {
   code: string;
   correctCode: string;
+  error?: string;
 };
 
-const CodeForm = ({ code, correctCode }: Props) => {
+const CodeForm = ({ code, correctCode, error }: Props) => {
   const [codeValue, setCodeValue] = useState(code);
   const router = useRouter();
   const pathname = usePathname();
@@ -26,6 +27,8 @@ const CodeForm = ({ code, correctCode }: Props) => {
 
     if (codeValue !== correctCode) {
       params.set('error', 'invalid_code');
+    } else {
+      params.delete('error');
     }
 
     const newQueryString = params.toString();
@@ -63,9 +66,9 @@ const CodeForm = ({ code, correctCode }: Props) => {
             >
               View Invoice
             </Button>
-            use {correctCode}
           </div>
         </form>
+        {error && <div className="text-red-500 text-center">{error}</div>}
       </div>
     </div>
   );

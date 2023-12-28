@@ -42,7 +42,11 @@ const ViewInvoicePublicPage = async (props: ViewInvoiceProps) => {
 
   // If there's no error and the code matches, render the InvoicePage
   if (invoiceData && code === invoiceData.code) {
-    return <InvoicePage invoiceData={invoiceData} publicView={true} />;
+    return (
+      <div className="flex min-h-screen justify-center items-center">
+        <InvoicePage invoiceData={invoiceData} publicView={true} />
+      </div>
+    );
   }
 
   return <LoadingSpinner />;

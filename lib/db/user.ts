@@ -13,7 +13,7 @@ export const getUserBySession = async () => {
   const session = await getAuthSession();
 
   if (!session || !session.user?.email) {
-    console.debug('No session found or email missing from session.');
+    console.debug('USER.ts: No session found or email missing from session.');
 
     return null;
   }

@@ -5,7 +5,7 @@ interface AmountDueSectionProps {
 }
 
 const AmountDueSection = ({ amountDue }: AmountDueSectionProps) => (
-  <div className="flex justify-between my-2">
+  <div className="flex justify-between my-2" id="amount-due-section">
     <span>Amount Due</span>
     <span className="text-xl font-bold">{amountDue}</span>
   </div>

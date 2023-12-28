@@ -16,7 +16,6 @@ const ActionButton = ({ status }: ActionButtonProps) => {
       DRAFT: 'bg-gray-500',
     }[status] || 'bg-gray-200';
 
-
   return (
     <div className="flex justify-end p-4">
       <span

@@ -82,7 +82,9 @@ export const processInvoiceSummary = async (
   const stats = await getLatestStats();
 
   if (!stats || !stats.stats) {
-    console.error('No session found or email missing from session.');
+    console.error(
+      'CALCULATION: No session found or email missing from session.',
+    );
 
     return null;
   }

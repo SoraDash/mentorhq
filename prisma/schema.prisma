@@ -78,6 +78,7 @@ model Invoice {
   alwaysOnFifth    Boolean         @default(false)
   totalAmount      Float?
   totalTime        Int?
+  downloadUrl      String?
 }
 
 model Notification {

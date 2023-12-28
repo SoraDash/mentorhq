@@ -11,7 +11,9 @@ export const getBilling = async (month: string, year: string) => {
       const session = await getUser();
 
       if (!session || !session.email) {
-        console.debug('No session found or email missing from session.');
+        console.debug(
+          'BILLING.ts: No session found or email missing from session.',
+        );
 
         return { error: true, message: 'Not authenticated', status: 401 };
       }

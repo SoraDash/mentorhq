@@ -17,22 +17,30 @@ const InvoiceSummary = async ({
   totalAmountDue,
 }: SummaryProps) => {
   const summaryData = await processInvoiceSummary(invoiceLines, totalAmountDue);
-
-  if (!summaryData) return <div>Something went wrong</div>;
+  const formattedAmountDue = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'EUR',
+  }).format(totalAmountDue);
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 my-4">
       {publicView ? (
-        <AmountDueSection amountDue={summaryData.formattedAmountDue} />
+        <AmountDueSection
+          amountDue={
+            formattedAmountDue || summaryData?.formattedAmountDue || '0'
+          }
+        />
       ) : (
         <FullSummary
-          amountBillable={summaryData.amountBillableStat?.content}
-          financialDiscrepancy={summaryData.formattedFinancialDiscrepancy}
-          formattedAmountDue={summaryData.formattedAmountDue}
-          formattedTime={summaryData.formattedTime}
-          timeDiscrepancy={summaryData.timeDiscrepancy}
-          totalMinutes={summaryData.totalMinutes}
-          totalSessionTimeStat={summaryData.totalSessionTimeStat}
+          amountBillable={summaryData?.amountBillableStat?.content}
+          financialDiscrepancy={
+            summaryData?.formattedFinancialDiscrepancy || ''
+          }
+          formattedAmountDue={summaryData?.formattedAmountDue || '0'}
+          formattedTime={summaryData?.formattedTime || ''}
+          timeDiscrepancy={summaryData?.timeDiscrepancy || ''}
+          totalMinutes={summaryData?.totalMinutes || 0}
+          totalSessionTimeStat={summaryData?.totalSessionTimeStat}
         />
       )}
     </div>

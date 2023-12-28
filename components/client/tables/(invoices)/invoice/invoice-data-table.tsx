@@ -23,7 +23,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
 }
 
-export function DataTable<TData, TValue>({
+export function InvoiceDataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {

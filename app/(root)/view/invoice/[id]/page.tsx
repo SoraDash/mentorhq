@@ -1,5 +1,4 @@
-import Image from 'next/image';
-
+import InvoicePage from '@/app/(dashboard)/(invoices)/_components/InvoicePage';
 import LoadingSpinner from '@/components/client/LoadingSpinner';
 import { getInvoiceById } from '@/lib/invoice/invoices';
 
@@ -25,31 +24,18 @@ const ViewInvoicePublicPage = async (props: ViewInvoiceProps) => {
   if (!invoiceData || !correctCode) return <LoadingSpinner />;
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <div className="w-full max-w-xs m-auto bg-indigo-100 rounded p-5">
-        <header>
-          <Image
-            alt="Logo"
-            className="w-20 mx-auto mb-5"
-            height={120}
-            src="/logos/logo_only_color.png"
-            width={120}
-          />
-        </header>
-        {code === correctCode ? (
-          <div>
-            You are looking at invoice {props.params.id} with code {correctCode}
-          </div>
-        ) : (
-          <CodeForm code={code} correctCode={correctCode} />
-        )}
-        {isError && (
-          <div className="text-red-500">
-            Invalid code entered. Please try again.
-          </div>
-        )}
-      </div>
-    </div>
+    <>
+      {code === correctCode ? (
+        <InvoicePage invoiceData={invoiceData} publicView={true} />
+      ) : (
+        <CodeForm code={code} correctCode={correctCode} />
+      )}
+      {isError && (
+        <div className="text-red-500">
+          Invalid code entered. Please try again.
+        </div>
+      )}
+    </>
   );
 };
 

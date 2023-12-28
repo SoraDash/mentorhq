@@ -1,10 +1,9 @@
 import React from 'react';
 interface InvoiceFooterProps {
-  code: string;
   status: boolean;
 }
 
-const InvoiceFooter = ({ code, status }: InvoiceFooterProps) => {
+const InvoiceFooter = ({ status }: InvoiceFooterProps) => {
   return (
     <div className="flex justify-end space-x-2 p-6">
       {!status && (
@@ -18,7 +17,6 @@ const InvoiceFooter = ({ code, status }: InvoiceFooterProps) => {
       <button className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded transition duration-300">
         Export to Excel
       </button>
-      {code && <div>You are looking at invoice {code} with code</div>}
     </div>
   );
 };

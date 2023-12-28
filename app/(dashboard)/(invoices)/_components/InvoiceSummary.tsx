@@ -10,13 +10,13 @@ import {
 
 interface SummaryProps {
   invoiceLines: InvoiceLine[];
-  showStats?: boolean;
+  publicView: boolean;
   totalAmountDue: number;
 }
 
 const InvoiceSummary = async ({
   invoiceLines,
-  showStats = false,
+  publicView,
   totalAmountDue,
 }: SummaryProps) => {
   const stats = await getLatestStats();
@@ -57,20 +57,28 @@ const InvoiceSummary = async ({
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 my-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div
+        className={`grid grid-cols-1 ${
+          !publicView ? 'md:grid-cols-2' : ''
+        } gap-4`}
+      >
         {/* Amount Section */}
-        <div className="flex flex-col">
-          <h3 className="text-lg font-semibold">Financial Summary</h3>
+        <div className={`flex flex-col ${!publicView ? 'col-span-2' : ''}`}>
+          {!publicView && (
+            <h3 className="text-lg font-semibold">Financial Summary</h3>
+          )}
           <div className="flex justify-between my-2">
             <span>Amount Due</span>
             <span className="text-xl font-bold ">{formattedAmountDue}</span>
           </div>
-          <div className="flex justify-between my-2">
-            <span>Expected Amount (Stats)</span>
-            <span className="text-xl font-bold">
-              {amountBillableStat?.content}
-            </span>
-          </div>
+          {!publicView && (
+            <div className="flex justify-between my-2">
+              <span>CI Expected Amount</span>
+              <span className="text-xl font-bold">
+                {amountBillableStat?.content}
+              </span>
+            </div>
+          )}
           {financialDiscrepancyValue && (
             <div className="flex justify-between my-2">
               <span>Total Discrepancy</span>
@@ -88,32 +96,35 @@ const InvoiceSummary = async ({
         </div>
 
         {/* Time Section */}
-        <div className="flex flex-col">
-          <h3 className="text-lg font-semibold">Time Summary (API Data)</h3>
-          <div className="flex justify-between my-2">
-            <span>Total Session Time</span>
-            <span className="text-xl font-bold ">
-              {formattedTime} ({totalMinutes} MIN)
-            </span>
-          </div>
-          {totalSessionTimeStat && (
+        {!publicView && (
+          <div className={`flex flex-col ${!publicView ? 'col-span-2' : ''}`}>
+            <h3 className="text-lg font-semibold">Time Summary (API Data)</h3>
             <div className="flex justify-between my-2">
-              <span>Total Time (Stats)</span>
+              <span>Total Session Time</span>
               <span className="text-xl font-bold ">
-                {totalSessionTimeStat.content} (
-                {convertToTotalMinutes(totalSessionTimeStat.content)} MIN)
+                {formattedTime} ({totalMinutes} MIN)
               </span>
             </div>
-          )}
-          {timeDiscrepancy && showStats && (
-            <div className="flex justify-between my-2 text-red-500">
-              <span>Time Discrepancy</span>
-              <span className="text-xl font-bold">
-                {timeDiscrepancy} ({convertToTotalMinutes(timeDiscrepancy)} MIN)
-              </span>
-            </div>
-          )}
-        </div>
+            {totalSessionTimeStat && (
+              <div className="flex justify-between my-2">
+                <span>CI Expected Session Time</span>
+                <span className="text-xl font-bold ">
+                  {totalSessionTimeStat.content} (
+                  {convertToTotalMinutes(totalSessionTimeStat.content)} MIN)
+                </span>
+              </div>
+            )}
+            {timeDiscrepancy && publicView && (
+              <div className="flex justify-between my-2 text-red-500">
+                <span>Time Discrepancy</span>
+                <span className="text-xl font-bold">
+                  {timeDiscrepancy} ({convertToTotalMinutes(timeDiscrepancy)}{' '}
+                  MIN)
+                </span>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -3,7 +3,7 @@
 import { InvoiceLine } from '@prisma/client';
 import { ColumnDef } from '@tanstack/react-table';
 
-export const columns: ColumnDef<InvoiceLine>[] = [
+export const invoiceColumns: ColumnDef<InvoiceLine>[] = [
   {
     accessorKey: 'service',
     header: 'Service',

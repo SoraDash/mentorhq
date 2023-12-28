@@ -32,7 +32,8 @@ type Props = {
 
 const InvoicePage = (props: Props) => {
   const invoiceLines = props.invoiceData?.invoiceLines ?? [];
-  const totalAmountDue = calculateTotal(invoiceLines);
+  const totalAmountDue =
+    props.invoiceData.totalAmount || calculateTotal(invoiceLines);
 
   return (
     <div className="container mx-auto p-4 bg-gray-100 rounded-lg shadow">

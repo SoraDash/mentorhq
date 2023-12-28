@@ -19,7 +19,6 @@ const FullSummary = ({
   formattedAmountDue,
   formattedTime,
   timeDiscrepancy,
-  totalMinutes,
   totalSessionTimeStat,
 }: FullSummaryProps) => (
   <div className="grid grid-cols-2 gap-4">
@@ -33,11 +32,8 @@ const FullSummary = ({
       />
     </div>
     <div className="flex flex-col col-span-2">
-      <h3 className="text-lg font-semibold">Time Summary (API Data)</h3>
-      <StatSection
-        label="Total Session Time"
-        value={`${formattedTime} (${totalMinutes} MIN)`}
-      />
+      <h3 className="text-lg font-semibold">Time Summary</h3>
+      <StatSection label="Total Session Time" value={formattedTime} />
       <StatSection
         label="CI Expected Session Time"
         value={totalSessionTimeStat?.content}

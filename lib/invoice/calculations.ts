@@ -87,19 +87,24 @@ export const processInvoiceSummary = async (
     return null;
   }
 
+  // Calculate the total minutes from invoice lines
   const totalMinutes = calculateTotalMinutesFromLines(invoiceLines);
+
+  // Convert total minutes to HH:MM:SS format
   const formattedTime = convertDuration(totalMinutes.toString());
+
+  // Format the total amount due as currency
   const formattedAmountDue = formatCurrency(totalAmountDue);
 
-  console.log('Formatted Time', formattedTime);
-
-  const amountBillableStat = stats?.stats?.find(
+  // Find the relevant stats for billing and session time
+  const amountBillableStat = stats.stats.find(
     (stat) => stat.title === 'Amount (billable)',
   );
-  const totalSessionTimeStat = stats?.stats?.find(
+  const totalSessionTimeStat = stats.stats.find(
     (stat) => stat.title === 'Total Session Time',
   );
 
+  // Calculate financial discrepancy if available
   const financialDiscrepancyValue = amountBillableStat
     ? totalAmountDue -
       parseFloat(amountBillableStat.content.replace(/[€,]/g, ''))
@@ -108,28 +113,26 @@ export const processInvoiceSummary = async (
     ? formatCurrency(financialDiscrepancyValue)
     : '';
 
-  const timeDiscrepancy = totalSessionTimeStat
-    ? calculateTimeDifference(formattedTime, totalSessionTimeStat.content)
-    : null;
-
+  // Ensure totalSessionTimeStat is in the correct format before proceeding
   const expectedSessionTime = totalSessionTimeStat
     ? convertToTotalMinutes(totalSessionTimeStat.content)
     : 0;
 
+  // Convert expected session time to HH:MM:SS format
   const formattedExpectedSessionTime = convertDuration(
     expectedSessionTime.toString(),
   );
 
-  const sessionTimeDiscrepancy = calculateTimeDifference(
-    totalMinutes.toString(),
-    formattedExpectedSessionTime.toString(),
+  // Calculate time discrepancy
+  const timeDiscrepancy = calculateTimeDifference(
+    formattedTime,
+    formattedExpectedSessionTime,
   );
 
   return {
     formattedAmountDue,
     formattedTime,
     timeDiscrepancy,
-    sessionTimeDiscrepancy,
     amountBillableStat,
     formattedFinancialDiscrepancy,
     totalMinutes,

@@ -30,7 +30,7 @@ const InvoiceSummary = async ({
           financialDiscrepancy={summaryData.formattedFinancialDiscrepancy}
           formattedAmountDue={summaryData.formattedAmountDue}
           formattedTime={summaryData.formattedTime}
-          timeDiscrepancy={summaryData.sessionTimeDiscrepancy}
+          timeDiscrepancy={summaryData.timeDiscrepancy}
           totalMinutes={summaryData.totalMinutes}
           totalSessionTimeStat={summaryData.totalSessionTimeStat}
         />

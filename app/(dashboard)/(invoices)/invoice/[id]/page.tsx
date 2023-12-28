@@ -1,5 +1,4 @@
 import LoadingSpinner from '@/components/client/LoadingSpinner';
-import { calculateTotal } from '@/lib/invoice/calculations';
 import { getInvoiceById } from '@/lib/invoice/invoices';
 
 import InvoicePage from '../../_components/InvoicePage';
@@ -15,7 +14,7 @@ const SingleInvoicePage = async ({ params }: Props) => {
 
   if (!invoiceData) return <LoadingSpinner />;
 
-  return <InvoicePage invoiceData={invoiceData} />;
+  return <InvoicePage invoiceData={invoiceData} publicView={true} />;
 };
 
 export default SingleInvoicePage;

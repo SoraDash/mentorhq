@@ -35,3 +35,5 @@ env.d.ts
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+emails/node_modules
+.react-email

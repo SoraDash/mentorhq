@@ -16,7 +16,8 @@
     "studio": "yarn prisma studio",
     "seed": "ts-node -O '{\"module\": \"commonjs\"}' prisma/seed/seed.ts",
     "seed:projects": "ts-node -O '{\"module\": \"commonjs\"}' prisma/seed/projects.ts",
-    "seed:invoices": "ts-node -O '{\"module\": \"commonjs\"}' prisma/seed/invoices.ts"
+    "seed:invoices": "ts-node -O '{\"module\": \"commonjs\"}' prisma/seed/invoices.ts",
+    "email": "email dev --dir lib/emails"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",

@@ -37,7 +37,6 @@ export const columns: ColumnDef<Invoice>[] = [
         DRAFT: 'warning',
         PENDING: 'secondary',
         PAID: 'success',
-        UNPAID: 'danger',
         OVERDUE: 'danger',
       };
 

@@ -93,6 +93,7 @@ async function main(): Promise<void> {
       dueDate: faker.date.soon({ days: 30 }),
       month: new Date().getMonth() + 1,
       year: new Date().getFullYear(),
+      totalAmount: faker.number.float({ min: 0, max: 1000 }),
       status: _.sample([
         'DRAFT',
         'PENDING',
@@ -104,7 +105,9 @@ async function main(): Promise<void> {
 
     try {
       const newInvoice = await prisma.invoice.create({
-        data: invoiceData,
+        data: {
+          ...invoiceData,
+        },
       });
 
       for (let j = 0; j < linesPerInvoice; j++) {

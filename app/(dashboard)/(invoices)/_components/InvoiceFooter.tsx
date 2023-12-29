@@ -6,7 +6,7 @@ import { Invoice } from '@prisma/client';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { FaFilePdf } from 'react-icons/fa';
+import { FaCloudDownloadAlt, FaFilePdf } from 'react-icons/fa';
 import { IoEyeSharp } from 'react-icons/io5';
 import { MdOutlineSend } from 'react-icons/md';
 interface InvoiceFooterProps {
@@ -24,7 +24,6 @@ const InvoiceFooter = ({ invoice }: InvoiceFooterProps) => {
     toast.promise(response, {
       loading: 'Working some magic...',
       success: (data) => {
-        console.log(data.data);
         window.open(data.data.downloadUrl, '_blank');
         router.refresh();
 
@@ -36,6 +35,18 @@ const InvoiceFooter = ({ invoice }: InvoiceFooterProps) => {
 
   return (
     <div className="flex justify-end space-x-2 p-6">
+      {invoice.downloadUrl && (
+        <Button
+          as={Link}
+          className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition duration-300"
+          download={invoice.downloadUrl}
+          endContent={<FaCloudDownloadAlt />}
+          href={invoice.downloadUrl}
+          size="md"
+        >
+          Download PDF
+        </Button>
+      )}
       <Button
         className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition duration-300"
         endContent={<FaFilePdf />}

@@ -17,7 +17,7 @@
     "seed": "ts-node -O '{\"module\": \"commonjs\"}' prisma/seed/seed.ts",
     "seed:projects": "ts-node -O '{\"module\": \"commonjs\"}' prisma/seed/projects.ts",
     "seed:invoices": "ts-node -O '{\"module\": \"commonjs\"}' prisma/seed/invoices.ts",
-    "email": "email dev --dir lib/emails"
+    "email": "email dev --dir lib/emails --port 3001"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",

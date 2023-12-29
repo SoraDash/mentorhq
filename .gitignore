@@ -37,3 +37,4 @@ env.d.ts
 next-env.d.ts
 emails/node_modules
 .react-email
+public/downloads

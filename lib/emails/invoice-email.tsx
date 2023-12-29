@@ -1,137 +1,105 @@
+import { Invoice } from '@prisma/client';
 import {
   Body,
-  Button,
-  Column,
   Container,
   Head,
   Heading,
-  Hr,
   Html,
   Img,
   Link,
-  Preview,
-  Row,
-  Section,
   Tailwind,
   Text,
 } from '@react-email/components';
-import * as React from 'react';
 
 interface VercelInviteUserEmailProps {
-  inviteFromIp?: string;
-  inviteFromLocation?: string;
-  inviteLink?: string;
-  invitedByEmail?: string;
-  invitedByUsername?: string;
-  teamImage?: string;
-  teamName?: string;
-  userImage?: string;
-  username?: string;
+  code: string;
+  downloadUrl: string;
+  dueDate: string;
+  id: string;
+  invoice_id: string;
+  totalAmount: number;
 }
-
 const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
-  : '';
+  : 'https://mentorhq.app';
 
 export const InvoiceEmail = ({
-  invitedByEmail = 'bukinoshita@example.com',
-  invitedByUsername = 'bukinoshita',
-  inviteFromIp = '204.13.186.218',
-  inviteFromLocation = 'São Paulo, Brazil',
-  inviteLink = 'https://vercel.com/teams/invite/foo',
-  teamImage = `${baseUrl}/static/vercel-team.png`,
-  teamName = 'My Project',
-  userImage = `${baseUrl}/static/vercel-user.png`,
-  username = 'zenorocha',
+  code,
+  downloadUrl,
+  dueDate,
+  invoice_id,
+  totalAmount,
 }: VercelInviteUserEmailProps) => {
-  const previewText = `Join ${invitedByUsername} on Vercel`;
+  const previewText = `Invoice from Simen`;
+  const logo = `${baseUrl}/logos/logo_text_color.png`;
 
   return (
     <Html>
-      <Head />
-      <Preview>{previewText}</Preview>
       <Tailwind>
-        <Body className="bg-white my-auto mx-auto font-sans">
-          <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] w-[465px]">
-            <Section className="mt-[32px]">
+        <Body className="bg-gray-100 p-6">
+          <Head>
+            <title>{previewText}</title>
+          </Head>
+          <Container className="max-w-xl mx-auto bg-white rounded-lg p-6 border shadow-md">
+            <Container className="text-center mb-6">
               <Img
-                alt="MentorHQ"
-                className="my-0 mx-auto"
-                height="37"
-                src={`/logos/logo_only_color.png`}
-                width="40"
+                alt="DigitalFairytales Logo"
+                className="mx-auto mb-4"
+                height={'100%'}
+                src={logo}
+                width={'100%'}
               />
-            </Section>
-            <Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
-              Welcome <strong>{teamName}</strong> on <strong>Vercel</strong>
-            </Heading>
-            <Text className="text-black text-[14px] leading-[24px]">
-              Hello {username},
-            </Text>
-            <Text className="text-black text-[14px] leading-[24px]">
-              <strong>{invitedByUsername}</strong> (
+              <Heading as="h1" className="text-2xl font-bold">
+                DigitalFairytales - Simen Daehlin
+              </Heading>
+              <hr className="my-4 border-gray-300" />
+            </Container>
+
+            <Container className="text-center mb-6">
+              <Text className="text-lg font-semibold">
+                Your Invoice for ${totalAmount} is Ready!
+              </Text>
+              <Text>
+                Please review and complete your payment by{' '}
+                <span className="font-bold">${dueDate}</span>.
+              </Text>
+            </Container>
+
+            <Container className="text-center mb-4">
               <Link
-                className="text-blue-600 no-underline"
-                href={`mailto:${invitedByEmail}`}
-              >
-                {invitedByEmail}
-              </Link>
-              ) has invited you to the <strong>{teamName}</strong> team on{' '}
-              <strong>Vercel</strong>.
-            </Text>
-            <Section>
-              <Row>
-                <Column align="right">
-                  <Img
-                    className="rounded-full"
-                    height="64"
-                    src={userImage}
-                    width="64"
-                  />
-                </Column>
-                <Column align="center">
-                  <Img
-                    alt="invited you to"
-                    height="9"
-                    src={`${baseUrl}/static/vercel-arrow.png`}
-                    width="12"
-                  />
-                </Column>
-                <Column align="left">
-                  <Img
-                    className="rounded-full"
-                    height="64"
-                    src={teamImage}
-                    width="64"
-                  />
-                </Column>
-              </Row>
-            </Section>
-            <Section className="text-center mt-[32px] mb-[32px]">
-              <Button
-                className="bg-[#000000] rounded text-white text-[12px] font-semibold no-underline text-center py-3 px-5"
-                href={inviteLink}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                href={downloadUrl}
+                target="_blank"
               >
                 View Invoice
-              </Button>
-            </Section>
-            <Text className="text-black text-[14px] leading-[24px]">
-              or copy and paste this URL into your browser:{' '}
-              <Link className="text-blue-600 no-underline" href={inviteLink}>
-                {inviteLink}
               </Link>
-            </Text>
-            <Hr className="border border-solid border-[#eaeaea] my-[26px] mx-0 w-full" />
-            <Text className="text-[#666666] text-[12px] leading-[24px]">
-              This invitation was intended for{' '}
-              <span className="text-black">{username} </span>.This invite was
-              sent from <span className="text-black">{inviteFromIp}</span>{' '}
-              located in{' '}
-              <span className="text-black">{inviteFromLocation}</span>. If you
-              were not expecting this invitation, you can ignore this email. If
-              you are concerned about your account's safety, please reply to
-              this email to get in touch with us.
-            </Text>
+            </Container>
+
+            <Container className="text-center">
+              <Text className="text-sm">Invoice ${invoice_id}</Text>
+              <Link
+                className="text-sm text-blue-500 hover:underline"
+                href={downloadUrl}
+                target="_blank"
+              >
+                View Invoice
+              </Link>
+              <Text>
+                Your access code is <br />
+                <span className="font-bold">{code}</span>
+              </Text>
+            </Container>
+
+            <Container className="text-center mt-6">
+              <Text className="text-sm">DigitalFairytales - Simen Daehlin</Text>
+              <Text className="text-sm">Phone: +447480887171</Text>
+              <Link
+                className="text-sm text-blue-500 hover:underline"
+                href="https://mentorhq.app"
+              >
+                Generated by MentorHQ.app
+              </Link>
+            </Container>
           </Container>
         </Body>
       </Tailwind>

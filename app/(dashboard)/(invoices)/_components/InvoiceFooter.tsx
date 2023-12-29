@@ -32,6 +32,20 @@ const InvoiceFooter = ({ invoice }: InvoiceFooterProps) => {
       error: 'Whoops! Something went awry, and we couldn’t save your changes.',
     });
   };
+  const sendEmail = async () => {
+    const response = axios.post(`/api/invoice/email`, {
+      invoiceId: invoice.id,
+      invoiceCode: invoice.code,
+    });
+
+    toast.promise(response, {
+      loading: 'Rocketing your invoice to the customer...',
+      success: () => {
+        return 'Blast off! Your invoice is now orbiting your customer’s inbox.';
+      },
+      error: 'Houston, we have a problem. The invoice couldn’t be sent.',
+    });
+  };
 
   return (
     <div className="flex justify-end space-x-2 p-6">
@@ -69,6 +83,7 @@ const InvoiceFooter = ({ invoice }: InvoiceFooterProps) => {
         <Button
           className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300"
           endContent={<MdOutlineSend />}
+          onClick={sendEmail}
           size="md"
         >
           Send Invoice

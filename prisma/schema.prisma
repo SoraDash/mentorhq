@@ -59,8 +59,8 @@ model Invoice {
   id               String          @id @default(uuid())
   invoice_id       String
   code             String
-  invoiceDate      DateTime?
-  dueDate          DateTime?
+  invoiceDate      DateTime
+  dueDate          DateTime
   month            Int?
   year             Int?
   created_at       DateTime        @default(now())
@@ -76,7 +76,7 @@ model Invoice {
   user             User            @relation(fields: [userId], references: [id])
   isPaid           Boolean         @default(false)
   alwaysOnFifth    Boolean         @default(false)
-  totalAmount      Float?
+  totalAmount      Float
   totalTime        Int?
   downloadUrl      String?
 }
